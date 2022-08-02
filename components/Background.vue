@@ -95,9 +95,10 @@ export default Vue.extend({
 
     @for $i from 0 to 40 {
       &:nth-child($i) {
+        --i: $i;
         --randomPercent: random(16, 24, {round: true})%;
-        --top: calc(200% - ($i * var(--randomPercent)));
-        --endTop: calc(100% - ($i * var(--randomPercent)));
+        --top: calc(200% - (var(--i) * var(--randomPercent)));
+        --endTop: calc(100% - (var(--i) * var(--randomPercent)));
         top: var(--top);
         backdrop-filter: saturate(5) blur(10px);
         animation: lineGlitch 10s linear infinite;
