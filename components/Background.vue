@@ -29,9 +29,9 @@ import Vue from 'vue'
 export default Vue.extend({
   data() {
     return {
-      videoId: 'rUxyKA_-grg',
+      videoId: 'sWtEYPva4A0',
       playerVars: {
-        playlist: 'rUxyKA_-grg',
+        playlist: 'sWtEYPva4A0',
         autoplay: 1,
         controls: 0,
         mute: 1,
@@ -59,6 +59,9 @@ export default Vue.extend({
     unMute() {
       this.player.unMute()
     },
+    mute() {
+      this.player.mute()
+    },
     changeVideo() {
       const newVideo = 'p6xqKJqsQWs'
       this.player.loadVideoById(newVideo)
@@ -82,10 +85,10 @@ export default Vue.extend({
   @apply w-screen h-screen absolute;
   overflow: hidden;
   z-index: 1;
-  box-shadow: inset 0px 0px 200px 40px #000;
+  box-shadow: inset 0px 0px 200px 40px rgba(0, 0, 0, 0.8);
 
   @screen md {
-    box-shadow: inset 0px 0px 480px 120px #000;
+    box-shadow: inset 0px 0px 480px 120px rgba(0, 0, 0, 0.8);
   }
 
   > .line {
@@ -97,12 +100,13 @@ export default Vue.extend({
       &:nth-child($i) {
         --i: $i;
         --randomPercent: random(16, 24, {round: true})%;
+        --randomHeight: random(2, 10, {round: true})px;
         --top: calc(200% - (var(--i) * var(--randomPercent)));
         --endTop: calc(100% - (var(--i) * var(--randomPercent)));
         top: var(--top);
         backdrop-filter: saturate(5) blur(10px);
         animation: lineGlitch 10s linear infinite;
-        height: random(2, 10, {round: true})px;
+        height: var(--randomHeight);
       }
     }
   }
@@ -174,16 +178,6 @@ export default Vue.extend({
     @apply absolute top-0 left-0 w-full h-full overflow-hidden;
     z-index: 0;
 
-    &:after {
-      @apply absolute top-0 left-0 right-0 bottom-0;
-      content: '';
-      background: radial-gradient(
-        ellipse at center,
-        rgba(0, 0, 0, 0) 0%,
-        rgba(0, 0, 0, 0.75) 100%
-      );
-    }
-
     & > .noise {
       @apply absolute;
       top: -500px;
@@ -191,9 +185,9 @@ export default Vue.extend({
       bottom: -500px;
       left: -500px;
       background: transparent
-        url(https://www.dropbox.com/s/h7ab1c82ctzy83n/noise.png?raw=1) 0 0;
+        url('~assets/img/noise.png') 0 0;
       background-size: 320px 320px;
-      opacity: 0.35;
+      opacity: 0.30;
       animation: noiseAnimation 1s steps(8, end) infinite both;
     }
   }

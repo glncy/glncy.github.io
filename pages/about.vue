@@ -1,13 +1,10 @@
 <template>
-  <div>
-    Hello World!
-  </div>
+  <div></div>
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
-
-export default Vue.extend({
+export default {
+  layout: 'home',
   name: 'AboutPage',
-})
+}
 </script>
