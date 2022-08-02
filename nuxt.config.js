@@ -21,7 +21,7 @@ export default {
   css: [],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-  plugins: [],
+  plugins: [{ src: '~/plugins/vue-youtube.js' }],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
@@ -52,9 +52,19 @@ export default {
   content: {},
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
-  build: {},
+  build: {
+    postcss: {
+      plugins: {
+        'postcss-for': {},
+        'postcss-random': {},
+        'tailwindcss/nesting': {},
+      },
+    },
+  },
 
   generate: {
     fallback: true,
   },
+
+  ssr: false,
 }

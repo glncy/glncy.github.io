@@ -5,7 +5,7 @@
 </template>
 <style lang="postcss" scoped>
 .wrapper {
-  @apply w-screen h-screen;
+  @apply w-screen h-screen overflow-x-hidden;
 }
 </style>
 
