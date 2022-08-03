@@ -30,14 +30,15 @@ import Vue from 'vue'
 export default Vue.extend({
   data() {
     return {
-      videoId: 'sWtEYPva4A0',
+      videoId: '8nXqcugV2Y4',
       playerVars: {
-        playlist: 'sWtEYPva4A0',
+        playlist: '8nXqcugV2Y4',
         autoplay: 1,
         controls: 0,
         mute: 1,
         showinfo: 0,
         loop: 1,
+        rel: 0,
       },
     }
   },
@@ -55,10 +56,11 @@ export default Vue.extend({
       youtubeWrapper.style.width = height * 2.1 + 'px'
     },
     playing() {
-      console.log('o/ we are watching!!!')
+      this.$emit('playing')
     },
     youtubeReady() {
       this.player.playVideo()
+      this.$emit('ready', true)
     },
     unMute() {
       this.player.unMute()
@@ -67,8 +69,25 @@ export default Vue.extend({
       this.player.mute()
     },
     changeVideo() {
-      const newVideo = 'p6xqKJqsQWs'
-      this.player.loadVideoById(newVideo)
+      this.videoId = 'vIaPWxMPhug'
+      this.playerVars = {
+        playlist: 'vIaPWxMPhug',
+        autoplay: 1,
+        controls: 0,
+        mute: 1,
+        showinfo: 0,
+        loop: 1,
+        rel: 0,
+      }
+    },
+    playVideo() {
+      this.player.playVideo()
+    },
+    replayVideoWithAudio() {
+      this.player.seekTo(0)
+      this.player.playVideo()
+      this.player.unMute()
+      this.player.setVolume(50)
     },
   },
   computed: {
@@ -90,9 +109,10 @@ export default Vue.extend({
   overflow: hidden;
   z-index: 1;
   box-shadow: inset 0px 0px 200px 40px rgba(0, 0, 0, 0.8);
+  background: rgba(0, 0, 0, 0.4);
 
   @screen md {
-    box-shadow: inset 0px 0px 480px 120px rgba(0, 0, 0, 0.8);
+    box-shadow: inset 0px 0px 480px 160px rgba(0, 0, 0, 0.8);
   }
 
   > .line {
@@ -176,7 +196,7 @@ export default Vue.extend({
 
 .noise-main-wrapper {
   @apply w-screen h-screen absolute;
-  z-index: 0;
+  z-index: 1;
 
   & > .noise-wrapper {
     @apply absolute top-0 left-0 w-full h-full overflow-hidden;
@@ -188,10 +208,9 @@ export default Vue.extend({
       right: -500px;
       bottom: -500px;
       left: -500px;
-      background: transparent
-        url('~assets/img/noise.png') 0 0;
-      background-size: 320px 320px;
-      opacity: 0.30;
+      background: transparent url('~assets/img/noise.png') 0 0;
+      background-size: 240px 240px;
+      opacity: 0.45;
       animation: noiseAnimation 1s steps(8, end) infinite both;
     }
   }
