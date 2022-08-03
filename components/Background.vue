@@ -14,6 +14,7 @@
           :video-id="videoId"
           :player-vars="playerVars"
           @playing="playing"
+          @ready="youtubeReady"
           ref="youtube"
           :resize="true"
           :fitParent="true"
@@ -55,6 +56,9 @@ export default Vue.extend({
     },
     playing() {
       console.log('o/ we are watching!!!')
+    },
+    youtubeReady() {
+      this.player.playVideo()
     },
     unMute() {
       this.player.unMute()
