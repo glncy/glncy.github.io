@@ -25,7 +25,13 @@
       <Nuxt />
     </div>
     <div class="footer">
-      <div class="playerControlsWrapper" v-if="isYoutubeReady">
+      <div
+        class="playerControlsWrapper"
+        v-if="isYoutubeReady"
+        :class="{
+          'player-hide': !isFirstLoad && isYoutubePlaying,
+        }"
+      >
         <div
           class="video-info cursor-pointer"
           v-if="!isFirstLoad"
@@ -216,6 +222,17 @@ export default Vue.extend({
       width: fit-content;
       background-color: rgba(0, 0, 0, 0.1);
       border: 1px solid rgba(0, 0, 0, 0.4);
+
+      &.player-hide {
+        @screen lg {
+          @apply top-12 relative;
+          transition: all 0.1s ease-in-out;
+
+          &:hover {
+            @apply top-0;
+          }
+        }
+      }
 
       > .video-info {
         > .title {
