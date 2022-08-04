@@ -7,6 +7,7 @@
         @playing="youtubePlaying"
         @paused="youtubePaused"
         @ended="youtubeEnded"
+        :youtubePlaylist="youtubePlaylist"
       />
     </div>
     <div class="header">
@@ -23,7 +24,7 @@
       <Nuxt />
     </div>
     <div class="footer" v-if="isYoutubeReady">
-      <div class="prev">
+      <div class="prev" @click="bgYoutube.changeVideo(false)">
         <div class="caret"></div>
         <div class="caret caret-2"></div>
       </div>
@@ -45,25 +46,48 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import { youtubePlaylistItem } from '~/components/Background.vue'
 
 declare module 'vue/types/vue' {
   interface Vue {
     $nuxt: any
     isYoutubeReady: boolean
+    youtubePlaylist: youtubePlaylistItem[]
   }
 }
 
 export default Vue.extend({
   data() {
     return {
+      isFirstLoad: true,
       isYoutubePlaying: false,
       isYoutubeMuted: true,
       isYoutubeReady: false,
+      youtubePlaylist: [{}],
     }
+  },
+  created() {
+    const result: Array<youtubePlaylistItem> = [
+      {
+        id: '8nXqcugV2Y4',
+      },
+      {
+        id: 'rzgITwK7GdM',
+      },
+      {
+        id: 'ovrGzbsQZqc',
+      },
+    ]
+    this.youtubePlaylist = result
   },
   methods: {
     unMute() {
       this.isYoutubeMuted = false
+      if (this.isFirstLoad) {
+        this.bgYoutube.replayVideoWithAudio()
+        this.isFirstLoad = false
+        return
+      }
       this.bgYoutube.unMute()
     },
     mute() {
@@ -89,10 +113,6 @@ export default Vue.extend({
     },
     youtubeEnded() {
       this.isYoutubePlaying = false
-    },
-    playYoutubeWithAudio() {
-      this.isYoutubeMuted = false
-      this.bgYoutube.replayVideoWithAudio()
     },
   },
   computed: {

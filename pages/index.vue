@@ -1,8 +1,12 @@
 <template>
   <div class="page-wrapper">
-    <div class="name">Glency Tirao</div>
-    <div class="short-description">web developer / web design / mobile developer</div>
-    <div class="cta">About Me <div class="arrow-right"></div></div>
+    <div class="hero-wrapper">
+      <div class="name">Glency Tirao</div>
+      <div class="short-description">web / mobile developer | music | design | animation</div>
+    </div>
+    <nuxt-link to="/about">
+      <div class="cta">About Me <div class="arrow-right"></div></div>
+    </nuxt-link>
   </div>
 </template>
 
@@ -10,6 +14,28 @@
 .page-wrapper {
   @apply flex flex-col w-full h-full items-center justify-center;
 }
+
+.hero-wrapper {
+  @apply flex flex-col items-center justify-center p-8 w-full;
+  backdrop-filter: blur(8px);
+  background: rgba(0, 0, 0, 0.2);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease-in-out;
+
+  @screen md {
+    @apply rounded-md w-auto;
+    border-left: 1px solid rgba(255, 255, 255, 0.1);
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
+
+    &:hover {
+      background: rgba(0, 0, 0, 0);
+      border: 1px solid rgba(255, 255, 255, 0);
+      backdrop-filter: blur(4px);
+    }
+  }
+}
+
 .name {
   @apply text-5xl text-gray-200 text-center;
   font-family: 'Playfair Display', serif;
@@ -21,17 +47,17 @@
 }
 
 .short-description {
-  @apply text-sm text-gray-200 text-center mt-3;
+  @apply text-sm text-gray-200 text-center mt-4;
   font-family: 'Playfair Display', serif;
-  font-weight: 200;
+  font-weight: 400;
 
   @screen md {
-    @apply text-xl mt-5
+    @apply text-xl mt-8
   }
 }
 
 .cta {
-  @apply text-base text-gray-200 text-center mt-5 py-1 px-2 rounded-md cursor-pointer flex flex-row items-center justify-center;
+  @apply text-base text-gray-200 text-center mt-6 py-1 px-2 rounded-md cursor-pointer flex flex-row items-center justify-center;
   font-family: 'Poppins', sans-serif;
   font-weight: 500;
   backdrop-filter: blur(1px);

@@ -34,7 +34,18 @@
 
 <script lang="ts">
 import Vue from 'vue'
+
+export interface youtubePlaylistItem {
+  id: string
+}
+
 export default Vue.extend({
+  props: {
+    youtubePlaylist: {
+      type: Array as () => youtubePlaylistItem[],
+      default: [],
+    },
+  },
   data() {
     return {
       isYoutubePlaying: false,
@@ -49,6 +60,10 @@ export default Vue.extend({
         rel: 0,
       },
     }
+  },
+  created() {
+    this.videoId = this.youtubePlaylist[0].id
+    this.playerVars.playlist = this.youtubePlaylist[0].id
   },
   mounted() {
     this.onHeightChange()
@@ -73,6 +88,7 @@ export default Vue.extend({
     },
     youtubeEnded() {
       this.isYoutubePlaying = false
+      this.changeVideo()
       this.$emit('ended')
     },
     youtubePaused() {
@@ -93,17 +109,33 @@ export default Vue.extend({
     mute() {
       this.player.mute()
     },
-    changeVideo() {
-      this.videoId = 'vIaPWxMPhug'
-      this.playerVars = {
-        playlist: 'vIaPWxMPhug',
-        autoplay: 1,
-        controls: 0,
-        mute: 1,
-        showinfo: 0,
-        loop: 1,
-        rel: 0,
+    changeVideo(isIncrement = true) {
+      const index = this.youtubePlaylist.findIndex(
+        (item) => item.id === this.videoId
+      )
+      if (isIncrement) {
+        if (index + 1 < this.youtubePlaylist.length) {
+          this.videoId = this.youtubePlaylist[index + 1].id
+          this.loadVideo()
+        } else {
+          this.videoId = this.youtubePlaylist[0].id
+          this.loadVideo()
+        }
+      } else {
+        if (index - 1 >= 0) {
+          this.videoId = this.youtubePlaylist[index - 1].id
+          this.loadVideo()
+        } else {
+          this.videoId =
+            this.youtubePlaylist[this.youtubePlaylist.length - 1].id
+          this.loadVideo()
+        }
       }
+    },
+    loadVideo() {
+      this.player.loadVideoById(this.videoId)
+      this.player.loadPlaylist(this.videoId)
+      this.player.setLoop(true)
     },
     playVideo() {
       this.player.playVideo()
@@ -115,7 +147,7 @@ export default Vue.extend({
       this.player.seekTo(0)
       this.player.playVideo()
       this.player.unMute()
-      this.player.setVolume(50)
+      this.player.setVolume(80)
     },
   },
   computed: {
@@ -238,7 +270,7 @@ export default Vue.extend({
       left: -500px;
       background: transparent url('~assets/img/noise.png') 0 0;
       background-size: 320px;
-      opacity: 0.30;
+      opacity: 0.3;
       animation: noiseAnimation 1s steps(8, end) infinite both;
     }
   }
@@ -283,14 +315,17 @@ export default Vue.extend({
 .fallback-bg {
   @apply w-screen h-screen absolute;
   z-index: 0;
-  background-color:#c399ff;
-background-image:
-radial-gradient(at 89% 54%, hsla(267,66%,74%,1) 0px, transparent 50%),
-radial-gradient(at 3% 65%, hsla(77,88%,78%,1) 0px, transparent 50%),
-radial-gradient(at 95% 18%, hsla(69,63%,71%,1) 0px, transparent 50%),
-radial-gradient(at 1% 42%, hsla(104,63%,73%,1) 0px, transparent 50%),
-radial-gradient(at 11% 38%, hsla(26,91%,71%,1) 0px, transparent 50%),
-radial-gradient(at 94% 92%, hsla(220,95%,66%,1) 0px, transparent 50%),
-radial-gradient(at 79% 75%, hsla(76,66%,76%,1) 0px, transparent 50%);
+  background-color: #c399ff;
+  background-image: radial-gradient(
+      at 89% 54%,
+      hsla(267, 66%, 74%, 1) 0px,
+      transparent 50%
+    ),
+    radial-gradient(at 3% 65%, hsla(77, 88%, 78%, 1) 0px, transparent 50%),
+    radial-gradient(at 95% 18%, hsla(69, 63%, 71%, 1) 0px, transparent 50%),
+    radial-gradient(at 1% 42%, hsla(104, 63%, 73%, 1) 0px, transparent 50%),
+    radial-gradient(at 11% 38%, hsla(26, 91%, 71%, 1) 0px, transparent 50%),
+    radial-gradient(at 94% 92%, hsla(220, 95%, 66%, 1) 0px, transparent 50%),
+    radial-gradient(at 79% 75%, hsla(76, 66%, 76%, 1) 0px, transparent 50%);
 }
 </style>
