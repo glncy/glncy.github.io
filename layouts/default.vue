@@ -30,6 +30,7 @@
         v-if="isYoutubeReady"
         :class="{
           'player-hide': !isFirstLoad && isYoutubePlaying,
+          'player-title-hide': isControllerIdle,
         }"
       >
         <div
@@ -46,7 +47,7 @@
           <div class="title pb-4">Click Speaker to Listen</div>
         </div>
         <div class="playerControls">
-          <div class="prev" @click="bgYoutube.changeVideo(false)">
+          <div class="prev" @click="changeVideo(false)">
             <div class="caret"></div>
             <div class="caret caret-2"></div>
           </div>
@@ -58,7 +59,7 @@
             <div class="unmute" @click="unMute()" v-if="isYoutubeMuted"></div>
             <div class="mute" @click="mute()" v-else></div>
           </div>
-          <div class="next" @click="bgYoutube.changeVideo()">
+          <div class="next" @click="changeVideo()">
             <div class="caret right"></div>
             <div class="caret right-2"></div>
           </div>
@@ -77,6 +78,8 @@ declare module 'vue/types/vue' {
     $nuxt: any
     isYoutubeReady: boolean
     youtubePlaylist: youtubePlaylistItem[]
+    controllerTimeInteracted: number
+    playerControllerPolling: any
   }
 }
 
@@ -88,11 +91,14 @@ export default Vue.extend({
       isYoutubeMuted: true,
       isYoutubeReady: false,
       youtubePlaylist: [{}],
+      controllerTimeInteracted: new Date().valueOf(),
+      isControllerIdle: false,
       currentlyPlaying: {
         url: '',
         title: '',
         channel: '',
       },
+      playerControllerPolling: null,
     }
   },
   created() {
@@ -115,10 +121,21 @@ export default Vue.extend({
       },
     ]
     this.youtubePlaylist = result
+    this.setPlayerControllerPolling()
   },
   methods: {
+    setPlayerControllerPolling() {
+      this.playerControllerPolling = setInterval(() => {
+        if (new Date().valueOf() - this.controllerTimeInteracted > 5000) {
+          this.isControllerIdle = true
+        } else {
+          this.isControllerIdle = false
+        }
+      }, 1000)
+    },
     unMute() {
       this.isYoutubeMuted = false
+      this.recordControllerTimeInteracted()
       if (this.isFirstLoad) {
         this.bgYoutube.replayVideoWithAudio()
         this.isFirstLoad = false
@@ -129,14 +146,25 @@ export default Vue.extend({
     mute() {
       this.isYoutubeMuted = true
       this.bgYoutube.mute()
+      this.recordControllerTimeInteracted()
     },
     play() {
       this.isYoutubePlaying = true
       this.bgYoutube.playVideo()
+      this.recordControllerTimeInteracted()
     },
     pause() {
       this.isYoutubePlaying = false
       this.bgYoutube.pauseVideo()
+      this.recordControllerTimeInteracted()
+    },
+    changeVideo(isNext: boolean = true) {
+      this.bgYoutube.changeVideo(isNext)
+      this.recordControllerTimeInteracted()
+    },
+    recordControllerTimeInteracted() {
+      this.isControllerIdle = false
+      this.controllerTimeInteracted = new Date().valueOf()
     },
     youtubeReady() {
       this.isYoutubeReady = true
@@ -165,6 +193,9 @@ export default Vue.extend({
     currentPage() {
       return this.$nuxt.$route
     },
+  },
+  beforeDestroy() {
+    clearInterval(this.playerControllerPolling)
   },
 })
 </script>
@@ -221,7 +252,7 @@ export default Vue.extend({
       @apply flex flex-col justify-center items-center p-3 rounded-lg;
       width: fit-content;
       background-color: rgba(0, 0, 0, 0.1);
-      border: 1px solid rgba(0, 0, 0, 0.4);
+      border: 0.05px solid rgba(0, 0, 0, 0.2);
 
       &.player-hide {
         @screen lg {
@@ -230,6 +261,16 @@ export default Vue.extend({
 
           &:hover {
             @apply top-0;
+          }
+        }
+      }
+
+      &.player-title-hide {
+        > .video-info.cursor-pointer {
+          @apply hidden;
+
+          @screen md {
+            @apply block;
           }
         }
       }
