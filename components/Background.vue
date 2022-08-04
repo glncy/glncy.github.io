@@ -1,5 +1,26 @@
 <template>
   <div class="bg-wrapper">
+    <div class="videoContainer">
+      <div class="youtubeWrapper" ref="youtubeWrapper">
+        <youtube
+          :video-id="videoId"
+          :player-vars="playerVars"
+          @ready="youtubeReady"
+          @ended="youtubeEnded"
+          @paused="youtubePaused"
+          @cued="youtubeCued"
+          @buffering="youtubeBuffering"
+          @playing="youtubePlaying"
+          ref="youtube"
+          :resize="true"
+          :fitParent="true"
+          :nocookie="true"
+        />
+      </div>
+    </div>
+    <transition name="fade">
+      <div class="fallback-bg" v-if="!isYoutubePlaying"></div>
+    </transition>
     <div class="noise-main-wrapper">
       <div class="noise-wrapper">
         <div class="noise"></div>
@@ -7,20 +28,6 @@
     </div>
     <div class="overlay">
       <div class="line" v-for="i in 40" :key="i" />
-    </div>
-    <div class="videoContainer">
-      <div class="youtubeWrapper" ref="youtubeWrapper">
-        <youtube
-          :video-id="videoId"
-          :player-vars="playerVars"
-          @playing="playing"
-          @ready="youtubeReady"
-          ref="youtube"
-          :resize="true"
-          :fitParent="true"
-          :nocookie="true"
-        />
-      </div>
     </div>
   </div>
 </template>
@@ -30,6 +37,7 @@ import Vue from 'vue'
 export default Vue.extend({
   data() {
     return {
+      isYoutubePlaying: false,
       videoId: '8nXqcugV2Y4',
       playerVars: {
         playlist: '8nXqcugV2Y4',
@@ -55,12 +63,29 @@ export default Vue.extend({
       const youtubeWrapper: any = this.$refs.youtubeWrapper
       youtubeWrapper.style.width = height * 2.1 + 'px'
     },
-    playing() {
+    youtubePlaying() {
+      this.isYoutubePlaying = true
       this.$emit('playing')
     },
     youtubeReady() {
       this.player.playVideo()
       this.$emit('ready', true)
+    },
+    youtubeEnded() {
+      this.isYoutubePlaying = false
+      this.$emit('ended')
+    },
+    youtubePaused() {
+      this.isYoutubePlaying = false
+      this.$emit('paused')
+    },
+    youtubeCued() {
+      this.isYoutubePlaying = false
+      this.$emit('cued')
+    },
+    youtubeBuffering() {
+      this.isYoutubePlaying = false
+      this.$emit('buffering')
     },
     unMute() {
       this.player.unMute()
@@ -82,6 +107,9 @@ export default Vue.extend({
     },
     playVideo() {
       this.player.playVideo()
+    },
+    pauseVideo() {
+      this.player.pauseVideo()
     },
     replayVideoWithAudio() {
       this.player.seekTo(0)
@@ -109,10 +137,10 @@ export default Vue.extend({
   overflow: hidden;
   z-index: 1;
   box-shadow: inset 0px 0px 200px 40px rgba(0, 0, 0, 0.8);
-  background: rgba(0, 0, 0, 0.4);
+  background: rgba(0, 0, 0, 0.5);
 
   @screen md {
-    box-shadow: inset 0px 0px 480px 160px rgba(0, 0, 0, 0.8);
+    box-shadow: inset 0px 0px 420px 120px rgba(0, 0, 0, 0.8);
   }
 
   > .line {
@@ -196,11 +224,11 @@ export default Vue.extend({
 
 .noise-main-wrapper {
   @apply w-screen h-screen absolute;
-  z-index: 1;
+  z-index: 2;
 
   & > .noise-wrapper {
     @apply absolute top-0 left-0 w-full h-full overflow-hidden;
-    z-index: 0;
+    z-index: 2;
 
     & > .noise {
       @apply absolute;
@@ -209,8 +237,8 @@ export default Vue.extend({
       bottom: -500px;
       left: -500px;
       background: transparent url('~assets/img/noise.png') 0 0;
-      background-size: 240px 240px;
-      opacity: 0.45;
+      background-size: 320px;
+      opacity: 0.30;
       animation: noiseAnimation 1s steps(8, end) infinite both;
     }
   }
@@ -250,5 +278,19 @@ export default Vue.extend({
   100% {
     transform: translate(-100px, 100px);
   }
+}
+
+.fallback-bg {
+  @apply w-screen h-screen absolute;
+  z-index: 0;
+  background-color:#c399ff;
+background-image:
+radial-gradient(at 89% 54%, hsla(267,66%,74%,1) 0px, transparent 50%),
+radial-gradient(at 3% 65%, hsla(77,88%,78%,1) 0px, transparent 50%),
+radial-gradient(at 95% 18%, hsla(69,63%,71%,1) 0px, transparent 50%),
+radial-gradient(at 1% 42%, hsla(104,63%,73%,1) 0px, transparent 50%),
+radial-gradient(at 11% 38%, hsla(26,91%,71%,1) 0px, transparent 50%),
+radial-gradient(at 94% 92%, hsla(220,95%,66%,1) 0px, transparent 50%),
+radial-gradient(at 79% 75%, hsla(76,66%,76%,1) 0px, transparent 50%);
 }
 </style>

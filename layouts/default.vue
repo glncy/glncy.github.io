@@ -5,43 +5,35 @@
         ref="bgYoutube"
         @ready="youtubeReady"
         @playing="youtubePlaying"
+        @paused="youtubePaused"
+        @ended="youtubeEnded"
       />
     </div>
     <div class="header">
       <div class="title">
         <nuxt-link to="/">glncy</nuxt-link>
       </div>
-      <div class="nav" v-if="!isInitialScreenVisible && isYoutubePlaying">
+      <div class="nav">
         <div><nuxt-link to="/about">About</nuxt-link></div>
         <div><nuxt-link to="/projects">Projects</nuxt-link></div>
         <div><nuxt-link to="/contact">Contact</nuxt-link></div>
       </div>
     </div>
     <div class="body-wrapper">
-      <transition name="fade">
-        <template v-if="!isYoutubePlaying || isInitialScreenVisible">
-          <InitialScreen
-            :isLoading="isLoading"
-            :bg="!isYoutubePlaying"
-            @yes="playYoutubeWithAudio"
-            @no="isInitialScreenVisible = false"
-          />
-        </template>
-      </transition>
-      <transition name="fade">
-        <template v-if="isYoutubePlaying && !isInitialScreenVisible">
-          <Nuxt />
-        </template>
-      </transition>
+      <Nuxt />
     </div>
-    <div class="footer" v-if="!isInitialScreenVisible && isYoutubePlaying">
+    <div class="footer" v-if="isYoutubeReady">
       <div class="prev">
         <div class="caret"></div>
         <div class="caret caret-2"></div>
       </div>
+      <div class="videoState">
+        <div class="pause" @click="pause()" v-if="isYoutubePlaying"></div>
+        <div class="play" @click="play()" v-else></div>
+      </div>
       <div class="volume">
-        <div class="mute" @click="unMute()" v-if="isYoutubeMuted"></div>
-        <div class="unmute" @click="mute()" v-else></div>
+        <div class="unmute" @click="unMute()" v-if="isYoutubeMuted"></div>
+        <div class="mute" @click="mute()" v-else></div>
       </div>
       <div class="next" @click="bgYoutube.changeVideo()">
         <div class="caret right"></div>
@@ -53,7 +45,6 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import InitialScreen from '~/components/InitialScreen.vue'
 
 declare module 'vue/types/vue' {
   interface Vue {
@@ -68,7 +59,6 @@ export default Vue.extend({
       isYoutubePlaying: false,
       isYoutubeMuted: true,
       isYoutubeReady: false,
-      isInitialScreenVisible: true,
     }
   },
   methods: {
@@ -80,16 +70,29 @@ export default Vue.extend({
       this.isYoutubeMuted = true
       this.bgYoutube.mute()
     },
+    play() {
+      this.isYoutubePlaying = true
+      this.bgYoutube.playVideo()
+    },
+    pause() {
+      this.isYoutubePlaying = false
+      this.bgYoutube.pauseVideo()
+    },
     youtubeReady() {
       this.isYoutubeReady = true
     },
-    playYoutubeWithAudio() {
-      this.isYoutubeMuted = false
-      this.isInitialScreenVisible = false
-      this.bgYoutube.replayVideoWithAudio()
-    },
     youtubePlaying() {
       this.isYoutubePlaying = true
+    },
+    youtubePaused() {
+      this.isYoutubePlaying = false
+    },
+    youtubeEnded() {
+      this.isYoutubePlaying = false
+    },
+    playYoutubeWithAudio() {
+      this.isYoutubeMuted = false
+      this.bgYoutube.replayVideoWithAudio()
     },
   },
   computed: {
@@ -100,11 +103,7 @@ export default Vue.extend({
     currentPage() {
       return this.$nuxt.$route
     },
-    isLoading() {
-      return !this.isYoutubeReady
-    },
   },
-  components: { InitialScreen },
 })
 </script>
 
@@ -157,7 +156,7 @@ export default Vue.extend({
     font-weight: 400;
 
     > .volume {
-      @apply cursor-pointer;
+      @apply cursor-pointer ml-4;
       transform: scale(1.8);
 
       > .unmute {
@@ -168,6 +167,23 @@ export default Vue.extend({
 
       > .mute {
         background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='white' class='bi bi-volume-mute-fill' viewBox='0 0 16 16'%3E%3Cpath d='M6.717 3.55A.5.5 0 0 1 7 4v8a.5.5 0 0 1-.812.39L3.825 10.5H1.5A.5.5 0 0 1 1 10V6a.5.5 0 0 1 .5-.5h2.325l2.363-1.89a.5.5 0 0 1 .529-.06zm7.137 2.096a.5.5 0 0 1 0 .708L12.207 8l1.647 1.646a.5.5 0 0 1-.708.708L11.5 8.707l-1.646 1.647a.5.5 0 0 1-.708-.708L10.793 8 9.146 6.354a.5.5 0 1 1 .708-.708L11.5 7.293l1.646-1.647a.5.5 0 0 1 .708 0z'/%3E%3C/svg%3E");
+        width: 16px;
+        height: 16px;
+      }
+    }
+
+    > .videoState {
+      @apply cursor-pointer mr-4;
+      transform: scale(1.8);
+
+      > .play {
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='white' class='bi bi-play-fill' viewBox='0 0 16 16'%3E%3Cpath d='m11.596 8.697-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393z'/%3E%3C/svg%3E");
+        width: 16px;
+        height: 16px;
+      }
+
+      > .pause {
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='white' class='bi bi-pause-fill' viewBox='0 0 16 16'%3E%3Cpath d='M5.5 3.5A1.5 1.5 0 0 1 7 5v6a1.5 1.5 0 0 1-3 0V5a1.5 1.5 0 0 1 1.5-1.5zm5 0A1.5 1.5 0 0 1 12 5v6a1.5 1.5 0 0 1-3 0V5a1.5 1.5 0 0 1 1.5-1.5z'/%3E%3C/svg%3E");
         width: 16px;
         height: 16px;
       }
