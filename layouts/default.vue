@@ -7,6 +7,7 @@
         @playing="youtubePlaying"
         @paused="youtubePaused"
         @ended="youtubeEnded"
+        @loadedVideo="setCurrentlyPlaying"
         :youtubePlaylist="youtubePlaylist"
       />
     </div>
@@ -23,22 +24,39 @@
     <div class="body-wrapper">
       <Nuxt />
     </div>
-    <div class="footer" v-if="isYoutubeReady">
-      <div class="prev" @click="bgYoutube.changeVideo(false)">
-        <div class="caret"></div>
-        <div class="caret caret-2"></div>
-      </div>
-      <div class="videoState">
-        <div class="pause" @click="pause()" v-if="isYoutubePlaying"></div>
-        <div class="play" @click="play()" v-else></div>
-      </div>
-      <div class="volume">
-        <div class="unmute" @click="unMute()" v-if="isYoutubeMuted"></div>
-        <div class="mute" @click="mute()" v-else></div>
-      </div>
-      <div class="next" @click="bgYoutube.changeVideo()">
-        <div class="caret right"></div>
-        <div class="caret right-2"></div>
+    <div class="footer">
+      <div class="playerControlsWrapper" v-if="isYoutubeReady">
+        <div
+          class="video-info cursor-pointer"
+          v-if="!isFirstLoad"
+          @click="openYoutubeLink"
+        >
+          <template v-if="isYoutubePlaying">
+            <div class="title">{{ currentlyPlaying.title }}</div>
+            <div class="channel">{{ currentlyPlaying.channel }}</div>
+          </template>
+        </div>
+        <div class="video-info" v-else>
+          <div class="title pb-4">Click Speaker to Listen</div>
+        </div>
+        <div class="playerControls">
+          <div class="prev" @click="bgYoutube.changeVideo(false)">
+            <div class="caret"></div>
+            <div class="caret caret-2"></div>
+          </div>
+          <div class="videoState">
+            <div class="pause" @click="pause()" v-if="isYoutubePlaying"></div>
+            <div class="play" @click="play()" v-else></div>
+          </div>
+          <div class="volume">
+            <div class="unmute" @click="unMute()" v-if="isYoutubeMuted"></div>
+            <div class="mute" @click="mute()" v-else></div>
+          </div>
+          <div class="next" @click="bgYoutube.changeVideo()">
+            <div class="caret right"></div>
+            <div class="caret right-2"></div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -64,18 +82,30 @@ export default Vue.extend({
       isYoutubeMuted: true,
       isYoutubeReady: false,
       youtubePlaylist: [{}],
+      currentlyPlaying: {
+        url: '',
+        title: '',
+        channel: '',
+      },
     }
   },
   created() {
     const result: Array<youtubePlaylistItem> = [
       {
         id: '8nXqcugV2Y4',
+        title:
+          '3:30 AM Coding Session - Lofi Hip Hop Mix [Study & Coding Beats]',
+        channel: 'Lofi Ghostie',
       },
       {
         id: 'rzgITwK7GdM',
+        title: 'Pegboard Nerds - Pink Cloud (feat. Max Collins)',
+        channel: 'Monstercat Uncaged',
       },
       {
         id: 'ovrGzbsQZqc',
+        title: 'Pegboard Nerds - Emoji VIP',
+        channel: 'Monstercat Uncaged',
       },
     ]
     this.youtubePlaylist = result
@@ -114,6 +144,12 @@ export default Vue.extend({
     youtubeEnded() {
       this.isYoutubePlaying = false
     },
+    setCurrentlyPlaying(obj: { url: string; title: string; channel: string }) {
+      this.currentlyPlaying = obj
+    },
+    openYoutubeLink() {
+      window.open(this.currentlyPlaying.url, '_blank')
+    },
   },
   computed: {
     bgYoutube() {
@@ -146,8 +182,8 @@ export default Vue.extend({
     }
 
     > .nav {
-      @apply flex flex-row items-center justify-center relative z-10 text-lg text-gray-200 mt-2;
-      font-family: 'Playfair Display', serif;
+      @apply flex flex-row items-center justify-center relative z-10 text-base text-gray-200 mt-4;
+      font-family: 'Poppins', sans-serif;
       font-weight: 400;
 
       > div {
@@ -171,73 +207,121 @@ export default Vue.extend({
   }
 
   > .footer {
-    @apply fixed bottom-8 left-0 w-full text-center text-gray-200 z-20 flex flex-row items-center justify-center;
+    @apply fixed bottom-4 left-0 w-full text-center text-gray-200 z-20 flex flex-col justify-center items-center;
     font-family: 'Poppins', sans-serif;
     font-weight: 400;
 
-    > .volume {
-      @apply cursor-pointer ml-4;
-      transform: scale(1.8);
+    > .playerControlsWrapper {
+      @apply flex flex-col justify-center items-center p-3 rounded-lg;
+      width: fit-content;
+      background-color: rgba(0, 0, 0, 0.1);
+      border: 1px solid rgba(0, 0, 0, 0.4);
 
-      > .unmute {
-        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='white' class='bi bi-volume-up-fill' viewBox='0 0 16 16'%3E%3Cpath d='M11.536 14.01A8.473 8.473 0 0 0 14.026 8a8.473 8.473 0 0 0-2.49-6.01l-.708.707A7.476 7.476 0 0 1 13.025 8c0 2.071-.84 3.946-2.197 5.303l.708.707z'/%3E%3Cpath d='M10.121 12.596A6.48 6.48 0 0 0 12.025 8a6.48 6.48 0 0 0-1.904-4.596l-.707.707A5.483 5.483 0 0 1 11.025 8a5.483 5.483 0 0 1-1.61 3.89l.706.706z'/%3E%3Cpath d='M8.707 11.182A4.486 4.486 0 0 0 10.025 8a4.486 4.486 0 0 0-1.318-3.182L8 5.525A3.489 3.489 0 0 1 9.025 8 3.49 3.49 0 0 1 8 10.475l.707.707zM6.717 3.55A.5.5 0 0 1 7 4v8a.5.5 0 0 1-.812.39L3.825 10.5H1.5A.5.5 0 0 1 1 10V6a.5.5 0 0 1 .5-.5h2.325l2.363-1.89a.5.5 0 0 1 .529-.06z'/%3E%3C/svg%3E");
-        width: 16px;
-        height: 16px;
+      > .video-info {
+        > .title {
+          @apply text-xs text-gray-200;
+          font-family: 'Poppins', sans-serif;
+          font-weight: 500;
+          max-width: 28ch;
+        }
+
+        > .channel {
+          @apply text-xs text-gray-200 mt-1 mb-4;
+          font-family: 'Poppins', sans-serif;
+          font-weight: 300;
+        }
       }
 
-      > .mute {
-        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='white' class='bi bi-volume-mute-fill' viewBox='0 0 16 16'%3E%3Cpath d='M6.717 3.55A.5.5 0 0 1 7 4v8a.5.5 0 0 1-.812.39L3.825 10.5H1.5A.5.5 0 0 1 1 10V6a.5.5 0 0 1 .5-.5h2.325l2.363-1.89a.5.5 0 0 1 .529-.06zm7.137 2.096a.5.5 0 0 1 0 .708L12.207 8l1.647 1.646a.5.5 0 0 1-.708.708L11.5 8.707l-1.646 1.647a.5.5 0 0 1-.708-.708L10.793 8 9.146 6.354a.5.5 0 1 1 .708-.708L11.5 7.293l1.646-1.647a.5.5 0 0 1 .708 0z'/%3E%3C/svg%3E");
-        width: 16px;
-        height: 16px;
-      }
-    }
+      > .playerControls {
+        @apply flex flex-row w-full justify-center items-center;
 
-    > .videoState {
-      @apply cursor-pointer mr-4;
-      transform: scale(1.8);
+        > .volume {
+          @apply cursor-pointer ml-5;
+          transform: scale(2.2);
 
-      > .play {
-        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='white' class='bi bi-play-fill' viewBox='0 0 16 16'%3E%3Cpath d='m11.596 8.697-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393z'/%3E%3C/svg%3E");
-        width: 16px;
-        height: 16px;
-      }
+          @screen lg {
+            @apply cursor-pointer ml-4;
+            transform: scale(1.8);
+          }
 
-      > .pause {
-        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='white' class='bi bi-pause-fill' viewBox='0 0 16 16'%3E%3Cpath d='M5.5 3.5A1.5 1.5 0 0 1 7 5v6a1.5 1.5 0 0 1-3 0V5a1.5 1.5 0 0 1 1.5-1.5zm5 0A1.5 1.5 0 0 1 12 5v6a1.5 1.5 0 0 1-3 0V5a1.5 1.5 0 0 1 1.5-1.5z'/%3E%3C/svg%3E");
-        width: 16px;
-        height: 16px;
-      }
-    }
+          > .unmute {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='white' class='bi bi-volume-up-fill' viewBox='0 0 16 16'%3E%3Cpath d='M11.536 14.01A8.473 8.473 0 0 0 14.026 8a8.473 8.473 0 0 0-2.49-6.01l-.708.707A7.476 7.476 0 0 1 13.025 8c0 2.071-.84 3.946-2.197 5.303l.708.707z'/%3E%3Cpath d='M10.121 12.596A6.48 6.48 0 0 0 12.025 8a6.48 6.48 0 0 0-1.904-4.596l-.707.707A5.483 5.483 0 0 1 11.025 8a5.483 5.483 0 0 1-1.61 3.89l.706.706z'/%3E%3Cpath d='M8.707 11.182A4.486 4.486 0 0 0 10.025 8a4.486 4.486 0 0 0-1.318-3.182L8 5.525A3.489 3.489 0 0 1 9.025 8 3.49 3.49 0 0 1 8 10.475l.707.707zM6.717 3.55A.5.5 0 0 1 7 4v8a.5.5 0 0 1-.812.39L3.825 10.5H1.5A.5.5 0 0 1 1 10V6a.5.5 0 0 1 .5-.5h2.325l2.363-1.89a.5.5 0 0 1 .529-.06z'/%3E%3C/svg%3E");
+            width: 16px;
+            height: 16px;
+          }
 
-    > .prev,
-    .next {
-      @apply flex flex-row items-center justify-center cursor-pointer;
-    }
+          > .mute {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='white' class='bi bi-volume-mute-fill' viewBox='0 0 16 16'%3E%3Cpath d='M6.717 3.55A.5.5 0 0 1 7 4v8a.5.5 0 0 1-.812.39L3.825 10.5H1.5A.5.5 0 0 1 1 10V6a.5.5 0 0 1 .5-.5h2.325l2.363-1.89a.5.5 0 0 1 .529-.06zm7.137 2.096a.5.5 0 0 1 0 .708L12.207 8l1.647 1.646a.5.5 0 0 1-.708.708L11.5 8.707l-1.646 1.647a.5.5 0 0 1-.708-.708L10.793 8 9.146 6.354a.5.5 0 1 1 .708-.708L11.5 7.293l1.646-1.647a.5.5 0 0 1 .708 0z'/%3E%3C/svg%3E");
+            width: 16px;
+            height: 16px;
+          }
+        }
 
-    > .prev {
-      @apply mr-8;
-    }
+        > .videoState {
+          @apply cursor-pointer mr-5;
+          transform: scale(2.4);
 
-    > .next {
-      @apply ml-8;
-    }
+          @screen lg {
+            @apply cursor-pointer mr-4;
+            transform: scale(1.8);
+          }
 
-    .caret {
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='white' class='bi bi-caret-left-fill' viewBox='0 0 16 16'%3E%3Cpath d='m3.86 8.753 5.482 4.796c.646.566 1.658.106 1.658-.753V3.204a1 1 0 0 0-1.659-.753l-5.48 4.796a1 1 0 0 0 0 1.506z'/%3E%3C/svg%3E");
-      width: 16px;
-      height: 16px;
+          > .play {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='white' class='bi bi-play-fill' viewBox='0 0 16 16'%3E%3Cpath d='m11.596 8.697-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393z'/%3E%3C/svg%3E");
+            width: 16px;
+            height: 16px;
+          }
 
-      &.caret-2 {
-        margin-left: -8px;
-      }
+          > .pause {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='white' class='bi bi-pause-fill' viewBox='0 0 16 16'%3E%3Cpath d='M5.5 3.5A1.5 1.5 0 0 1 7 5v6a1.5 1.5 0 0 1-3 0V5a1.5 1.5 0 0 1 1.5-1.5zm5 0A1.5 1.5 0 0 1 12 5v6a1.5 1.5 0 0 1-3 0V5a1.5 1.5 0 0 1 1.5-1.5z'/%3E%3C/svg%3E");
+            width: 16px;
+            height: 16px;
+          }
+        }
 
-      &.right {
-        transform: rotate(180deg);
-      }
+        > .prev,
+        .next {
+          @apply flex flex-row items-center justify-center cursor-pointer;
+        }
 
-      &.right-2 {
-        transform: rotate(180deg);
-        margin-left: -8px;
+        > .prev {
+          @apply mr-10;
+          transform: scale(1.8);
+
+          @screen lg {
+            @apply mr-8;
+            transform: none;
+          }
+        }
+
+        > .next {
+          @apply ml-10;
+          transform: scale(1.8);
+
+          @screen lg {
+            @apply ml-8;
+            transform: none;
+          }
+        }
+
+        .caret {
+          background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='white' class='bi bi-caret-left-fill' viewBox='0 0 16 16'%3E%3Cpath d='m3.86 8.753 5.482 4.796c.646.566 1.658.106 1.658-.753V3.204a1 1 0 0 0-1.659-.753l-5.48 4.796a1 1 0 0 0 0 1.506z'/%3E%3C/svg%3E");
+          width: 16px;
+          height: 16px;
+
+          &.caret-2 {
+            margin-left: -8px;
+          }
+
+          &.right {
+            transform: rotate(180deg);
+          }
+
+          &.right-2 {
+            transform: rotate(180deg);
+            margin-left: -8px;
+          }
+        }
       }
     }
   }

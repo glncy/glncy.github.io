@@ -2,7 +2,7 @@
   <div class="page-wrapper">
     <div class="hero-wrapper">
       <div class="name">Glency Tirao</div>
-      <div class="short-description">web / mobile developer | music | design | animation</div>
+      <div class="short-description">web & mobile development | design & multimedia</div>
     </div>
     <nuxt-link to="/about">
       <div class="cta">About Me <div class="arrow-right"></div></div>
@@ -48,7 +48,7 @@
 
 .short-description {
   @apply text-sm text-gray-200 text-center mt-4;
-  font-family: 'Playfair Display', serif;
+  font-family: 'Poppins', sans-serif;
   font-weight: 400;
 
   @screen md {
@@ -57,21 +57,21 @@
 }
 
 .cta {
-  @apply text-base text-gray-200 text-center mt-6 py-1 px-2 rounded-md cursor-pointer flex flex-row items-center justify-center;
+  @apply text-lg text-gray-200 text-center mt-6 py-2 px-3 rounded-md cursor-pointer flex flex-row items-center justify-center;
   font-family: 'Poppins', sans-serif;
   font-weight: 500;
-  backdrop-filter: blur(1px);
-  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(4px);
+  background: rgba(255, 255, 255, 0.1);
   border: 0.05px solid rgba(255, 255, 255, 0.08);
   transition: all 0.2s ease-in-out;
 
   @screen md {
-    @apply text-lg py-2 px-3;
+    @apply text-xl py-3 px-4;
 
     &:hover {
-      backdrop-filter: blur(5px);
-      background: rgba(255, 255, 255, 0.1);
-      border: 1px solid rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(8px);
+      background: rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.5);
     }
   }
 

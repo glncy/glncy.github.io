@@ -37,6 +37,8 @@ import Vue from 'vue'
 
 export interface youtubePlaylistItem {
   id: string
+  title: string
+  channel: string
 }
 
 export default Vue.extend({
@@ -61,11 +63,10 @@ export default Vue.extend({
       },
     }
   },
-  created() {
+  mounted() {
     this.videoId = this.youtubePlaylist[0].id
     this.playerVars.playlist = this.youtubePlaylist[0].id
-  },
-  mounted() {
+    this.loadVideo(this.youtubePlaylist[0])
     this.onHeightChange()
     window.addEventListener('resize', this.onHeightChange)
   },
@@ -116,25 +117,28 @@ export default Vue.extend({
       if (isIncrement) {
         if (index + 1 < this.youtubePlaylist.length) {
           this.videoId = this.youtubePlaylist[index + 1].id
-          this.loadVideo()
+          this.loadVideo(this.youtubePlaylist[index + 1])
         } else {
           this.videoId = this.youtubePlaylist[0].id
-          this.loadVideo()
+          this.loadVideo(this.youtubePlaylist[0])
         }
       } else {
         if (index - 1 >= 0) {
           this.videoId = this.youtubePlaylist[index - 1].id
-          this.loadVideo()
+          this.loadVideo(this.youtubePlaylist[index - 1])
         } else {
           this.videoId =
             this.youtubePlaylist[this.youtubePlaylist.length - 1].id
-          this.loadVideo()
+          this.loadVideo(this.youtubePlaylist[this.youtubePlaylist.length - 1])
         }
       }
     },
-    loadVideo() {
-      this.player.loadVideoById(this.videoId)
-      this.player.loadPlaylist(this.videoId)
+    async loadVideo(videoInformation: youtubePlaylistItem | undefined) {
+      this.$emit('loadedVideo', {
+        url: `https://www.youtube.com/watch?v=${this.videoId}`,
+        title: videoInformation?.title ?? '',
+        channel: videoInformation?.channel ?? '',
+      })
       this.player.setLoop(true)
     },
     playVideo() {
