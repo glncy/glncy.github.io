@@ -1,6 +1,6 @@
 <template>
   <div class="page-wrapper">
-    <div class="section">
+    <div class="header-section">
       <title-box
         title="About"
         subTitle="Hi! Let me introduce myself to you."
@@ -13,7 +13,11 @@
 </template>
 
 <style lang="postcss" scoped>
-.section {
+.page-wrapper {
+  @apply pb-40;
+}
+
+.header-section {
   @apply flex flex-col w-full h-screen items-center justify-center;
 
   > .action {
