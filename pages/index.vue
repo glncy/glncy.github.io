@@ -2,7 +2,7 @@
   <div class="page-wrapper">
     <title-box
       title="Glency Tirao"
-      subTitle="web & mobile development | design & multimedia"
+      subTitle="web & mobile developer | designs & multimedia"
     />
     <nuxt-link to="/about">
       <div class="cta">

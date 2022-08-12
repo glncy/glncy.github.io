@@ -242,7 +242,7 @@ export default Vue.extend({
           ],
         },
         {
-          category: 'Design',
+          category: 'Designs & Multimedia',
           list: [
             {
               className: 'devicon-figma-plain',

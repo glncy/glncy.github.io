@@ -3,7 +3,7 @@
     <div class="header-section">
       <title-box
         title="About"
-        subTitle="Hi! Let me introduce myself to you."
+        subTitle="Well. I guess you're here to learn more about me."
       />
       <div class="action">Scroll Down</div>
       <div class="down-arrow"></div>
