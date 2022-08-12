@@ -1,7 +1,7 @@
 <template>
   <div class="icon-wrapper">
     <i :class=[classIcon] v-if="classIcon"></i>
-    <!-- TODO: img -->
+    <img :src="img" v-else-if="img" />
   </div>
 </template>
 
@@ -35,11 +35,16 @@ export default Vue.extend({
     transition: all 0.1s ease-in-out;
   }
 
+  > img {
+    @apply w-16;
+    transition: all 0.1s ease-in-out;
+  }
+
   &:hover {
     background: rgba(255, 255, 255, 0.2);
     border: 1.5px solid rgba(255, 255, 255, 0.3);
 
-    > i {
+    > i, img {
       transform: scale(1.1);
     }
   }
