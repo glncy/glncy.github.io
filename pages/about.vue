@@ -8,6 +8,7 @@
       <div class="action">Scroll Down</div>
       <div class="down-arrow"></div>
     </div>
+    <InformationSection />
     <SkillsSection />
   </div>
 </template>
@@ -72,13 +73,15 @@
 <script lang="ts">
 import TitleBox from '~/components/TitleBox.vue'
 import SkillsSection from '~/components/sections/about/SkillsSection.vue'
+import InformationSection from '~/components/sections/about/InformationSection.vue'
 
 export default {
   layout: 'default',
   name: 'AboutPage',
   components: {
     TitleBox,
-    SkillsSection
-}
+    SkillsSection,
+    InformationSection,
+  },
 }
 </script>

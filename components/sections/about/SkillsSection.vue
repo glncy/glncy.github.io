@@ -1,5 +1,5 @@
 <template>
-  <div class="section">
+  <div class="page-section">
     <div class="header">Skills</div>
     <div class="divider" />
     <div v-for="(skill, index) in skills" :key="index" class="skills-wrapper">
@@ -22,19 +22,7 @@
 </template>
 
 <style lang="postcss" scoped>
-.section {
-  @apply flex flex-col w-full px-5;
-
-  @screen lg {
-    @apply mx-auto;
-    max-width: 768px;
-  }
-
-  @screen xl {
-    @apply mx-auto;
-    max-width: 1024px;
-  }
-
+.page-section {
   > .divider {
     @apply w-full my-4;
     height: 0.2px;

@@ -16,3 +16,21 @@
 .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
   opacity: 0;
 }
+
+.page-section {
+  @apply flex flex-col w-full px-5;
+
+  @screen md {
+    @apply px-20;
+  }
+
+  @screen lg {
+    @apply mx-auto px-0;
+    max-width: 768px;
+  }
+
+  @screen xl {
+    @apply mx-auto;
+    max-width: 1024px;
+  }
+}
