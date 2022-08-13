@@ -23,6 +23,8 @@
 
 <style lang="postcss" scoped>
 .page-section {
+  @apply mb-10;
+  
   > .divider {
     @apply w-full my-4;
     height: 0.2px;

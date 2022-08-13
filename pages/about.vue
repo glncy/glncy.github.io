@@ -10,6 +10,7 @@
     </div>
     <InformationSection />
     <SkillsSection />
+    <JobHistorySection />
   </div>
 </template>
 
@@ -74,6 +75,7 @@
 import TitleBox from '~/components/TitleBox.vue'
 import SkillsSection from '~/components/sections/about/SkillsSection.vue'
 import InformationSection from '~/components/sections/about/InformationSection.vue'
+import JobHistorySection from '~/components/sections/about/JobHistorySection.vue';
 
 export default {
   layout: 'default',
@@ -82,6 +84,7 @@ export default {
     TitleBox,
     SkillsSection,
     InformationSection,
-  },
+    JobHistorySection
+},
 }
 </script>
