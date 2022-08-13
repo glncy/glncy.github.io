@@ -31,7 +31,15 @@
   }
 
   > .job-history-wrapper {
-    @apply grid grid-cols-3 gap-4;
+    @apply grid grid-cols-1 gap-4;
+
+    @screen md {
+      @apply grid grid-cols-2 gap-4;
+    }
+
+    @screen xl {
+      @apply grid grid-cols-3 gap-4;
+    }
 
     > .job-wrapper {
       @apply flex flex-col p-4 rounded-lg;

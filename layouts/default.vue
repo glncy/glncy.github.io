@@ -44,7 +44,7 @@
           </template>
         </div>
         <div class="video-info" v-else>
-          <div class="title pb-4">Click Speaker to Listen</div>
+          <div class="title pb-4">Love Musics? Click unmute. :)</div>
         </div>
         <div class="playerControls">
           <div class="prev" @click="changeVideo(false)">
@@ -56,8 +56,8 @@
             <div class="play" @click="play()" v-else></div>
           </div>
           <div class="volume">
-            <div class="unmute" @click="unMute()" v-if="isYoutubeMuted"></div>
-            <div class="mute" @click="mute()" v-else></div>
+            <div class="unmute" @click="mute()" v-if="!isYoutubeMuted"></div>
+            <div class="mute" @click="unMute()" v-else></div>
           </div>
           <div class="next" @click="changeVideo()">
             <div class="caret right"></div>
