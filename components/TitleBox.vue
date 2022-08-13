@@ -37,12 +37,12 @@
   }
 
   .sub-title {
-    @apply text-sm text-gray-200 text-center mt-4;
+    @apply text-sm text-gray-200 text-center mt-2;
     font-family: 'Poppins', sans-serif;
-    font-weight: 400;
+    font-weight: 200;
 
     @screen md {
-      @apply text-xl mt-8;
+      @apply text-xl mt-4;
     }
   }
 }

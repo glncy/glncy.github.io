@@ -15,7 +15,7 @@
       <div class="title">
         <nuxt-link to="/">glncy</nuxt-link>
       </div>
-      <div class="nav">
+      <div class="nav" v-if="currentPage.name !== 'index'">
         <div><nuxt-link to="/about">About</nuxt-link></div>
         <div><nuxt-link to="/projects">Projects</nuxt-link></div>
         <div><nuxt-link to="/contact">Contact</nuxt-link></div>
