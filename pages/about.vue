@@ -10,12 +10,25 @@
     </div>
     <InformationSection />
     <SkillsSection />
+    <JobHistorySection />
+    <div class="page-section cta-section">
+      <nuxt-link to="/projects">
+        <div class="cta">
+          Check out my projects
+          <div class="arrow-right"></div>
+        </div>
+      </nuxt-link>
+    </div>
   </div>
 </template>
 
 <style lang="postcss" scoped>
 .page-wrapper {
   @apply pb-40;
+
+  > .page-section.cta-section {
+    @apply mt-10;
+  }
 }
 
 .header-section {
@@ -74,6 +87,7 @@
 import TitleBox from '~/components/TitleBox.vue'
 import SkillsSection from '~/components/sections/about/SkillsSection.vue'
 import InformationSection from '~/components/sections/about/InformationSection.vue'
+import JobHistorySection from '~/components/sections/about/JobHistorySection.vue';
 
 export default {
   layout: 'default',
@@ -82,6 +96,7 @@ export default {
     TitleBox,
     SkillsSection,
     InformationSection,
-  },
+    JobHistorySection
+},
 }
 </script>
