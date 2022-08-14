@@ -21,7 +21,7 @@
 
 <style lang="postcss" scoped>
 .page-wrapper {
-  @apply flex flex-col w-full h-full items-center justify-center;
+  @apply flex flex-col w-screen h-screen items-center justify-center;
 }
 </style>
 

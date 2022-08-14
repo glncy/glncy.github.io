@@ -202,10 +202,10 @@ export default Vue.extend({
 
 <style lang="postcss" scoped>
 .layout-wrapper {
-  @apply w-screen h-screen overflow-x-hidden;
+  @apply w-screen h-full overflow-x-hidden;
 
   > .background-wrapper {
-    @apply absolute z-0 pointer-events-none;
+    @apply fixed z-0 pointer-events-none;
   }
 
   > .header {
@@ -240,7 +240,7 @@ export default Vue.extend({
   }
 
   > .body-wrapper {
-    @apply relative top-0 left-0 w-screen h-screen z-10;
+    @apply relative z-10;
   }
 
   > .footer {

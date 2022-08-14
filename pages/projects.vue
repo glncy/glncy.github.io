@@ -2,19 +2,17 @@
   <div class="page-wrapper">
     <div class="header-section">
       <title-box
-        title="About"
-        subTitle="Well, I guess you're here to learn more about me."
+        title="Projects"
+        subTitle="Projects and Repositories in which I have contributed."
       />
       <div class="action">Scroll Down</div>
       <div class="down-arrow"></div>
     </div>
-    <InformationSection />
-    <SkillsSection />
-    <JobHistorySection />
+    <ProjectList/>
     <div class="page-section cta-section">
-      <nuxt-link to="/projects">
+      <nuxt-link to="/contact">
         <div class="cta">
-          Check out my projects
+          Contact Me
           <div class="arrow-right"></div>
         </div>
       </nuxt-link>
@@ -85,18 +83,14 @@
 
 <script lang="ts">
 import TitleBox from '~/components/TitleBox.vue'
-import SkillsSection from '~/components/sections/about/SkillsSection.vue'
-import InformationSection from '~/components/sections/about/InformationSection.vue'
-import JobHistorySection from '~/components/sections/about/JobHistorySection.vue';
+import ProjectList from '~/components/sections/projects/ProjectList.vue';
 
 export default {
   layout: 'default',
-  name: 'AboutPage',
+  name: 'ProjectPage',
   components: {
     TitleBox,
-    SkillsSection,
-    InformationSection,
-    JobHistorySection
+    ProjectList
 },
 }
 </script>
