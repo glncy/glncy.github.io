@@ -51,7 +51,7 @@
           <div class="title pb-4">Love Musics? Click unmute. :)</div>
         </div>
         <div class="playerControls">
-          <div class="prev" @click="changeVideo(false)">
+          <div class="prev-next-wrapper prev" @click="changeVideo(false)">
             <div class="caret"></div>
             <div class="caret caret-2"></div>
           </div>
@@ -63,7 +63,7 @@
             <div class="unmute" @click="mute()" v-if="!isYoutubeMuted"></div>
             <div class="mute" @click="unMute()" v-else></div>
           </div>
-          <div class="next" @click="changeVideo()">
+          <div class="prev-next-wrapper next" @click="changeVideo()">
             <div class="caret right"></div>
             <div class="caret right-2"></div>
           </div>
@@ -118,15 +118,13 @@ export default Vue.extend({
       {
         id: '_ITiwPMUzho',
         includeInRandom: true,
-        title:
-          '3 AM Coding Session - Lofi Hip Hop Mix [Study & Coding Beats]',
+        title: '3 AM Coding Session - Lofi Hip Hop Mix [Study & Coding Beats]',
         channel: 'Lofi Ghostie',
       },
       {
         id: 'q55qNEKQLG0',
         includeInRandom: true,
-        title:
-          'RAINING IN OSAKA ( Lofi HipHop) 3 Hour Extended',
+        title: 'RAINING IN OSAKA ( Lofi HipHop) 3 Hour Extended',
         channel: 'Lofi Music',
       },
       {
@@ -153,8 +151,7 @@ export default Vue.extend({
       {
         id: 'N7d73NmztLg',
         includeInRandom: true,
-        title:
-          `old songs but it's lofi remix ~ Lofi old songs mix`,
+        title: `old songs but it's lofi remix ~ Lofi old songs mix`,
         channel: 'Lofi Chill Music',
       },
       // {
@@ -393,28 +390,27 @@ export default Vue.extend({
           }
         }
 
-        > .prev,
-        .next {
+        > .prev-next-wrapper {
           @apply flex flex-row items-center justify-center cursor-pointer;
-        }
 
-        > .prev {
-          @apply mr-10;
-          transform: scale(1.8);
+          &.prev {
+            @apply mr-10;
+            transform: scale(1.8);
 
-          @screen lg {
-            @apply mr-8;
-            transform: none;
+            @screen lg {
+              @apply mr-8;
+              transform: none !important;
+            }
           }
-        }
 
-        > .next {
-          @apply ml-10;
-          transform: scale(1.8);
+          &.next {
+            @apply ml-10;
+            transform: scale(1.8);
 
-          @screen lg {
-            @apply ml-8;
-            transform: none;
+            @screen lg {
+              @apply ml-8;
+              transform: none;
+            }
           }
         }
 
