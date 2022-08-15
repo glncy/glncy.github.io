@@ -96,7 +96,6 @@
           > .stack {
             @apply text-xs text-gray-200 p-1 rounded-md mr-1 mt-2;
             background: rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(5px);
             border: 0.5px solid rgba(255, 255, 255, 0.3);
             font-family: 'Poppins', sans-serif;
             font-weight: 400;
@@ -199,11 +198,12 @@ export default Vue.extend({
           contributions: [
             'Developed web app features',
             'Involved in project planning and management',
-            'Implmented continuous integration and deployment',
+            'Implemented continuous integration and deployment',
             'Involved in fixing bugs and issues',
           ],
           stack: [
             'Node.js',
+            'Express',
             'MySQL',
             'JavaScript',
             'Sequelize',
@@ -211,7 +211,7 @@ export default Vue.extend({
             'Bootstrap',
             'CSS',
           ],
-          remarks: `Freelance Job with Jan Salvador Sebastian.`,
+          remarks: `Freelance Job with <a href="https://jansalvador1445.github.io/" target="_blank">Jan Salvador Sebastian</a>.`,
         },
         {
           name: 'IQ Audio Inventory System',
@@ -219,11 +219,12 @@ export default Vue.extend({
           contributions: [
             'Developed web app features',
             'Involved in project planning and management',
-            'Implmented continuous integration and deployment',
+            'Implemented continuous integration and deployment',
             'Involved in fixing bugs and issues',
           ],
           stack: [
             'Node.js',
+            'Express',
             'MySQL',
             'JavaScript',
             'Sequelize',
@@ -232,7 +233,7 @@ export default Vue.extend({
             'CSS',
             'GitLab Runner',
           ],
-          remarks: `Freelance Job with Jan Salvador Sebastian.`,
+          remarks: `Freelance Job with <a href="https://jansalvador1445.github.io/" target="_blank">Jan Salvador Sebastian</a>.`,
         },
         {
           name: 'Millennial Resorts',
@@ -266,11 +267,19 @@ export default Vue.extend({
             'Involved in fixing bugs and issues',
             'Provides solutions to client in conducting election during pandemic',
           ],
-          stack: ['Node.js', 'Vue', 'Bootstrap', 'JavaScript', 'Vercel', 'CSS'],
-          remarks: `Freelance Job with Jan Salvador Sebastian.`,
+          stack: [
+            'Node.js',
+            'Express',
+            'Vue',
+            'Bootstrap',
+            'JavaScript',
+            'Vercel',
+            'CSS',
+          ],
+          remarks: `Freelance Job with <a href="https://jansalvador1445.github.io/" target="_blank">Jan Salvador Sebastian</a>.`,
         },
         {
-          name: 'Cast Chronicle Web and Mobile App',
+          name: 'Cast Chronicle News App',
           year: '2019',
           contributions: [
             'Developed web and mobile features',

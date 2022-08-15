@@ -40,8 +40,7 @@
         beside my desk and studying Piano.
         <br />
         <br />
-        Wanna know more? Feel free scroll to see what skills I have and my work
-        history. Have a great day!
+        Wanna know more? Scroll to see what skills I have and My Job History. :)
       </div>
     </div>
   </div>

@@ -57,7 +57,7 @@
       > .description {
         @apply text-sm text-gray-200;
         font-family: 'Poppins', sans-serif;
-        font-weight: 100;
+        font-weight: 300;
       }
 
       > .divider {

@@ -1,7 +1,7 @@
 <template>
   <div class="title-wrapper">
     <div class="title">{{ title }}</div>
-    <div class="sub-title">{{ subTitle }}</div>
+    <div class="sub-title" v-html="subTitle"/>
   </div>
 </template>
 
@@ -39,10 +39,15 @@
   .sub-title {
     @apply text-sm text-gray-200 text-center mt-2;
     font-family: 'Poppins', sans-serif;
-    font-weight: 200;
+    font-weight: 300;
 
     @screen md {
       @apply text-xl mt-4;
+    }
+
+    &:deep(a) {
+      @apply text-blue-500;
+      text-decoration: underline;
     }
   }
 }

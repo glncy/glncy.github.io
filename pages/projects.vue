@@ -1,14 +1,11 @@
 <template>
   <div class="page-wrapper">
     <div class="header-section">
-      <title-box
-        title="Projects"
-        subTitle="Projects and Repositories in which I have contributed."
-      />
+      <title-box title="Projects" :subTitle="subTitle" />
       <div class="action">Scroll Down</div>
       <div class="down-arrow"></div>
     </div>
-    <ProjectList/>
+    <ProjectList />
     <div class="page-section cta-section">
       <nuxt-link to="/contact">
         <div class="cta">
@@ -83,14 +80,25 @@
 
 <script lang="ts">
 import TitleBox from '~/components/TitleBox.vue'
-import ProjectList from '~/components/sections/projects/ProjectList.vue';
+import ProjectList from '~/components/sections/projects/ProjectList.vue'
 
 export default {
   layout: 'default',
   name: 'ProjectPage',
   components: {
     TitleBox,
-    ProjectList
-},
+    ProjectList,
+  },
+  data() {
+    return {
+      subTitle: `
+            Projects and Repositories in which I have contributed.
+            <div class="mt-2 flex items-center justify-center">
+              <i class="bi bi-github mr-2"></i>
+              <a href="https://github.com/glncy" target="_blank">@glncy</a>
+            </div>
+          `,
+    }
+  },
 }
 </script>
