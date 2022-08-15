@@ -202,7 +202,7 @@ export default Vue.extend({
 
 <style lang="postcss" scoped>
 .layout-wrapper {
-  @apply w-screen h-full overflow-x-hidden;
+  @apply overflow-x-hidden;
 
   > .background-wrapper {
     @apply fixed z-0 pointer-events-none;
