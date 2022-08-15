@@ -11,6 +11,7 @@
           @cued="youtubeCued"
           @buffering="youtubeBuffering"
           @playing="youtubePlaying"
+          @error="youtubeError"
           ref="youtube"
           :resize="true"
           :fitParent="true"
@@ -39,6 +40,8 @@ export interface youtubePlaylistItem {
   id: string
   title: string
   channel: string
+  includeInRandom?: boolean
+  asBackground?: boolean
 }
 
 export default Vue.extend({
@@ -64,9 +67,11 @@ export default Vue.extend({
     }
   },
   mounted() {
-    this.videoId = this.youtubePlaylist[0].id
-    this.playerVars.playlist = this.youtubePlaylist[0].id
-    this.loadVideo(this.youtubePlaylist[0])
+    const randomVideoList = this.youtubePlaylist.filter(item => item.includeInRandom)
+    const randomVideo = randomVideoList[Math.floor(Math.random() * randomVideoList.length)]
+    this.videoId = randomVideo.id
+    this.playerVars.playlist = randomVideo.id
+    this.loadVideo(randomVideo)
     this.onHeightChange()
     window.addEventListener('resize', this.onHeightChange)
   },
@@ -100,9 +105,14 @@ export default Vue.extend({
       this.isYoutubePlaying = false
       this.$emit('cued')
     },
-    youtubeBuffering() {
+    youtubeBuffering(log: any) {
       this.isYoutubePlaying = false
       this.$emit('buffering')
+    },
+    youtubeError(error: any) {
+      this.isYoutubePlaying = false
+      this.$emit('error')
+      this.changeVideo();
     },
     unMute() {
       this.player.unMute()

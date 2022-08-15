@@ -8,6 +8,7 @@
         @paused="youtubePaused"
         @ended="youtubeEnded"
         @loadedVideo="setCurrentlyPlaying"
+        @buffering="youtubeBuffering"
         :youtubePlaylist="youtubePlaylist"
       />
     </div>
@@ -41,6 +42,12 @@
           <template v-if="isYoutubePlaying">
             <div class="title">{{ currentlyPlaying.title }}</div>
             <div class="channel">{{ currentlyPlaying.channel }}</div>
+          </template>
+          <template v-else-if="isYoutubeBuffering">
+            <div class="title pb-4">Player still loading...</div>
+          </template>
+          <template v-else>
+            <div class="title pb-4">Preparing...</div>
           </template>
         </div>
         <div class="video-info" v-else>
@@ -90,6 +97,7 @@ export default Vue.extend({
       isYoutubePlaying: false,
       isYoutubeMuted: true,
       isYoutubeReady: false,
+      isYoutubeBuffering: false,
       youtubePlaylist: [{}],
       controllerTimeInteracted: new Date().valueOf(),
       isControllerIdle: false,
@@ -105,20 +113,63 @@ export default Vue.extend({
     const result: Array<youtubePlaylistItem> = [
       {
         id: '8nXqcugV2Y4',
+        includeInRandom: true,
         title:
           '3:30 AM Coding Session - Lofi Hip Hop Mix [Study & Coding Beats]',
         channel: 'Lofi Ghostie',
       },
       {
-        id: 'rzgITwK7GdM',
-        title: 'Pegboard Nerds - Pink Cloud (feat. Max Collins)',
-        channel: 'Monstercat Uncaged',
+        id: '_ITiwPMUzho',
+        includeInRandom: true,
+        title:
+          '3 AM Coding Session - Lofi Hip Hop Mix [Study & Coding Beats]',
+        channel: 'Lofi Ghostie',
       },
       {
-        id: 'ovrGzbsQZqc',
-        title: 'Pegboard Nerds - Emoji VIP',
-        channel: 'Monstercat Uncaged',
+        id: 'q55qNEKQLG0',
+        includeInRandom: true,
+        title:
+          'RAINING IN OSAKA ( Lofi HipHop) 3 Hour Extended',
+        channel: 'Lofi Music',
       },
+      {
+        id: 'nrmEXapsmN8',
+        includeInRandom: true,
+        title:
+          'chill lofi beats ~cozy sounds for studying and sleeping ~ relaxing sounds 🌙',
+        channel: 'Lofi Koala',
+      },
+      {
+        id: 'XUNtD0I4IIo',
+        includeInRandom: true,
+        title:
+          'Chill lofi mix ~ music for studying and sleeping ~ Relaxing Music 🌙',
+        channel: 'Lofi Koala',
+      },
+      {
+        id: '8DEEOdz1v0c',
+        includeInRandom: true,
+        title:
+          'feel better again ☁️ lofi chill mix - soothing beats to calm your anxiety',
+        channel: 'saikai',
+      },
+      {
+        id: 'N7d73NmztLg',
+        includeInRandom: true,
+        title:
+          `old songs but it's lofi remix ~ Lofi old songs mix`,
+        channel: 'Lofi Chill Music',
+      },
+      // {
+      //   id: 'rzgITwK7GdM',
+      //   title: 'Pegboard Nerds - Pink Cloud (feat. Max Collins)',
+      //   channel: 'Monstercat Uncaged',
+      // },
+      // {
+      //   id: 'ovrGzbsQZqc',
+      //   title: 'Pegboard Nerds - Emoji VIP',
+      //   channel: 'Monstercat Uncaged',
+      // },
     ]
     this.youtubePlaylist = result
     this.setPlayerControllerPolling()
@@ -168,15 +219,23 @@ export default Vue.extend({
     },
     youtubeReady() {
       this.isYoutubeReady = true
+      this.isYoutubeBuffering = false
     },
     youtubePlaying() {
       this.isYoutubePlaying = true
+      this.isYoutubeBuffering = false
     },
     youtubePaused() {
       this.isYoutubePlaying = false
+      this.isYoutubeBuffering = false
     },
     youtubeEnded() {
       this.isYoutubePlaying = false
+      this.isYoutubeBuffering = false
+    },
+    youtubeBuffering() {
+      this.isYoutubePlaying = false
+      this.isYoutubeBuffering = true
     },
     setCurrentlyPlaying(obj: { url: string; title: string; channel: string }) {
       this.currentlyPlaying = obj
