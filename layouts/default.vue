@@ -46,9 +46,6 @@
           <template v-else-if="isYoutubeBuffering">
             <div class="title pb-4">Player still loading...</div>
           </template>
-          <template v-else>
-            <div class="title pb-4">Preparing...</div>
-          </template>
         </div>
         <div class="video-info" v-else>
           <div class="title pb-4">Love Musics? Click unmute. :)</div>
