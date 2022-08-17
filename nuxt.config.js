@@ -46,6 +46,7 @@ export default {
     '@nuxt/typescript-build',
     // https://go.nuxtjs.dev/tailwindcss
     '@nuxtjs/tailwindcss',
+    '@nuxtjs/google-analytics',
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
@@ -82,4 +83,8 @@ export default {
   },
 
   ssr: false,
+
+  googleAnalytics: {
+    id: 'G-ET3F69DHKG'
+  }
 }
