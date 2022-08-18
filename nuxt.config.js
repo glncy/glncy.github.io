@@ -29,6 +29,15 @@ export default {
         href: 'https://cdn.jsdelivr.net/gh/devicons/devicon@v2.15.1/devicon.min.css',
       },
     ],
+    script: [
+      {
+        src: 'https://www.googletagmanager.com/gtag/js?id=G-ET3F69DHKG',
+        async: true,
+      },
+      {
+        src: 'js/ga.js',
+      },
+    ],
   },
 
   // Global CSS: https://go.nuxtjs.dev/config-css
@@ -46,7 +55,6 @@ export default {
     '@nuxt/typescript-build',
     // https://go.nuxtjs.dev/tailwindcss
     '@nuxtjs/tailwindcss',
-    '@nuxtjs/google-analytics',
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
@@ -83,8 +91,4 @@ export default {
   },
 
   ssr: false,
-
-  googleAnalytics: {
-    id: 'G-ET3F69DHKG'
-  }
 }
