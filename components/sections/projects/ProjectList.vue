@@ -142,6 +142,30 @@ export default Vue.extend({
     return {
       projects: [
         {
+          name: 'ttap.me',
+          year: '2023',
+          contributions: [
+            'Developed web app features',
+            'Implemented continuous integration and deployment',
+            'Involved in fixing bugs and issues'
+          ],
+          stack: ['React', 'Next', 'SCSS', 'Tailwind', 'Javascript', 'TypeScript', 'Firebase'],
+          remarks: `<a href="https://ttap.me" target="_blank">Click Here</a> to visit ttap.me Website.`,
+        },
+        {
+          name: 'Betterteem',
+          year: '2022',
+          contributions: [
+            'Developed web and mobile app features',
+            'Implemented continuous integration and deployment',
+            'Involved in fixing bugs and issues',
+            'Managed app submissions for Google Play Store and App Store',
+            'Involved in Code Review and Code Quality Assurance',
+          ],
+          stack: ['React', 'Next', 'SCSS', 'Tailwind', 'Javascript', 'TypeScript', 'Node.js', 'Express', 'MySQL', 'TypeORM', 'Prisma'],
+          remarks: `<a href="https://betterteem.com" target="_blank">Click Here</a> to visit Betterteem Website. Visit <a href="https://play.google.com/store/apps/details?id=com.betterteem.mobile" target="_blank">Android</a> or <a href="https://apps.apple.com/ph/app/betterteem/id6447600533" target="_blank">iOS</a> app.`,
+        },
+        {
           // img: 'https://previews.123rf.com/images/arcady31/arcady311108/arcady31110800017/10101139-sample-stamp.jpg',
           name: 'glncy',
           year: '2022',
