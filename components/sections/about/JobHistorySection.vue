@@ -141,8 +141,16 @@ export default Vue.extend({
           company: 'Infoshift',
           location: 'Manila, Philippines',
           startDate: 'October 2020',
-          endDate: 'Present',
+          endDate: 'September 2022',
           description: `Developed features for client's web and mobile applications, managed submission of mobiles apps to Google Play and App Store, developed web components for clients, conducted code reviews, supporting live bugs.`,
+        },
+        {
+          title: 'Junior Software Engineer',
+          company: 'Betterteem',
+          location: 'Manila, Philippines',
+          startDate: 'September 2022',
+          endDate: 'Present',
+          description: `Developed features for web and mobile Betterteem Application, managed submission of mobiles apps to Google Play and App Store, developed web components, conducted code reviews, supporting live bugs. Managed CI/CD for mobile deployment and OTA patches.`,
         },
       ],
     }

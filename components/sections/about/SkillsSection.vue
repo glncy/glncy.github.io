@@ -110,6 +110,11 @@ export default Vue.extend({
               className: 'devicon-php-plain',
               name: 'PHP',
             },
+          ],
+        },
+        {
+          category: 'Frontend Development',
+          list: [
             {
               className: 'devicon-html5-plain',
               name: 'HTML',
@@ -118,11 +123,6 @@ export default Vue.extend({
               className: 'devicon-css3-plain',
               name: 'CSS',
             },
-          ],
-        },
-        {
-          category: 'Frontend Development',
-          list: [
             {
               className: 'devicon-sass-original',
               name: 'SASS',
