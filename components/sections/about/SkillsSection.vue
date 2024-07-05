@@ -110,6 +110,10 @@ export default Vue.extend({
               className: 'devicon-php-plain',
               name: 'PHP',
             },
+            {
+              className: 'devicon-dart-plain',
+              name: 'Dart',
+            }
           ],
         },
         {
@@ -163,6 +167,10 @@ export default Vue.extend({
               className: 'devicon-ionic-original',
               name: 'Ionic',
             },
+            {
+              className: 'devicon-flutter-plain',
+              name: 'Flutter',
+            }
           ],
         },
         {

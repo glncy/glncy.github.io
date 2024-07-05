@@ -6,7 +6,7 @@
         :key="index"
         class="project-wrapper"
       >
-        <img :src="project.img" v-if="project.img" />
+        <!-- <img :src="project.img" v-if="project.img" /> -->
         <div class="information-wrapper">
           <div class="name">{{ project.name }}</div>
           <div class="year">{{ project.year }}</div>
@@ -141,6 +141,52 @@ export default Vue.extend({
   data() {
     return {
       projects: [
+        {
+          name: 'Petpal',
+          year: '2024',
+          contributions: [
+            'Developed cross-platform mobile app features',
+            'API Integrations',
+            'Involved in fixing bugs and issues',
+          ],
+          stack: ['Flutter', 'Dart'],
+          remarks: `<a href="https://petpal.asia" target="_blank">Click Here</a> to view Petpal Website.`,
+        },
+        {
+          name: 'expo-up-server',
+          year: '2024',
+          contributions: [
+            'Developed package to create custom server for Expo Updates',
+            'Managed and maintained npm package',
+            'Involved in fixing bugs and issues'
+          ],
+          stack: ['Node.js', 'Javascript', 'TypeScript', 'Next.js', 'Firebase'],
+          remarks: `Open Source Project. <a href="https://www.npmjs.com/package/expo-up-server" target="_blank">Click Here</a> to view npm package.`,
+        },
+        {
+          name: 'expo-up CLI',
+          year: '2024',
+          contributions: [
+            'Developed CLI tool for Custom Server Expo Updates',
+            'Managed and maintained npm package',
+            'Involved in fixing bugs and issues'
+          ],
+          stack: ['Node.js', 'Javascript', 'TypeScript'],
+          remarks: `Open Source Project. <a href="https://www.npmjs.com/package/expo-up" target="_blank">Click Here</a> to view npm package.`,
+        },
+        {
+          name: 'Resource Tracker',
+          year: '2024',
+          contributions: [
+            'Developed cross-platform mobile app and web app features',
+            'API Integrations',
+            'Integrated Google Auth and Firebase services',
+            'Desinged and implemented database schema',
+            'Involved in fixing bugs and issues'
+          ],
+          stack: ['React Native', 'Tailwind', 'Javascript', 'TypeScript', 'Firebase', 'Strapi'],
+          remarks: `Internal Project of <a href="https://917ventures.com" target="_blank">917Ventures</a>.`,
+        },
         {
           name: 'ttap.me',
           year: '2023',

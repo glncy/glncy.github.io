@@ -149,10 +149,18 @@ export default Vue.extend({
           company: 'Betterteem',
           location: 'Manila, Philippines',
           startDate: 'September 2022',
-          endDate: 'Present',
+          endDate: 'October 2023',
           description: `Developed features for web and mobile Betterteem Application, managed submission of mobiles apps to Google Play and App Store, developed web components, conducted code reviews, supporting live bugs. Managed CI/CD for mobile deployment and OTA patches.`,
         },
-      ],
+        {
+          title: 'Software Engineer - React Native',
+          company: 'Yondu Inc.',
+          location: 'Manila, Philippines',
+          startDate: 'December 2023',
+          endDate: 'Present',
+          description: `Worked on Mobile and Web Applications powered by React Native, developed features for client's applications using Flutter, conducted code reviews, supporting live bugs.`,
+        }
+      ].reverse(),
     }
   },
 })
