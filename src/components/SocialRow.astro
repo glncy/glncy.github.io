@@ -28,22 +28,22 @@ const links = [
 <style>
   .social-row {
     display: flex;
-    gap: 1rem;
+    gap: 1.4rem;
     justify-content: center;
     align-items: center;
   }
   .social-row a {
-    color: #e5e7eb;
+    color: #ffffff;
     line-height: 0;
-    transition: transform 0.15s ease, opacity 0.15s ease;
-    opacity: 0.85;
+    transition: transform 0.15s ease, color 0.15s ease;
+    /* drop-shadow keeps icons legible over the bright/busy video */
+    filter: drop-shadow(0 1px 6px rgba(0, 0, 0, 0.7));
   }
   .social-row a:hover {
-    transform: translateY(-2px) scale(1.1);
-    opacity: 1;
+    transform: translateY(-2px) scale(1.15);
   }
   .social-row :global(svg) {
-    width: 1.35rem;
-    height: 1.35rem;
+    width: 1.7rem;
+    height: 1.7rem;
   }
 </style>

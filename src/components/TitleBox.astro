@@ -2,11 +2,12 @@
 interface Props {
   title: string
   subtitle?: string
+  plain?: boolean // when true, no glass box — title floats on the background
 }
-const { title, subtitle } = Astro.props
+const { title, subtitle, plain = false } = Astro.props
 ---
 
-<div class="title-box glass">
+<div class:list={['title-box', plain ? 'plain' : 'glass']}>
   <div class="font-heading title">{title}</div>
   {subtitle && <div class="subtitle" set:html={subtitle} />}
 </div>
@@ -22,8 +23,17 @@ const { title, subtitle } = Astro.props
     transition: all 0.3s ease-in-out;
   }
   @media (min-width: 768px) {
-    .title-box { width: auto; border-radius: 0.375rem; }
-    .title-box:hover { background: rgba(0, 0, 0, 0); border-color: rgba(255, 255, 255, 0); }
+    .title-box.glass { width: auto; border-radius: 0.375rem; }
+    .title-box.glass:hover { background: rgba(0, 0, 0, 0); border-color: rgba(255, 255, 255, 0); }
+  }
+  /* Boxless variant: drop the panel, lean on text-shadow for legibility. */
+  .title-box.plain {
+    padding: 1rem;
+    width: auto;
+  }
+  .title-box.plain .title,
+  .title-box.plain .subtitle {
+    text-shadow: 0 2px 24px rgba(0, 0, 0, 0.7), 0 1px 4px rgba(0, 0, 0, 0.6);
   }
   .title {
     font-size: 3rem;

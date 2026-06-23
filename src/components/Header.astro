@@ -1,37 +1,32 @@
 ---
-import { Icon } from 'astro-icon/components'
 import settings from '../data/settings.json'
 
 const path = Astro.url.pathname
-const isActive = (href: string) =>
-  href === '/' ? path === '/' : path.startsWith(href)
+const isHome = path === '/'
+const links = [
+  { href: '/about', label: 'About' },
+  { href: '/projects', label: 'Projects' },
+  { href: '/writing', label: 'Writing' },
+  { href: '/contact', label: 'Contact' },
+]
+const isActive = (href: string) => {
+  if (href === '/writing') {
+    return path.startsWith('/writing') || path.startsWith('/blog') || path.startsWith('/til')
+  }
+  return path.startsWith(href)
+}
 ---
 
-<header class="site-header" id="site-header">
-  <div class="header-inner">
-    <a href="/" class="font-heading brand">{settings.siteTitle}</a>
+<header class="site-header" id="site-header" class:list={{ home: isHome }}>
+  <a href="/" class="font-heading brand">{settings.siteTitle}</a>
 
+  {!isHome && (
     <nav class="nav" aria-label="Primary">
-      <a href="/about" class:list={['nav-link', { active: isActive('/about') }]}>About</a>
-      <a href="/projects" class:list={['nav-link', { active: isActive('/projects') }]}>Projects</a>
-
-      <div class="nav-dd">
-        <a href="/writing" aria-haspopup="true" class:list={['nav-link', 'dd-toggle', { active: isActive('/writing') || isActive('/blog') || isActive('/til') }]}>
-          Writing <Icon name="ph:caret-down" />
-        </a>
-        <div class="dd-menu">
-          <a href="/blog" class="dd-item">Blog</a>
-          <a href="/til" class="dd-item">TIL</a>
-        </div>
-      </div>
-
-      <a href="/contact" class:list={['nav-link', { active: isActive('/contact') }]}>Contact</a>
+      {links.map((l) => (
+        <a href={l.href} class:list={['nav-link', { active: isActive(l.href) }]}>{l.label}</a>
+      ))}
     </nav>
-
-    <button class="menu-btn" id="menu-btn" aria-label="Menu" aria-expanded="false">
-      <Icon name="ph:list" />
-    </button>
-  </div>
+  )}
 </header>
 
 <style>
@@ -39,143 +34,54 @@ const isActive = (href: string) =>
     position: fixed;
     inset: 0 0 auto 0;
     z-index: 40;
-    transition: padding 0.2s ease, background 0.2s ease, backdrop-filter 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.6rem;
     padding: 1rem 1.25rem;
+    transition: padding 0.2s ease, background 0.2s ease, backdrop-filter 0.2s ease;
   }
-  /* condensed on scroll */
   .site-header.scrolled {
-    padding: 0.4rem 1.25rem;
+    padding: 0.5rem 1.25rem;
     background: rgba(0, 0, 0, 0.35);
     backdrop-filter: blur(var(--glass-blur));
-  }
-  .header-inner {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    max-width: 72rem;
-    margin: 0 auto;
   }
   .brand {
     font-style: italic;
     font-weight: 500;
-    font-size: 1.6rem;
-    color: #e5e7eb;
+    font-size: 1.7rem;
+    color: #f3f4f6;
+    text-shadow: 0 1px 12px rgba(0, 0, 0, 0.5);
   }
   .nav {
-    display: none;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
     align-items: center;
-    gap: 1.4rem;
-  }
-  @media (min-width: 768px) {
-    .nav { display: flex; }
-    .menu-btn { display: none; }
+    gap: 1.5rem;
   }
   .nav-link {
     color: #e5e7eb;
     font-size: 1rem;
     opacity: 0.85;
     transition: opacity 0.15s ease, transform 0.15s ease;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.2rem;
+    text-shadow: 0 1px 8px rgba(0, 0, 0, 0.5);
   }
-  .nav-link:hover { opacity: 1; transform: translateY(-1px); }
+  .nav-link:hover { opacity: 1; transform: scale(1.08); }
   .nav-link.active { opacity: 1; text-decoration: underline; text-underline-offset: 6px; }
-  .nav-link :global(svg) { width: 0.9rem; height: 0.9rem; }
-
-  /* dropdown */
-  .nav-dd { position: relative; }
-  .dd-menu {
-    position: absolute;
-    top: 100%;
-    left: 50%;
-    transform: translateX(-50%) translateY(6px);
-    display: flex;
-    flex-direction: column;
-    min-width: 9rem;
-    padding: 0.4rem;
-    border-radius: 0.6rem;
-    background: var(--glass-bg-strong);
-    backdrop-filter: blur(var(--glass-blur));
-    border: 0.5px solid var(--glass-border);
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.15s ease, transform 0.15s ease;
-  }
-  .nav-dd:hover .dd-menu,
-  .nav-dd:focus-within .dd-menu {
-    opacity: 1;
-    visibility: visible;
-    transform: translateX(-50%) translateY(2px);
-  }
-  .dd-item {
-    color: #e5e7eb;
-    padding: 0.4rem 0.6rem;
-    border-radius: 0.4rem;
-    font-size: 0.95rem;
-    opacity: 0.85;
-  }
-  .dd-item:hover { opacity: 1; background: rgba(255, 255, 255, 0.08); }
-
-  /* mobile */
-  .menu-btn {
-    background: none;
-    border: none;
-    color: #e5e7eb;
-    cursor: pointer;
-    line-height: 0;
-  }
-  .menu-btn :global(svg) { width: 1.5rem; height: 1.5rem; }
-
-  .nav.open {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.8rem;
-    position: absolute;
-    top: 100%;
-    right: 1.25rem;
-    margin-top: 0.5rem;
-    padding: 1rem 1.25rem;
-    border-radius: 0.7rem;
-    background: var(--glass-bg-strong);
-    backdrop-filter: blur(var(--glass-blur));
-    border: 0.5px solid var(--glass-border);
-  }
-  .nav.open .dd-menu {
-    position: static;
-    transform: none;
-    opacity: 1;
-    visibility: visible;
-    background: none;
-    border: none;
-    padding: 0.2rem 0 0 0.8rem;
-  }
 </style>
 
 <script is:inline>
-  // Sticky-condense on scroll + mobile menu toggle. Runs on every page load
-  // (View Transitions re-fire astro:page-load), so re-bind each time.
+  // Sticky-condense on scroll. ClientRouter re-fires astro:page-load each nav,
+  // so re-bind idempotently (remove any prior window scroll handler first).
   function initHeader() {
     const header = document.getElementById('site-header')
     if (!header) return
-    const btn = document.getElementById('menu-btn')
-    const nav = header.querySelector('.nav')
     const onScroll = () => header.classList.toggle('scrolled', window.scrollY > 24)
     if (window.__headerScroll) window.removeEventListener('scroll', window.__headerScroll)
     window.__headerScroll = onScroll
     window.addEventListener('scroll', onScroll, { passive: true })
     onScroll()
-    if (btn && nav) {
-      btn.addEventListener('click', () => {
-        const open = nav.classList.toggle('open')
-        btn.setAttribute('aria-expanded', String(open))
-      })
-      // close mobile menu on Escape
-      document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') { nav.classList.remove('open'); btn.setAttribute('aria-expanded','false') }
-      })
-    }
   }
   document.addEventListener('astro:page-load', initHeader)
 </script>
