@@ -1,6 +1,6 @@
 ---
 import settings from '../data/settings.json'
-import WritingNav from './WritingNav.tsx'
+import WritingNav from './WritingNav.astro'
 
 const path = Astro.url.pathname
 const isHome = path === '/'
@@ -16,7 +16,7 @@ const writingActive =
     <nav class="nav" aria-label="Primary">
       <a href="/about" class:list={['nav-link', { active: isActive('/about') }]}>About</a>
       <a href="/projects" class:list={['nav-link', { active: isActive('/projects') }]}>Projects</a>
-      <WritingNav client:load active={writingActive} />
+      <WritingNav active={writingActive} />
       <a href="/contact" class:list={['nav-link', { active: isActive('/contact') }]}>Contact</a>
     </nav>
   )}
