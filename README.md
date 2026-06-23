@@ -57,17 +57,21 @@ builds with Bun and deploys to Pages.
 
 ## Embeds in content
 
-Markdown bodies (bio, jobs, projects, future blog) support:
+Content bodies are **`.mdx`** (`src/content/**`), powered by **[astro-embed](https://astro-embed.netlify.app/)**:
 - **Images** natively: `![alt](/img/foo.png)`
-- **YouTube / Vimeo**: paste a bare link on its own line -> auto-embeds
-  (via `src/lib/rehype-embeds.mjs`).
+- **Auto-embed** — paste a bare link on its own line -> embeds automatically:
+  YouTube, Vimeo, Tweet/X, Bluesky, Gist, and generic link previews.
+- **Manual components** (optional, for power use):
+  `import { YouTube } from 'astro-embed'` then `<YouTube id="..." />`.
+
+> Astro 7 note: astro-embed's remark plugin needs the unified pipeline, so
+> `astro.config.mjs` sets `markdown: { processor: unified() }` and installs
+> `@astrojs/markdown-remark`. Without that, Astro 7's default (Sätteri) processor
+> ignores remark/rehype plugins and auto-embed silently no-ops.
 
 ## TODO
 
-- [ ] **Convert content to `.mdx` soon** — to allow richer embeds/components
-  (X/Twitter, link previews, custom components) inside posts, especially for the
-  planned **blog**. Trade-off: MDX is less forgiving for CMS editing (a stray
-  `<`/`{` can break the build), so likely make **only the blog** MDX and keep
-  profile/jobs/projects on safe `.md`. See `astro-embed` (auto-embed is MDX-only).
+- [ ] Add a **blog** collection (`src/content/blog/`) + `/blog` pages (MDX, so
+  embeds work out of the box).
 - [ ] Add a **blog** collection (`src/content/blog/`) + `/blog` pages.
 
