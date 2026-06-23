@@ -49,12 +49,15 @@ Designed as one spec; implemented in 3 phases (each its own plan + MR, site stay
 - Card polish (media, hover, layout).
 
 ### Contact (selected elements)
-- **Contact form** — Formspree/Web3Forms (free, static-friendly). Fields: name, email, message →
-  POST to endpoint; show thank-you state. Endpoint/key stored in `settings.json` (or env).
+- **Contact form** — **Web3Forms** (free, 250/mo, static-friendly; chosen over Formspree for the
+  generous tier + public access key). Fields: name, email, message → client-side POST with honeypot;
+  show thank-you state. Access key in `settings.json → web3formsKey` (public key, CMS-editable).
+  Form renders only when the key is set.
 - **Socials grid** — Email, LinkedIn, Messenger, GitHub (+ room for X/Bluesky/IG/YouTube); CMS-editable.
 - **Location & timezone** — "Philippines · GMT+8".
 - **Copy-email button** — copies email to clipboard.
-- **Schedule a call** — Cal.com/Calendly link (CMS field).
+- **Schedule a call** — CMS field `settings.json → scheduleUrl` (Cal.com *or* Calendly; user pastes
+  later). Button hides when empty.
 - **"What I can help with"** — short services line (web & mobile dev, UI/UX, multimedia).
 - **Response-time note** — "I usually reply within 24h".
 - (Availability badge intentionally omitted.)
@@ -138,6 +141,6 @@ must be clean and usable on mobile.
 - Real-time/back-end features, comments, search across posts, RSS (could add later), i18n.
 
 ## Open items to confirm at build time
-- Formspree vs Web3Forms (both free; pick when building Contact).
-- Cal.com vs Calendly link (user provides).
+- Web3Forms access key — user creates (free) and pastes into CMS (`web3formsKey`).
+- Schedule link (`scheduleUrl`) — user pastes Cal.com or Calendly later via CMS.
 - Exact "featured" projects list.
