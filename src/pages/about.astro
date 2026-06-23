@@ -4,6 +4,7 @@ import TitleBox from '../components/TitleBox.astro'
 import Information from '../components/sections/Information.astro'
 import Skills from '../components/sections/Skills.astro'
 import JobHistory from '../components/sections/JobHistory.astro'
+import { Icon } from 'astro-icon/components'
 import settings from '../data/settings.json'
 ---
 
@@ -23,7 +24,7 @@ import settings from '../data/settings.json'
       <JobHistory />
 
       <div class="mt-10 flex justify-center">
-        <a href="/projects" class="cta glass">Check out my projects <span class="arrow">→</span></a>
+        <a href="/projects" class="cta glass">Check out my projects <Icon class="arrow" name="ph:arrow-right" /></a>
       </div>
     </div>
   </div>

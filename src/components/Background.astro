@@ -1,4 +1,5 @@
 ---
+import { Icon } from 'astro-icon/components'
 import background from '../data/background.json'
 
 const videos = background.videos
@@ -37,17 +38,27 @@ const lines = Array.from({ length: 40 }, (_, i) => {
   </div>
 </div>
 
-<!-- Glass music player (fixed bottom) -->
+<!-- Glass music player (fixed bottom). Phosphor (fill) icons. -->
 <div class="player glass" id="player" hidden>
   <div class="player-info" id="player-info" title="Open on YouTube">
     <div class="player-title" id="player-title">Love music? Click unmute. :)</div>
     <div class="player-channel" id="player-channel"></div>
   </div>
   <div class="player-controls">
-    <button class="pbtn" id="prev" aria-label="Previous">‹‹</button>
-    <button class="pbtn" id="toggle" aria-label="Play/Pause">►</button>
-    <button class="pbtn" id="mute" aria-label="Mute/Unmute">🔇</button>
-    <button class="pbtn" id="next" aria-label="Next">››</button>
+    <button class="pbtn" id="prev" aria-label="Previous">
+      <Icon name="ph:skip-back-fill" />
+    </button>
+    <button class="pbtn" id="toggle" aria-label="Play/Pause">
+      <Icon name="ph:play-fill" id="icon-play" />
+      <Icon name="ph:pause-fill" id="icon-pause" hidden />
+    </button>
+    <button class="pbtn" id="mute" aria-label="Mute/Unmute">
+      <Icon name="ph:speaker-slash-fill" id="icon-muted" />
+      <Icon name="ph:speaker-high-fill" id="icon-unmuted" hidden />
+    </button>
+    <button class="pbtn" id="next" aria-label="Next">
+      <Icon name="ph:skip-forward-fill" />
+    </button>
   </div>
 </div>
 </div>
@@ -75,33 +86,46 @@ const lines = Array.from({ length: 40 }, (_, i) => {
 
   .player {
     position: fixed;
-    bottom: 1rem;
+    bottom: 1.5rem;
     left: 50%;
     transform: translateX(-50%);
     z-index: 30;
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 0.75rem 1rem;
-    border-radius: 0.75rem;
+    padding: 0.85rem 1.25rem;
+    border-radius: 0.85rem;
     text-align: center;
-    transition: opacity 0.3s ease-in-out;
+    transition: transform 0.1s ease-in-out;
   }
-  .player.idle { opacity: 0.25; }
-  .player-info { cursor: pointer; max-width: 30ch; }
+  /* While playing on large screens, slide the player down just enough to hide
+     the buttons (title stays visible); hover brings the buttons back. */
+  @media (min-width: 1024px) {
+    .player.playing { transform: translateX(-50%) translateY(3.5rem); }
+    .player.playing:hover { transform: translateX(-50%) translateY(0); }
+  }
+  /* When idle, hide the now-playing title — on mobile only (desktop keeps it). */
+  .player.idle-title .player-info { display: none; }
+  @media (min-width: 768px) {
+    .player.idle-title .player-info { display: block; }
+  }
+  .player-info { cursor: pointer; max-width: 30ch; margin-bottom: 0.7rem; }
   .player-title { font-size: 0.75rem; font-weight: 500; }
   .player-channel { font-size: 0.7rem; font-weight: 300; opacity: 0.85; margin-top: 0.15rem; }
-  .player-controls { display: flex; align-items: center; gap: 1rem; margin-top: 0.5rem; }
+  .player-controls { display: flex; align-items: center; gap: 0.85rem; }
   .pbtn {
     background: none;
     border: none;
     color: #e5e7eb;
-    font-size: 1.1rem;
-    line-height: 1;
+    line-height: 0;
     cursor: pointer;
+    padding: 0;
     transition: transform 0.1s ease;
   }
-  .pbtn:hover { transform: scale(1.25); }
+  .pbtn svg { width: 1.25rem; height: 1.25rem; }
+  .pbtn svg:not([hidden]) { display: block; }
+  .pbtn svg[hidden] { display: none; }
+  .pbtn:hover { transform: scale(1.2); }
 </style>
 
 <script is:inline define:vars={{ videos }}>
@@ -136,6 +160,21 @@ const lines = Array.from({ length: 40 }, (_, i) => {
   const channelEl = $('player-channel')
   const toggleBtn = $('toggle')
   const muteBtn = $('mute')
+  const iconPlay = $('icon-play')
+  const iconPause = $('icon-pause')
+  const iconMuted = $('icon-muted')
+  const iconUnmuted = $('icon-unmuted')
+
+  // Use toggleAttribute (not .hidden) — SVG elements don't reflect the .hidden
+  // DOM property to the attribute, so CSS [hidden] wouldn't update.
+  function setPlayIcon() {
+    iconPlay.toggleAttribute('hidden', isPlaying)
+    iconPause.toggleAttribute('hidden', !isPlaying)
+  }
+  function setMuteIcon() {
+    iconMuted.toggleAttribute('hidden', !isMuted)
+    iconUnmuted.toggleAttribute('hidden', isMuted)
+  }
 
   function loadYouTubeAPI() {
     return new Promise((resolve) => {
@@ -153,10 +192,8 @@ const lines = Array.from({ length: 40 }, (_, i) => {
     // Keep the "Click unmute" prompt until the user has unmuted at least once.
     if (isFirstLoad) return
     const v = current()
-    if (isPlaying) {
-      titleEl.textContent = v.title
-      channelEl.textContent = v.channel
-    }
+    titleEl.textContent = v.title
+    channelEl.textContent = v.channel
   }
 
   function setFallback(hidden) { fallback.style.opacity = hidden ? '0' : '1' }
@@ -178,16 +215,17 @@ const lines = Array.from({ length: 40 }, (_, i) => {
         onStateChange: (e) => {
           if (e.data === YT.PlayerState.PLAYING) {
             isPlaying = true
-            toggleBtn.textContent = '❚❚'
+            setPlayIcon()
             setFallback(true)
             updateInfo()
+            updateClasses()
           } else if (e.data === YT.PlayerState.ENDED) {
             changeVideo(1)
           } else {
-            // Paused/buffering: keep the (paused) video frame visible —
-            // don't bring the fallback gradient back over it.
+            // Paused/buffering: keep the paused video frame visible.
             isPlaying = false
-            toggleBtn.textContent = '►'
+            setPlayIcon()
+            updateClasses()
           }
         },
         onError: () => changeVideo(1),
@@ -200,48 +238,56 @@ const lines = Array.from({ length: 40 }, (_, i) => {
     const v = current()
     player.loadVideoById(v.id)
     player.setLoop(true)
+    // Preserve mute state across track changes.
+    if (isMuted) player.mute()
+    else { player.unMute(); player.setVolume(80) }
+    updateInfo()
     interact()
   }
 
-  function interact() { lastInteract = Date.now(); playerEl.classList.remove('idle') }
+  // `playing` -> tuck down on desktop while a track plays (hover reveals).
+  // `idle-title` -> hide the now-playing title on mobile after 5s idle.
+  function updateClasses() {
+    const idle = Date.now() - lastInteract > 5000
+    playerEl.classList.toggle('playing', isPlaying && !isFirstLoad)
+    playerEl.classList.toggle('idle-title', idle && !isFirstLoad)
+  }
+
+  function interact() { lastInteract = Date.now(); updateClasses() }
 
   // Wire controls
   $('prev').addEventListener('click', () => changeVideo(-1))
   $('next').addEventListener('click', () => changeVideo(1))
+  // Real play/pause.
   toggleBtn.addEventListener('click', () => {
     if (!player) return
     isPlaying ? player.pauseVideo() : player.playVideo()
     interact()
   })
+  // Separate mute/unmute. First unmute restarts the track with audio (Vue parity).
   muteBtn.addEventListener('click', () => {
     if (!player) return
     if (isMuted) {
-      // First unmute: restart the current track with audio (like the Vue site).
-      if (isFirstLoad) {
-        isFirstLoad = false
-        player.seekTo(0)
-        player.playVideo()
-      }
+      if (isFirstLoad) { isFirstLoad = false; player.seekTo(0); player.playVideo() }
       player.unMute()
       player.setVolume(80)
       isMuted = false
-      muteBtn.textContent = '🔊'
       updateInfo()
     } else {
       player.mute()
       isMuted = true
-      muteBtn.textContent = '🔇'
     }
+    setMuteIcon()
     interact()
   })
   $('player-info').addEventListener('click', () => {
     window.open(`https://www.youtube.com/watch?v=${current().id}`, '_blank')
   })
+  // Un-dim while hovering the player.
+  playerEl.addEventListener('mouseenter', interact)
 
-  // Auto-dim the player when idle.
-  setInterval(() => {
-    if (Date.now() - lastInteract > 5000) playerEl.classList.add('idle')
-  }, 1000)
+  // Re-evaluate idle/playing state every second.
+  setInterval(updateClasses, 1000)
 
   init()
   }
