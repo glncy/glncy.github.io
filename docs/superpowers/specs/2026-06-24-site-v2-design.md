@@ -107,6 +107,15 @@ Goal: keep the frosted-glass aesthetic but make it **consistent, professional, a
   type), one `SectionHeading`, one `Divider`/hairline. Used across Projects, About, Contact, Writing.
 - **Typography scale** — fixed Playfair (headings) + Poppins (body) sizes/weights with consistent
   line-heights and clear hierarchy.
+- **Icons (consistent system)** — standardize on **astro-icon + Phosphor** (`<Icon name="ph:..." />`)
+  everywhere:
+  - Nav `Writing ▾` caret, social row (GitHub/LinkedIn/Email/Messenger), player controls (already done).
+  - About **timeline** node markers + section headings.
+  - Projects: filter/tag chips, links (external-link, GitHub), featured star.
+  - Contact: envelope, copy, calendar (schedule), map-pin (location), clock (response time), socials.
+  - Writing/Blog/TIL cards & detail: calendar (date), pencil/clock (updated), tag, reading-time, type badge.
+  - **Tech brand logos stay on devicon** (Skills grid, project stack) — Phosphor doesn't cover those.
+  Icons render as inline SVG at build (no client JS); sizes/colors via the token/type scale.
 
 **Fun (with restraint):**
 - **Micro-interactions** — smooth hover lift on cards/buttons, glass brighten on hover, animated arrows.
