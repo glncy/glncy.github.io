@@ -59,7 +59,7 @@ collections:
     files:
       - name: profile
         label: Profile
-        file: src/content/profile/profile.md
+        file: src/content/profile/profile.mdx
         fields:
           - { name: name, label: Name, widget: string }
           - { name: role, label: Role, widget: string }
@@ -92,6 +92,7 @@ collections:
   - name: jobs
     label: Job History
     folder: src/content/jobs
+    extension: mdx
     format: frontmatter
     create: true
     slug: '{{order}}-{{company}}-{{title}}'
@@ -107,6 +108,7 @@ collections:
   - name: projects
     label: Projects
     folder: src/content/projects
+    extension: mdx
     format: frontmatter
     create: true
     slug: '{{order}}-{{name}}'
