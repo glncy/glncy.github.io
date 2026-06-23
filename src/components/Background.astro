@@ -19,7 +19,9 @@ const lines = Array.from({ length: 40 }, (_, i) => {
 <div transition:persist="background-player">
 <!-- Fixed animated background -->
 <div class="bg-fixed-layer">
-  <div id="yt-bg"></div>
+  <div class="yt-wrapper" id="yt-wrapper">
+    <div id="yt-bg"></div>
+  </div>
   <div class="bg-fallback" id="bg-fallback"></div>
   <div class="glitch-lines">
     {lines.map((l) => (
@@ -54,18 +56,21 @@ const lines = Array.from({ length: 40 }, (_, i) => {
   /* YT.Player replaces #yt-bg with an <iframe> that keeps this id.
      Cover the viewport AND overscan (scale) so YouTube's title bar and
      controls sit off-screen; pointer-events:none stops hover UI. */
-  #yt-bg {
+  /* Wrapper is sized by JS to a 16:9 box larger than the viewport (overscan),
+     so YouTube's title bar (top) and "More videos"/logo (bottom) sit off-screen
+     while the video covers fully with no black bars. Ported from the Vue site. */
+  .yt-wrapper {
     position: absolute;
     top: 50%;
     left: 50%;
-    /* Always 16:9 (177.78vh*9/16 = 100vh; 100vw*9/16 = 56.25vw), sized to the
-       larger dimension so it COVERS with no letterbox/pillarbox bars. */
-    width: max(100vw, 177.78vh);
-    height: max(56.25vw, 100vh);
-    /* Extra overscan pushes YouTube's title bar + logo off-screen. */
-    transform: translate(-50%, -50%) scale(1.5);
-    border: 0;
+    transform: translate(-50%, -50%);
     pointer-events: none;
+  }
+  #yt-bg {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border: 0;
   }
 
   .player {
@@ -113,7 +118,18 @@ const lines = Array.from({ length: 40 }, (_, i) => {
   let lastInteract = Date.now()
 
   const $ = (id) => document.getElementById(id)
+  const wrapper = $('yt-wrapper')
   const fallback = $('bg-fallback')
+
+  // Size the player to a 16:9 box bigger than the viewport so it covers fully
+  // AND YouTube's chrome (title/logo/more-videos) overscans off-screen.
+  function sizeWrapper() {
+    const w = Math.max(window.innerWidth * 1.18, window.innerHeight * 2.1)
+    wrapper.style.width = w + 'px'
+    wrapper.style.height = (w * 9) / 16 + 'px'
+  }
+  sizeWrapper()
+  window.addEventListener('resize', sizeWrapper)
   const playerEl = $('player')
   const titleEl = $('player-title')
   const channelEl = $('player-channel')
