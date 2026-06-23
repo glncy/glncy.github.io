@@ -98,10 +98,10 @@ const lines = Array.from({ length: 40 }, (_, i) => {
     text-align: center;
     transition: transform 0.1s ease-in-out;
   }
-  /* While playing, tuck the player down on large screens; hover slides it back
-     up (ported from the original Vue site — no opacity fade). */
+  /* While playing on large screens, slide the player down just enough to hide
+     the buttons (title stays visible); hover brings the buttons back. */
   @media (min-width: 1024px) {
-    .player.playing { transform: translateX(-50%) translateY(3rem); }
+    .player.playing { transform: translateX(-50%) translateY(3.5rem); }
     .player.playing:hover { transform: translateX(-50%) translateY(0); }
   }
   /* When idle, hide the now-playing title — on mobile only (desktop keeps it). */
