@@ -203,11 +203,11 @@
 .bg-overlay {
   position: absolute;
   inset: 0;
-  background: rgba(0, 0, 0, 0.5);
-  box-shadow: inset 0 0 200px 40px rgba(0, 0, 0, 0.8);
+  background: rgba(0, 0, 0, 0.35);
+  box-shadow: inset 0 0 180px 30px rgba(0, 0, 0, 0.7);
 }
 @media (min-width: 768px) {
-  .bg-overlay { box-shadow: inset 0 0 420px 120px rgba(0, 0, 0, 0.8); }
+  .bg-overlay { box-shadow: inset 0 0 360px 90px rgba(0, 0, 0, 0.7); }
 }
 .bg-noise {
   position: absolute;
@@ -229,6 +229,36 @@
   80%  { transform: translate(100px, -150px); }
   90%  { transform: translate(0, 200px); }
   100% { transform: translate(-100px, 100px); }
+}
+
+/* ---- Glitch scanlines (animated horizontal distortion bars) ----------- */
+.glitch-lines {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+.glitch-line {
+  position: absolute;
+  width: 100vw;
+  opacity: 0.6;
+  top: var(--top);
+  backdrop-filter: saturate(5) blur(10px);
+  animation: lineGlitch 10s linear infinite;
+}
+@keyframes lineGlitch {
+  0.1%  { top: var(--top); opacity: 0; }
+  0.2%  { top: var(--top); opacity: 0.6; }
+  50%   { opacity: 0.6; }
+  50.1% { opacity: 0; }
+  55%   { opacity: 0; }
+  55.1% { opacity: 0.6; }
+  70%   { opacity: 0.6; }
+  70.1% { opacity: 0; }
+  72%   { opacity: 0; }
+  72.1% { opacity: 0.6; }
+  97%   { opacity: 0.6; }
+  97.1% { opacity: 0; }
+  100%  { top: var(--endTop); opacity: 0; }
 }
 
 /* ---- Bouncing down-arrow (About/Projects header) ---------------------- */

@@ -2,12 +2,31 @@
 import settings from '../data/settings.json'
 
 const videos = settings.backgroundVideos
+
+// Pre-generate the animated glitch scanlines (ported from the original site).
+const lines = Array.from({ length: 40 }, (_, i) => {
+  const pct = 16 + Math.floor(Math.random() * 8) // 16–24
+  const height = 2 + Math.floor(Math.random() * 8) // 2–10px
+  return {
+    height,
+    top: `calc(200% - ${i * pct}%)`,
+    endTop: `calc(100% - ${i * pct}%)`,
+  }
+})
 ---
 
 <!-- Fixed animated background -->
 <div class="bg-fixed-layer">
   <div id="yt-bg"></div>
   <div class="bg-fallback" id="bg-fallback"></div>
+  <div class="glitch-lines">
+    {lines.map((l) => (
+      <div
+        class="glitch-line"
+        style={`--top:${l.top};--endTop:${l.endTop};height:${l.height}px;`}
+      ></div>
+    ))}
+  </div>
   <div class="bg-overlay"></div>
   <div style="position:absolute;inset:0;overflow:hidden;">
     <div class="bg-noise"></div>
