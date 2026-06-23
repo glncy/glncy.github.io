@@ -1,0 +1,17 @@
+---
+import { Icon } from 'astro-icon/components'
+
+interface Props {
+  href: string
+  icon?: string // optional Phosphor icon name, e.g. "ph:arrow-right"
+  external?: boolean
+  class?: string
+}
+const { href, icon, external = false, class: cls = '' } = Astro.props
+const attrs = external ? { target: '_blank', rel: 'noopener' } : {}
+---
+
+<a href={href} class={`cta glass ${cls}`} {...attrs}>
+  <slot />
+  {icon && <Icon class="arrow" name={icon} />}
+</a>
