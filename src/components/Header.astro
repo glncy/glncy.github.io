@@ -1,6 +1,6 @@
 ---
-import { Icon } from 'astro-icon/components'
 import settings from '../data/settings.json'
+import WritingNav from './WritingNav.tsx'
 
 const path = Astro.url.pathname
 const isHome = path === '/'
@@ -16,21 +16,7 @@ const writingActive =
     <nav class="nav" aria-label="Primary">
       <a href="/about" class:list={['nav-link', { active: isActive('/about') }]}>About</a>
       <a href="/projects" class:list={['nav-link', { active: isActive('/projects') }]}>Projects</a>
-
-      <div class="nav-dd">
-        <a
-          href="/writing"
-          aria-haspopup="true"
-          class:list={['nav-link', 'dd-toggle', { active: writingActive }]}
-        >
-          Writing <Icon name="ph:caret-down" />
-        </a>
-        <div class="dd-menu">
-          <a href="/blog" class="dd-item">Blog</a>
-          <a href="/til" class="dd-item">TIL</a>
-        </div>
-      </div>
-
+      <WritingNav client:load active={writingActive} />
       <a href="/contact" class:list={['nav-link', { active: isActive('/contact') }]}>Contact</a>
     </nav>
   )}
@@ -84,63 +70,6 @@ const writingActive =
   }
   .nav-link:hover { opacity: 1; transform: scale(1.08); }
   .nav-link.active { opacity: 1; text-decoration: underline; text-underline-offset: 6px; }
-
-  /* Writing dropdown */
-  .nav-dd { position: relative; }
-  .dd-toggle {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.2rem;
-  }
-  .dd-toggle :global(svg) {
-    width: 0.8rem;
-    height: 0.8rem;
-    transition: transform 0.15s ease;
-  }
-  .nav-dd:hover .dd-toggle :global(svg) { transform: rotate(180deg); }
-  .dd-menu {
-    position: absolute;
-    top: 100%;
-    left: 50%;
-    transform: translateX(-50%) translateY(4px);
-    display: flex;
-    flex-direction: column;
-    min-width: 8.5rem;
-    padding: 0.4rem;
-    border-radius: 0.6rem;
-    background: rgba(10, 12, 16, 0.7);
-    backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.14);
-    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.15s ease, transform 0.15s ease;
-  }
-  .nav-dd:hover .dd-menu,
-  .nav-dd:focus-within .dd-menu {
-    opacity: 1;
-    visibility: visible;
-    transform: translateX(-50%) translateY(8px);
-  }
-  /* hover bridge so the menu doesn't close in the gap below the toggle */
-  .nav-dd::after {
-    content: '';
-    position: absolute;
-    top: 100%;
-    left: 0;
-    right: 0;
-    height: 12px;
-  }
-  .dd-item {
-    color: #e5e7eb;
-    padding: 0.45rem 0.7rem;
-    border-radius: 0.4rem;
-    font-size: 0.95rem;
-    opacity: 0.85;
-    text-align: center;
-    transition: background 0.15s ease, opacity 0.15s ease;
-  }
-  .dd-item:hover { opacity: 1; background: rgba(255, 255, 255, 0.1); }
 </style>
 
 <script is:inline>
