@@ -115,6 +115,7 @@ const lines = Array.from({ length: 40 }, (_, i) => {
   let player = null
   let isPlaying = false
   let isMuted = true
+  let isFirstLoad = true // show "Click unmute" prompt until the user unmutes once
   let lastInteract = Date.now()
 
   const $ = (id) => document.getElementById(id)
@@ -149,6 +150,8 @@ const lines = Array.from({ length: 40 }, (_, i) => {
   function current() { return videos[index] }
 
   function updateInfo() {
+    // Keep the "Click unmute" prompt until the user has unmuted at least once.
+    if (isFirstLoad) return
     const v = current()
     if (isPlaying) {
       titleEl.textContent = v.title
@@ -212,8 +215,23 @@ const lines = Array.from({ length: 40 }, (_, i) => {
   })
   muteBtn.addEventListener('click', () => {
     if (!player) return
-    if (isMuted) { player.unMute(); player.setVolume(80); isMuted = false; muteBtn.textContent = '🔊' }
-    else { player.mute(); isMuted = true; muteBtn.textContent = '🔇' }
+    if (isMuted) {
+      // First unmute: restart the current track with audio (like the Vue site).
+      if (isFirstLoad) {
+        isFirstLoad = false
+        player.seekTo(0)
+        player.playVideo()
+      }
+      player.unMute()
+      player.setVolume(80)
+      isMuted = false
+      muteBtn.textContent = '🔊'
+      updateInfo()
+    } else {
+      player.mute()
+      isMuted = true
+      muteBtn.textContent = '🔇'
+    }
     interact()
   })
   $('player-info').addEventListener('click', () => {
