@@ -7,6 +7,8 @@ import react from '@astrojs/react';
 import mdx from '@astrojs/mdx';
 import embeds from 'astro-embed/integration';
 
+import icon from 'astro-icon';
+
 // https://astro.build/config
 // Custom domain (public/CNAME -> glncy.is-a.dev). User site at domain root: no `base`.
 export default defineConfig({
@@ -26,5 +28,5 @@ export default defineConfig({
   // embeds() must come BEFORE mdx(). Auto-embeds bare URLs (YouTube, Vimeo,
   // Tweet, Bluesky, Gist, link previews) on their own line in .md/.mdx, and
   // provides <YouTube/> etc. components for manual use.
-  integrations: [embeds(), mdx(), react()],
+  integrations: [embeds(), mdx(), react(), icon()],
 });

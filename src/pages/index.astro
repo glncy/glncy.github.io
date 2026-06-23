@@ -1,6 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro'
 import TitleBox from '../components/TitleBox.astro'
+import { Icon } from 'astro-icon/components'
 import { getEntry } from 'astro:content'
 
 const profile = await getEntry('profile', 'profile')
@@ -11,7 +12,7 @@ const { name, tagline } = profile!.data
   <div class="flex h-screen w-screen flex-col items-center justify-center">
     <TitleBox title={name} subtitle={tagline} />
     <div class="mt-6">
-      <a href="/about" class="cta glass">About Me <span class="arrow">→</span></a>
+      <a href="/about" class="cta glass">About Me <Icon class="arrow" name="ph:arrow-right" /></a>
     </div>
   </div>
 </Layout>

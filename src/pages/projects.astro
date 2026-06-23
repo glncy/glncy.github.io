@@ -2,6 +2,7 @@
 import Layout from '../layouts/Layout.astro'
 import TitleBox from '../components/TitleBox.astro'
 import Projects from '../components/sections/Projects.astro'
+import { Icon } from 'astro-icon/components'
 import settings from '../data/settings.json'
 
 const subtitle = `${settings.pages.projectsSubtitle}
@@ -22,7 +23,7 @@ const subtitle = `${settings.pages.projectsSubtitle}
       <Projects />
 
       <div class="mt-10 flex justify-center">
-        <a href="/contact" class="cta glass">Contact Me <span class="arrow">→</span></a>
+        <a href="/contact" class="cta glass">Contact Me <Icon class="arrow" name="ph:arrow-right" /></a>
       </div>
     </div>
   </div>
