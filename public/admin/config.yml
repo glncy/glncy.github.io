@@ -5,7 +5,7 @@ backend:
   repo: glncy/glncy
   branch: main
   auth_type: pkce
-  app_id: PLACEHOLDER_GITLAB_APPLICATION_ID # set in MR before use (see README)
+  app_id: 9b093f6070f6c28feb3dc52bd930d3eeb85318d9d60f39e654f40ff3248a8d18
 
 # Images committed straight to the repo; videos use YouTube (see Projects.youtube).
 media_folder: public/img
