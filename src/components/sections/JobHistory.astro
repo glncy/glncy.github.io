@@ -1,0 +1,32 @@
+---
+import { getCollection, render } from 'astro:content'
+
+const jobs = (await getCollection('jobs')).sort((a, b) => b.data.order - a.data.order)
+const rendered = await Promise.all(
+  jobs.map(async (job) => ({ data: job.data, Content: (await render(job)).Content }))
+)
+---
+
+<div>
+  <div class="font-heading w-fit text-6xl text-gray-200">Job History</div>
+  <div class="hairline my-4 w-full"></div>
+
+  <div class="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
+    {rendered.map(({ data, Content }) => (
+      <div class="glass glass-hover flex flex-col rounded-lg p-4">
+        <div class="text-2xl text-gray-200">{data.title}</div>
+        <div class="desc text-sm font-light text-gray-200"><Content /></div>
+        <div class="hairline my-2"></div>
+        <div class="text-xl text-gray-200">{data.company}</div>
+        <div class="text-base font-extralight text-gray-200">{data.location}</div>
+        <div class="text-sm font-extralight italic text-gray-200">
+          {data.startDate} - {data.endDate}
+        </div>
+      </div>
+    ))}
+  </div>
+</div>
+
+<style>
+  .desc :global(p) { margin: 0; }
+</style>

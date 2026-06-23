@@ -6,8 +6,8 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
-    --font-heading: var(--font-sans);
-    --font-sans: 'Geist Variable', sans-serif;
+    --font-heading: 'Playfair Display', serif;
+    --font-sans: 'Poppins', sans-serif;
     --color-sidebar-ring: var(--sidebar-ring);
     --color-sidebar-border: var(--sidebar-border);
     --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -120,11 +120,128 @@
 @layer base {
   * {
     @apply border-border outline-ring/50;
-    }
-  body {
-    @apply bg-background text-foreground;
-    }
+  }
   html {
     @apply font-sans;
-    }
+  }
+  /* The site renders over a fixed video background, so the page itself is
+     transparent and text defaults to light gray (matches the original). */
+  body {
+    @apply text-gray-200;
+    background: transparent;
+  }
+  h1, h2, h3, .font-heading {
+    font-family: var(--font-heading);
+  }
+}
+
+/* ---- Glassmorphism panel (cards, info boxes, title box) ---------------- */
+.glass {
+  background: rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(8px);
+  border: 0.5px solid rgba(255, 255, 255, 0.2);
+}
+.glass-hover {
+  transition: all 0.2s ease-in-out;
+}
+.glass-hover:hover {
+  transform: scale(1.02);
+  background: rgba(0, 0, 0, 0.5);
+  border: 0.5px solid rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(8px);
+}
+.hairline {
+  height: 0.2px;
+  background: rgba(255, 255, 255, 0.5);
+}
+
+/* ---- Call-to-action pill ---------------------------------------------- */
+.cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1.2rem;
+  border-radius: 9999px;
+  color: #e5e7eb;
+  transition: all 0.2s ease-in-out;
+}
+.cta:hover { transform: scale(1.05); background: rgba(0, 0, 0, 0.5); }
+.cta .arrow { transition: transform 0.2s ease; }
+.cta:hover .arrow { transform: translateX(4px); }
+
+/* ---- Animated background ----------------------------------------------- */
+.bg-fixed-layer {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  overflow: hidden;
+  background: #000;
+}
+.bg-video {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  min-width: 100%;
+  min-height: 100%;
+}
+.bg-fallback {
+  position: absolute;
+  inset: 0;
+  background-color: #c399ff;
+  background-image:
+    radial-gradient(at 89% 54%, hsla(267, 66%, 74%, 1) 0px, transparent 50%),
+    radial-gradient(at 3% 65%, hsla(77, 88%, 78%, 1) 0px, transparent 50%),
+    radial-gradient(at 95% 18%, hsla(69, 63%, 71%, 1) 0px, transparent 50%),
+    radial-gradient(at 1% 42%, hsla(104, 63%, 73%, 1) 0px, transparent 50%),
+    radial-gradient(at 11% 38%, hsla(26, 91%, 71%, 1) 0px, transparent 50%),
+    radial-gradient(at 94% 92%, hsla(220, 95%, 66%, 1) 0px, transparent 50%),
+    radial-gradient(at 79% 75%, hsla(76, 66%, 76%, 1) 0px, transparent 50%);
+  transition: opacity 0.6s ease-in-out;
+}
+.bg-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  box-shadow: inset 0 0 200px 40px rgba(0, 0, 0, 0.8);
+}
+@media (min-width: 768px) {
+  .bg-overlay { box-shadow: inset 0 0 420px 120px rgba(0, 0, 0, 0.8); }
+}
+.bg-noise {
+  position: absolute;
+  inset: -500px;
+  background: transparent url('/img/noise.png') 0 0;
+  background-size: 320px;
+  opacity: 0.3;
+  animation: noiseAnimation 1s steps(8, end) infinite both;
+}
+@keyframes noiseAnimation {
+  0%   { transform: translate(0, 0); }
+  10%  { transform: translate(-100px, 100px); }
+  20%  { transform: translate(150px, -100px); }
+  30%  { transform: translate(-100px, 100px); }
+  40%  { transform: translate(100px, -150px); }
+  50%  { transform: translate(-100px, 200px); }
+  60%  { transform: translate(-200px, -100px); }
+  70%  { transform: translate(50px, 100px); }
+  80%  { transform: translate(100px, -150px); }
+  90%  { transform: translate(0, 200px); }
+  100% { transform: translate(-100px, 100px); }
+}
+
+/* ---- Bouncing down-arrow (About/Projects header) ---------------------- */
+.down-arrow {
+  width: 16px;
+  height: 16px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='white' viewBox='0 0 16 16'%3E%3Cpath fill-rule='evenodd' d='M8 1a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L7.5 13.293V1.5A.5.5 0 0 1 8 1z'/%3E%3C/svg%3E");
+  opacity: 0.8;
+  animation: downArrow 2s infinite ease-in-out;
+}
+@keyframes downArrow {
+  0%   { transform: scale(2) translateY(12vh); opacity: 0; }
+  20%  { opacity: 0.5; }
+  60%  { transform: scale(2) translateY(13vh); }
+  100% { transform: scale(2) translateY(13vh); opacity: 0; }
 }

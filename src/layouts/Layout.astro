@@ -1,0 +1,84 @@
+---
+import '../styles/global.css'
+import Background from '../components/Background.astro'
+import settings from '../data/settings.json'
+
+interface Props {
+  title?: string
+  description?: string
+  showNav?: boolean
+}
+
+const {
+  title = settings.siteTitle,
+  description = 'Glency Tirao — web & mobile developer | designs & multimedia',
+  showNav = true,
+} = Astro.props
+
+const ga = settings.analyticsId
+---
+
+<!doctype html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <meta name="format-detection" content="telephone=no" />
+    <link rel="icon" href="/favicon.ico" />
+    <link rel="canonical" href={Astro.url.href} />
+    <title>{title}</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Poppins:ital,wght@0,100..900;1,100..900&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Devicon (skill icons) -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/gh/devicons/devicon@v2.16.0/devicon.min.css"
+    />
+
+    <!-- Google Analytics -->
+    {ga && (
+      <>
+        <script
+          is:inline
+          async
+          src={`https://www.googletagmanager.com/gtag/js?id=${ga}`}
+        ></script>
+        <script is:inline define:vars={{ ga }}>
+          window.dataLayer = window.dataLayer || []
+          function gtag() { dataLayer.push(arguments) }
+          gtag('js', new Date())
+          gtag('config', ga)
+        </script>
+      </>
+    )}
+  </head>
+  <body class="overflow-x-hidden">
+    <Background />
+
+    <header class="fixed inset-x-0 top-0 z-20">
+      <div
+        class="font-heading mt-3 text-center text-4xl font-medium italic text-gray-200"
+      >
+        <a href="/">{settings.siteTitle}</a>
+      </div>
+      {showNav && (
+        <nav class="mt-4 flex justify-center gap-5 text-base text-gray-200">
+          <a class="transition hover:scale-110" href="/about">About</a>
+          <a class="transition hover:scale-110" href="/projects">Projects</a>
+          <a class="transition hover:scale-110" href="/contact">Contact</a>
+        </nav>
+      )}
+    </header>
+
+    <main class="relative z-10">
+      <slot />
+    </main>
+  </body>
+</html>

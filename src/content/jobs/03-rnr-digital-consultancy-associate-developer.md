@@ -1,0 +1,10 @@
+---
+title: "Associate Developer"
+company: "RNR Digital Consultancy"
+location: "Pangasinan, Philippines"
+startDate: "October 2019"
+endDate: "January 2020"
+order: 3
+---
+
+Developed Node.js RESTful API application, making components for Mobile and Web, setting up CI/CD pipeline, managing AWS EC2 servers, conducted R&D activities.

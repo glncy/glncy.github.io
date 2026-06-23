@@ -1,0 +1,14 @@
+---
+import Layout from '../layouts/Layout.astro'
+import TitleBox from '../components/TitleBox.astro'
+import profile from '../data/profile.json'
+---
+
+<Layout showNav={false} title="glncy">
+  <div class="flex h-screen w-screen flex-col items-center justify-center">
+    <TitleBox title={profile.name} subtitle={profile.tagline} />
+    <div class="mt-6">
+      <a href="/about" class="cta glass">About Me <span class="arrow">→</span></a>
+    </div>
+  </div>
+</Layout>

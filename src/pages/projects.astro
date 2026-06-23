@@ -1,0 +1,29 @@
+---
+import Layout from '../layouts/Layout.astro'
+import TitleBox from '../components/TitleBox.astro'
+import Projects from '../components/sections/Projects.astro'
+import settings from '../data/settings.json'
+
+const subtitle = `Projects and Repositories in which I have contributed.
+  <div class="mt-2"><a href="${settings.github}" target="_blank" rel="noopener">@glncy</a></div>`
+---
+
+<Layout title="Projects | glncy">
+  <div class="pb-40">
+    <div class="relative flex h-screen w-full flex-col items-center justify-center">
+      <TitleBox title="Projects" subtitle={subtitle} />
+      <div class="absolute text-sm text-gray-200 opacity-80" style="margin-top:38vh;">
+        Scroll Down
+      </div>
+      <div class="down-arrow absolute"></div>
+    </div>
+
+    <div class="mx-auto max-w-6xl px-4">
+      <Projects />
+
+      <div class="mt-10 flex justify-center">
+        <a href="/contact" class="cta glass">Contact Me <span class="arrow">→</span></a>
+      </div>
+    </div>
+  </div>
+</Layout>

@@ -1,0 +1,30 @@
+---
+import skills from '../../data/skills.json'
+---
+
+<div class="mb-10">
+  <div class="font-heading w-fit text-6xl text-gray-200">Skills</div>
+  <div class="hairline my-4 w-full"></div>
+
+  {skills.categories.map((group) => (
+    <div class="mb-4 last:mb-0">
+      <div class="mb-4 w-fit text-xl font-semibold text-gray-200">{group.category}</div>
+      <div class="grid grid-cols-3 gap-2 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-8 xl:gap-4">
+        {group.list.map((item) => (
+          <div class="flex flex-col items-center">
+            <div class="glass flex h-14 w-14 items-center justify-center rounded-lg">
+              {item.img ? (
+                <img src={item.img} alt={item.name} class="h-7 w-7 object-contain" />
+              ) : (
+                <i class={`${item.icon} text-3xl text-gray-200`}></i>
+              )}
+            </div>
+            <div class="mt-2 whitespace-nowrap text-center text-base text-gray-200">
+              {item.name}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  ))}
+</div>

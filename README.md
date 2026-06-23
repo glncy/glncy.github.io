@@ -1,68 +1,56 @@
 # glncy
 
-## Build Setup
+Personal site of Glency Tirao — **Astro 7** rebuild (was Nuxt 2 / Vue 2).
+
+- **Framework:** Astro 7 (Tailwind v4, React islands, shadcn/ui)
+- **Content:** git-based, editable via **Sveltia CMS** at `/admin`
+- **Source of truth:** GitLab `glncy/glncy` → push-mirrored to GitHub `glncy/glncy.github.io`
+- **Hosting:** GitHub Pages at **glncy.is-a.dev** (`public/CNAME`)
+- **Media:** images in git (`public/img`), videos via YouTube embeds
+
+## Develop
 
 ```bash
-# install dependencies
-$ yarn install
-
-# serve with hot reload at localhost:3000
-$ yarn dev
-
-# build for production and launch server
-$ yarn build
-$ yarn start
-
-# generate static project
-$ yarn generate
+bun install
+bun run dev      # http://localhost:4321
+bun run build    # -> dist/
 ```
 
-For detailed explanation on how things work, check out the [documentation](https://nuxtjs.org).
+## Content
 
-## Special Directories
+| Type | Location | Edited as |
+| --- | --- | --- |
+| Profile / bio | `src/data/profile.json` | Sveltia file |
+| Skills | `src/data/skills.json` | Sveltia file |
+| Site settings + lofi videos | `src/data/settings.json` | Sveltia file |
+| Job history | `src/content/jobs/*.md` | Sveltia folder |
+| Projects | `src/content/projects/*.md` | Sveltia folder |
 
-You can create the following extra directories, some of which have special behaviors. Only `pages` is required; you can delete them if you don't want to use their functionality.
+## Admin (Sveltia CMS)
 
-### `assets`
+Live at `https://glncy.is-a.dev/admin/`. Auth is **GitLab PKCE — no backend server**.
 
-The assets directory contains your uncompiled assets such as Stylus or Sass files, images, or fonts.
+### One-time setup: GitLab OAuth application
 
-More information about the usage of this directory in [the documentation](https://nuxtjs.org/docs/2.x/directory-structure/assets).
+There is no API/CLI to create a user OAuth app on gitlab.com — do it in the UI:
 
-### `components`
+1. Go to **GitLab → User Settings → Applications**
+   (`https://gitlab.com/-/user_settings/applications`)
+2. **Name:** `Sveltia CMS — glncy`
+3. **Redirect URI** (add both):
+   - `https://glncy.is-a.dev/admin/`
+   - `http://localhost:4321/admin/` (local dev)
+4. **Confidential:** unchecked (PKCE public client)
+5. **Scopes:** `api`
+6. Save, copy the **Application ID**, and set it in `public/admin/config.yml`:
+   ```yaml
+   backend:
+     app_id: <your Application ID>
+   ```
 
-The components directory contains your Vue.js components. Components make up the different parts of your page and can be reused and imported into your pages, layouts and even other components.
+## Deploy
 
-More information about the usage of this directory in [the documentation](https://nuxtjs.org/docs/2.x/directory-structure/components).
+Push to GitLab `main` -> mirror to GitHub -> GitHub Actions (`.github/workflows/deploy.yml`)
+builds with Bun and deploys to Pages.
 
-### `layouts`
-
-Layouts are a great help when you want to change the look and feel of your Nuxt app, whether you want to include a sidebar or have distinct layouts for mobile and desktop.
-
-More information about the usage of this directory in [the documentation](https://nuxtjs.org/docs/2.x/directory-structure/layouts).
-
-### `pages`
-
-This directory contains your application views and routes. Nuxt will read all the `*.vue` files inside this directory and setup Vue Router automatically.
-
-More information about the usage of this directory in [the documentation](https://nuxtjs.org/docs/2.x/get-started/routing).
-
-### `plugins`
-
-The plugins directory contains JavaScript plugins that you want to run before instantiating the root Vue.js Application. This is the place to add Vue plugins and to inject functions or constants. Every time you need to use `Vue.use()`, you should create a file in `plugins/` and add its path to plugins in `nuxt.config.js`.
-
-More information about the usage of this directory in [the documentation](https://nuxtjs.org/docs/2.x/directory-structure/plugins).
-
-### `static`
-
-This directory contains your static files. Each file inside this directory is mapped to `/`.
-
-Example: `/static/robots.txt` is mapped as `/robots.txt`.
-
-More information about the usage of this directory in [the documentation](https://nuxtjs.org/docs/2.x/directory-structure/static).
-
-### `store`
-
-This directory contains your Vuex store files. Creating a file in this directory automatically activates Vuex.
-
-More information about the usage of this directory in [the documentation](https://nuxtjs.org/docs/2.x/directory-structure/store).
+> GitHub repo setting required: **Settings -> Pages -> Source = GitHub Actions.**
