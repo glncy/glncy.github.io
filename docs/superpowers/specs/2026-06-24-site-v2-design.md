@@ -92,6 +92,32 @@ Two collections in `src/content/`:
 
 ---
 
+## Design System & UI Polish
+
+Goal: keep the frosted-glass aesthetic but make it **consistent, professional, and fun**.
+
+**Preserved (non-negotiable, core identity):**
+- The **animated glitch scanlines** and the **YouTube lofi background** stay exactly as-is.
+- Keep the **noise overlay** and the **lofi music player**.
+
+**Consistency (professional):**
+- **Design tokens** — single source of truth for the glass (bg opacity, blur, border), a radius
+  scale, spacing scale, and shadows. Replace the ad-hoc rgba/blur values scattered across components.
+- **Reusable components** — one `GlassPanel`, one `Button`/CTA, one `Badge` (stack chips + Blog/TIL
+  type), one `SectionHeading`, one `Divider`/hairline. Used across Projects, About, Contact, Writing.
+- **Typography scale** — fixed Playfair (headings) + Poppins (body) sizes/weights with consistent
+  line-heights and clear hierarchy.
+
+**Fun (with restraint):**
+- **Micro-interactions** — smooth hover lift on cards/buttons, glass brighten on hover, animated arrows.
+- **Page transitions** — gentle fade/slide between pages via View Transitions (router already present).
+
+**Not included (deliberately):** extra accent color, playful gimmicks (tilt/emoji), and an explicit
+reduced-motion toggle were considered and left out to keep it clean/professional. (Glitch + bg remain.)
+
+**Baseline (always):** every new section (timeline, project filters, writing cards, contact form)
+must be clean and usable on mobile.
+
 ## Cross-cutting
 
 - **Styling**: keep dark glassmorphism, Playfair/Poppins, Phosphor icons (astro-icon).
