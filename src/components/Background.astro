@@ -88,6 +88,7 @@ const lines = Array.from({ length: 40 }, (_, i) => {
     transition: opacity 0.3s ease-in-out;
   }
   .player.idle { opacity: 0.25; }
+  .player.idle:hover { opacity: 1; }
   .player-info { cursor: pointer; max-width: 30ch; }
   .player-title { font-size: 0.75rem; font-weight: 500; }
   .player-channel { font-size: 0.7rem; font-weight: 300; opacity: 0.85; margin-top: 0.15rem; }
@@ -237,6 +238,8 @@ const lines = Array.from({ length: 40 }, (_, i) => {
   $('player-info').addEventListener('click', () => {
     window.open(`https://www.youtube.com/watch?v=${current().id}`, '_blank')
   })
+  // Un-dim while hovering the player.
+  playerEl.addEventListener('mouseenter', interact)
 
   // Auto-dim the player when idle.
   setInterval(() => {
