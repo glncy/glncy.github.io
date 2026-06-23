@@ -3,7 +3,7 @@
 backend:
   name: gitlab
   repo: glncy/glncy
-  branch: astro-rebuild # TEMP: preview rebuild content before merge; switch to `main` on merge
+  branch: main
   auth_type: pkce
   app_id: 9b093f6070f6c28feb3dc52bd930d3eeb85318d9d60f39e654f40ff3248a8d18
 
