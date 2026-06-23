@@ -1,0 +1,248 @@
+---
+import settings from '../data/settings.json'
+
+const videos = settings.backgroundVideos
+
+// Pre-generate the animated glitch scanlines (ported from the original site).
+const lines = Array.from({ length: 40 }, (_, i) => {
+  const pct = 16 + Math.floor(Math.random() * 8) // 16–24
+  const height = 2 + Math.floor(Math.random() * 8) // 2–10px
+  return {
+    height,
+    top: `calc(200% - ${i * pct}%)`,
+    endTop: `calc(100% - ${i * pct}%)`,
+  }
+})
+---
+
+<!-- Persisted across navigation so the video + player never restart. -->
+<div transition:persist="background-player">
+<!-- Fixed animated background -->
+<div class="bg-fixed-layer">
+  <div class="yt-wrapper" id="yt-wrapper">
+    <div id="yt-bg"></div>
+  </div>
+  <div class="bg-fallback" id="bg-fallback"></div>
+  <div class="glitch-lines">
+    {lines.map((l) => (
+      <div
+        class="glitch-line"
+        style={`--top:${l.top};--endTop:${l.endTop};height:${l.height}px;`}
+      ></div>
+    ))}
+  </div>
+  <div class="bg-overlay"></div>
+  <div style="position:absolute;inset:0;overflow:hidden;">
+    <div class="bg-noise"></div>
+  </div>
+</div>
+
+<!-- Glass music player (fixed bottom) -->
+<div class="player glass" id="player" hidden>
+  <div class="player-info" id="player-info" title="Open on YouTube">
+    <div class="player-title" id="player-title">Love music? Click unmute. :)</div>
+    <div class="player-channel" id="player-channel"></div>
+  </div>
+  <div class="player-controls">
+    <button class="pbtn" id="prev" aria-label="Previous">‹‹</button>
+    <button class="pbtn" id="toggle" aria-label="Play/Pause">►</button>
+    <button class="pbtn" id="mute" aria-label="Mute/Unmute">🔇</button>
+    <button class="pbtn" id="next" aria-label="Next">››</button>
+  </div>
+</div>
+</div>
+
+<style>
+  /* YT.Player replaces #yt-bg with an <iframe> that keeps this id.
+     Cover the viewport AND overscan (scale) so YouTube's title bar and
+     controls sit off-screen; pointer-events:none stops hover UI. */
+  /* Wrapper is sized by JS to a 16:9 box larger than the viewport (overscan),
+     so YouTube's title bar (top) and "More videos"/logo (bottom) sit off-screen
+     while the video covers fully with no black bars. Ported from the Vue site. */
+  .yt-wrapper {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+  }
+  #yt-bg {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+
+  .player {
+    position: fixed;
+    bottom: 1rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 30;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    border-radius: 0.75rem;
+    text-align: center;
+    transition: opacity 0.3s ease-in-out;
+  }
+  .player.idle { opacity: 0.25; }
+  .player-info { cursor: pointer; max-width: 30ch; }
+  .player-title { font-size: 0.75rem; font-weight: 500; }
+  .player-channel { font-size: 0.7rem; font-weight: 300; opacity: 0.85; margin-top: 0.15rem; }
+  .player-controls { display: flex; align-items: center; gap: 1rem; margin-top: 0.5rem; }
+  .pbtn {
+    background: none;
+    border: none;
+    color: #e5e7eb;
+    font-size: 1.1rem;
+    line-height: 1;
+    cursor: pointer;
+    transition: transform 0.1s ease;
+  }
+  .pbtn:hover { transform: scale(1.25); }
+</style>
+
+<script is:inline define:vars={{ videos }}>
+  // Runs once for the lifetime of the persisted background (ClientRouter keeps
+  // the DOM + this state alive across page navigations).
+  if (!window.__bgInit) {
+  window.__bgInit = true
+
+  // Pick a random starting track each load.
+  let index = Math.floor(Math.random() * videos.length)
+  let player = null
+  let isPlaying = false
+  let isMuted = true
+  let isFirstLoad = true // show "Click unmute" prompt until the user unmutes once
+  let lastInteract = Date.now()
+
+  const $ = (id) => document.getElementById(id)
+  const wrapper = $('yt-wrapper')
+  const fallback = $('bg-fallback')
+
+  // Size the player to a 16:9 box bigger than the viewport so it covers fully
+  // AND YouTube's chrome (title/logo/more-videos) overscans off-screen.
+  function sizeWrapper() {
+    const w = Math.max(window.innerWidth * 1.18, window.innerHeight * 2.1)
+    wrapper.style.width = w + 'px'
+    wrapper.style.height = (w * 9) / 16 + 'px'
+  }
+  sizeWrapper()
+  window.addEventListener('resize', sizeWrapper)
+  const playerEl = $('player')
+  const titleEl = $('player-title')
+  const channelEl = $('player-channel')
+  const toggleBtn = $('toggle')
+  const muteBtn = $('mute')
+
+  function loadYouTubeAPI() {
+    return new Promise((resolve) => {
+      if (window.YT && window.YT.Player) return resolve()
+      const tag = document.createElement('script')
+      tag.src = 'https://www.youtube.com/iframe_api'
+      window.onYouTubeIframeAPIReady = () => resolve()
+      document.head.appendChild(tag)
+    })
+  }
+
+  function current() { return videos[index] }
+
+  function updateInfo() {
+    // Keep the "Click unmute" prompt until the user has unmuted at least once.
+    if (isFirstLoad) return
+    const v = current()
+    if (isPlaying) {
+      titleEl.textContent = v.title
+      channelEl.textContent = v.channel
+    }
+  }
+
+  function setFallback(hidden) { fallback.style.opacity = hidden ? '0' : '1' }
+
+  async function init() {
+    await loadYouTubeAPI()
+    player = new YT.Player('yt-bg', {
+      width: '100%',
+      height: '100%',
+      videoId: current().id,
+      playerVars: {
+        autoplay: 1, mute: 1, controls: 0, loop: 1,
+        playlist: current().id, rel: 0, showinfo: 0, playsinline: 1,
+        modestbranding: 1, iv_load_policy: 3, fs: 0, disablekb: 1,
+        cc_load_policy: 0,
+      },
+      events: {
+        onReady: () => { player.playVideo(); playerEl.hidden = false },
+        onStateChange: (e) => {
+          if (e.data === YT.PlayerState.PLAYING) {
+            isPlaying = true
+            toggleBtn.textContent = '❚❚'
+            setFallback(true)
+            updateInfo()
+          } else if (e.data === YT.PlayerState.ENDED) {
+            changeVideo(1)
+          } else {
+            // Paused/buffering: keep the (paused) video frame visible —
+            // don't bring the fallback gradient back over it.
+            isPlaying = false
+            toggleBtn.textContent = '►'
+          }
+        },
+        onError: () => changeVideo(1),
+      },
+    })
+  }
+
+  function changeVideo(dir) {
+    index = (index + dir + videos.length) % videos.length
+    const v = current()
+    player.loadVideoById(v.id)
+    player.setLoop(true)
+    interact()
+  }
+
+  function interact() { lastInteract = Date.now(); playerEl.classList.remove('idle') }
+
+  // Wire controls
+  $('prev').addEventListener('click', () => changeVideo(-1))
+  $('next').addEventListener('click', () => changeVideo(1))
+  toggleBtn.addEventListener('click', () => {
+    if (!player) return
+    isPlaying ? player.pauseVideo() : player.playVideo()
+    interact()
+  })
+  muteBtn.addEventListener('click', () => {
+    if (!player) return
+    if (isMuted) {
+      // First unmute: restart the current track with audio (like the Vue site).
+      if (isFirstLoad) {
+        isFirstLoad = false
+        player.seekTo(0)
+        player.playVideo()
+      }
+      player.unMute()
+      player.setVolume(80)
+      isMuted = false
+      muteBtn.textContent = '🔊'
+      updateInfo()
+    } else {
+      player.mute()
+      isMuted = true
+      muteBtn.textContent = '🔇'
+    }
+    interact()
+  })
+  $('player-info').addEventListener('click', () => {
+    window.open(`https://www.youtube.com/watch?v=${current().id}`, '_blank')
+  })
+
+  // Auto-dim the player when idle.
+  setInterval(() => {
+    if (Date.now() - lastInteract > 5000) playerEl.classList.add('idle')
+  }, 1000)
+
+  init()
+  }
+</script>

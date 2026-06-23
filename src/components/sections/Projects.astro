@@ -1,0 +1,57 @@
+---
+import { getCollection, render } from 'astro:content'
+
+const projects = (await getCollection('projects')).sort((a, b) => b.data.order - a.data.order)
+const rendered = await Promise.all(
+  projects.map(async (p) => ({ data: p.data, Content: (await render(p)).Content }))
+)
+
+const ytId = (url: string) => {
+  if (!url) return ''
+  const m = url.match(/(?:youtu\.be\/|v=|embed\/)([\w-]{11})/)
+  return m ? m[1] : url
+}
+---
+
+<div class="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
+  {rendered.map(({ data, Content }) => (
+    <div class="glass glass-hover flex flex-col rounded-lg">
+      {data.youtube ? (
+        <iframe
+          class="aspect-video w-full rounded-t-lg"
+          src={`https://www.youtube-nocookie.com/embed/${ytId(data.youtube)}`}
+          title={data.name}
+          loading="lazy"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen
+        ></iframe>
+      ) : data.thumbnail ? (
+        <img src={data.thumbnail} alt={data.name} class="w-full rounded-t-lg object-cover" />
+      ) : null}
+
+      <div class="p-4">
+        <div class="text-xl text-gray-200">{data.name}</div>
+        <div class="text-sm font-extralight italic text-gray-200">{data.year}</div>
+        <div class="mb-2 flex flex-wrap">
+          {data.stack.map((s) => (
+            <span class="stack mr-1 mt-2 rounded-md p-1 text-xs text-gray-200">{s}</span>
+          ))}
+        </div>
+        <ul class="ml-4 list-disc text-base font-light text-gray-200">
+          {data.contributions.map((c) => <li>{c}</li>)}
+        </ul>
+        <div class="hairline my-2"></div>
+        <div class="remarks text-sm text-gray-200"><Content /></div>
+      </div>
+    </div>
+  ))}
+</div>
+
+<style>
+  .stack {
+    background: rgba(255, 255, 255, 0.2);
+    border: 0.5px solid rgba(255, 255, 255, 0.3);
+  }
+  .remarks :global(a) { color: #3b82f6; text-decoration: underline; }
+  .remarks :global(p) { margin: 0; }
+</style>

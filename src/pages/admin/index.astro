@@ -1,0 +1,20 @@
+---
+// Sveltia CMS admin route. Served at /admin/ in both dev and production so the
+// OAuth redirect URI (https://glncy.is-a.dev/admin/ and http://localhost:4321/admin/)
+// matches exactly. Config is loaded from /admin/config.yml (public/admin/config.yml).
+export const prerender = true
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex" />
+    <title>Content Manager — glncy</title>
+  </head>
+  <body>
+    <!-- Sveltia CMS: git-based admin, authenticates to GitLab via PKCE (no backend). -->
+    <script src="https://unpkg.com/@sveltia/cms/dist/sveltia-cms.js" type="module"></script>
+  </body>
+</html>

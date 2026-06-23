@@ -1,0 +1,64 @@
+{
+  "categories": [
+    {
+      "category": "Core Languages",
+      "list": [
+        { "name": "JavaScript", "icon": "devicon-javascript-plain" },
+        { "name": "TypeScript", "icon": "devicon-typescript-plain" },
+        { "name": "Python", "icon": "devicon-python-plain" },
+        { "name": "PHP", "icon": "devicon-php-plain" },
+        { "name": "Dart", "icon": "devicon-dart-plain" }
+      ]
+    },
+    {
+      "category": "Frontend Development",
+      "list": [
+        { "name": "HTML", "icon": "devicon-html5-plain" },
+        { "name": "CSS", "icon": "devicon-css3-plain" },
+        { "name": "SASS", "icon": "devicon-sass-original" },
+        { "name": "Tailwind", "icon": "devicon-tailwindcss-plain" },
+        { "name": "jQuery", "icon": "devicon-jquery-plain-wordmark" },
+        { "name": "Bootstrap", "icon": "devicon-bootstrap-plain" },
+        { "name": "Vue.js", "icon": "devicon-vuejs-plain" },
+        { "name": "React", "icon": "devicon-react-original" },
+        { "name": "Next.js", "icon": "devicon-nextjs-plain" },
+        { "name": "Nuxt.js", "icon": "devicon-nuxtjs-plain" },
+        { "name": "Cordova", "img": "/img/cordova-icon.png" },
+        { "name": "Ionic", "icon": "devicon-ionic-original" },
+        { "name": "Flutter", "icon": "devicon-flutter-plain" }
+      ]
+    },
+    {
+      "category": "Backend Development",
+      "list": [
+        { "name": "Node.js", "icon": "devicon-nodejs-plain" },
+        { "name": "Django", "icon": "devicon-django-plain" },
+        { "name": "Express", "icon": "devicon-express-original" },
+        { "name": "MySQL", "icon": "devicon-mysql-plain" },
+        { "name": "AWS", "icon": "devicon-amazonwebservices-plain" },
+        { "name": "Firebase", "icon": "devicon-firebase-plain" },
+        { "name": "Heroku", "icon": "devicon-heroku-plain" },
+        { "name": "Docker", "icon": "devicon-docker-plain" },
+        { "name": "Digital Ocean", "icon": "devicon-digitalocean-plain" },
+        { "name": "Bash", "icon": "devicon-bash-plain" }
+      ]
+    },
+    {
+      "category": "Version Control System and CI/CD",
+      "list": [
+        { "name": "Git", "icon": "devicon-git-plain" },
+        { "name": "Github Actions", "icon": "devicon-github-plain" },
+        { "name": "Gitlab CI/CD", "icon": "devicon-gitlab-plain" },
+        { "name": "Bitbucket", "icon": "devicon-bitbucket-plain" }
+      ]
+    },
+    {
+      "category": "Designs & Multimedia",
+      "list": [
+        { "name": "Figma", "icon": "devicon-figma-plain" },
+        { "name": "Photoshop", "icon": "devicon-photoshop-plain" },
+        { "name": "Illustrator", "icon": "devicon-illustrator-plain" }
+      ]
+    }
+  ]
+}

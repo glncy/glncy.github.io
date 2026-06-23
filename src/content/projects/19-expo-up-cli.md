@@ -1,0 +1,17 @@
+---
+name: "expo-up CLI"
+year: "2024"
+order: 19
+stack:
+  - "Node.js"
+  - "Javascript"
+  - "TypeScript"
+contributions:
+  - "Developed CLI tool for Custom Server Expo Updates"
+  - "Managed and maintained npm package"
+  - "Involved in fixing bugs and issues"
+thumbnail: ""
+youtube: ""
+---
+
+Open Source Project. [Click Here](https://www.npmjs.com/package/expo-up) to view npm package.
