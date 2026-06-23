@@ -22,9 +22,23 @@ const { title, subtitle, plain = false } = Astro.props
     width: 100%;
     transition: all 0.3s ease-in-out;
   }
+  /* Polished frosted hero box — subtle gradient frost, soft shadow, top highlight.
+     (No hover-fade; it stays put.) */
+  .title-box.glass {
+    border-radius: 1rem;
+    background: linear-gradient(
+      180deg,
+      rgba(0, 0, 0, 0.28),
+      rgba(0, 0, 0, 0.16)
+    );
+    border-top: 1px solid rgba(255, 255, 255, 0.28);
+    border-left: 1px solid rgba(255, 255, 255, 0.14);
+    border-right: 1px solid rgba(255, 255, 255, 0.14);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 12px 48px rgba(0, 0, 0, 0.35);
+  }
   @media (min-width: 768px) {
-    .title-box.glass { width: auto; border-radius: 0.375rem; }
-    .title-box.glass:hover { background: rgba(0, 0, 0, 0); border-color: rgba(255, 255, 255, 0); }
+    .title-box.glass { width: auto; padding: 2.25rem 3rem; }
   }
   /* Boxless variant: drop the panel, lean on text-shadow for legibility. */
   .title-box.plain {
