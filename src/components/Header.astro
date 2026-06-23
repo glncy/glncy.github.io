@@ -41,10 +41,6 @@ const isActive = (href: string) => {
     padding: 1.1rem 1.25rem 1.6rem;
     /* Soft top-down scrim for legibility — no hard band/box edge. */
     background: linear-gradient(to bottom, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0));
-    transition: padding 0.2s ease;
-  }
-  .site-header.scrolled {
-    padding: 0.5rem 1.25rem 1.2rem;
   }
   .brand {
     font-style: italic;
@@ -70,18 +66,3 @@ const isActive = (href: string) => {
   .nav-link:hover { opacity: 1; transform: scale(1.08); }
   .nav-link.active { opacity: 1; text-decoration: underline; text-underline-offset: 6px; }
 </style>
-
-<script is:inline>
-  // Sticky-condense on scroll. ClientRouter re-fires astro:page-load each nav,
-  // so re-bind idempotently (remove any prior window scroll handler first).
-  function initHeader() {
-    const header = document.getElementById('site-header')
-    if (!header) return
-    const onScroll = () => header.classList.toggle('scrolled', window.scrollY > 24)
-    if (window.__headerScroll) window.removeEventListener('scroll', window.__headerScroll)
-    window.__headerScroll = onScroll
-    window.addEventListener('scroll', onScroll, { passive: true })
-    onScroll()
-  }
-  document.addEventListener('astro:page-load', initHeader)
-</script>
