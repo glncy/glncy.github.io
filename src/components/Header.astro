@@ -17,7 +17,7 @@ const isActive = (href: string) => {
 }
 ---
 
-<header class="site-header" id="site-header" class:list={{ home: isHome }}>
+<header id="site-header" class:list={['site-header', { home: isHome }]}>
   <a href="/" class="font-heading brand">{settings.siteTitle}</a>
 
   {!isHome && (
