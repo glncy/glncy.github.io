@@ -165,9 +165,10 @@ const lines = Array.from({ length: 40 }, (_, i) => {
           } else if (e.data === YT.PlayerState.ENDED) {
             changeVideo(1)
           } else {
+            // Paused/buffering: keep the (paused) video frame visible —
+            // don't bring the fallback gradient back over it.
             isPlaying = false
             toggleBtn.textContent = '►'
-            setFallback(false)
           }
         },
         onError: () => changeVideo(1),
