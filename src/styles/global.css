@@ -7,7 +7,7 @@
 
 @theme inline {
     --font-heading: 'Playfair Display', serif;
-    --font-sans: 'Poppins', sans-serif;
+    --font-sans: 'Geist Variable', sans-serif;
     --color-sidebar-ring: var(--sidebar-ring);
     --color-sidebar-border: var(--sidebar-border);
     --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -137,10 +137,28 @@
   body {
     @apply text-gray-200;
     background: transparent;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
   }
   h1, h2, h3, .font-heading {
     font-family: var(--font-heading);
+    line-height: 1.1;
+    letter-spacing: -0.01em;
   }
+}
+
+/* ---- Type scale helpers --------------------------------------------------- */
+/* Big display (hero name) and page titles scale fluidly with the viewport. */
+.t-display { font-size: clamp(2.75rem, 9vw, 6rem); }
+.t-title   { font-size: clamp(2rem, 6vw, 4rem); }
+/* Small uppercase eyebrow/label. */
+.t-label {
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.72rem;
+  font-weight: 600;
+  opacity: 0.7;
 }
 
 /* ---- Embedded media in markdown bodies (YouTube/Vimeo + images) ------- */

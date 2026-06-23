@@ -55,19 +55,19 @@ const { title, subtitle, plain = false } = Astro.props
     text-shadow: 0 2px 24px rgba(0, 0, 0, 0.7), 0 1px 4px rgba(0, 0, 0, 0.6);
   }
   .title {
-    font-size: 3rem;
+    font-size: clamp(2.75rem, 9vw, 6rem);
     font-weight: 500;
+    line-height: 1.05;
+    letter-spacing: -0.015em;
     text-align: center;
     color: #e5e7eb;
   }
-  @media (min-width: 768px) { .title { font-size: 6rem; } }
   .subtitle {
-    margin-top: 0.5rem;
-    font-size: 0.875rem;
+    margin-top: 0.75rem;
+    font-size: clamp(0.875rem, 1.6vw, 1.25rem);
     font-weight: 300;
     text-align: center;
     color: #e5e7eb;
   }
-  @media (min-width: 768px) { .subtitle { margin-top: 1rem; font-size: 1.25rem; } }
   .subtitle :global(a) { color: #3b82f6; text-decoration: underline; }
 </style>
