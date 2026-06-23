@@ -9,7 +9,7 @@ const profile = await getEntry('profile', 'profile')
 const { name, tagline } = profile!.data
 ---
 
-<Layout showNav={false} title="glncy">
+<Layout title="glncy">
   <div class="flex h-screen w-screen flex-col items-center justify-center gap-6">
     <TitleBox title={name} subtitle={tagline} />
     <SocialRow />

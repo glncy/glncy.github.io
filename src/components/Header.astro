@@ -16,7 +16,7 @@ const isActive = (href: string) =>
       <a href="/projects" class:list={['nav-link', { active: isActive('/projects') }]}>Projects</a>
 
       <div class="nav-dd">
-        <a href="/writing" class:list={['nav-link', 'dd-toggle', { active: isActive('/writing') || isActive('/blog') || isActive('/til') }]}>
+        <a href="/writing" aria-haspopup="true" class:list={['nav-link', 'dd-toggle', { active: isActive('/writing') || isActive('/blog') || isActive('/til') }]}>
           Writing <Icon name="ph:caret-down" />
         </a>
         <div class="dd-menu">
@@ -158,21 +158,24 @@ const isActive = (href: string) =>
   // (View Transitions re-fire astro:page-load), so re-bind each time.
   function initHeader() {
     const header = document.getElementById('site-header')
-    const btn = document.getElementById('menu-btn')
-    const nav = header && header.querySelector('.nav')
     if (!header) return
-
+    const btn = document.getElementById('menu-btn')
+    const nav = header.querySelector('.nav')
     const onScroll = () => header.classList.toggle('scrolled', window.scrollY > 24)
-    onScroll()
+    if (window.__headerScroll) window.removeEventListener('scroll', window.__headerScroll)
+    window.__headerScroll = onScroll
     window.addEventListener('scroll', onScroll, { passive: true })
-
+    onScroll()
     if (btn && nav) {
       btn.addEventListener('click', () => {
         const open = nav.classList.toggle('open')
         btn.setAttribute('aria-expanded', String(open))
       })
+      // close mobile menu on Escape
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') { nav.classList.remove('open'); btn.setAttribute('aria-expanded','false') }
+      })
     }
   }
   document.addEventListener('astro:page-load', initHeader)
-  initHeader()
 </script>

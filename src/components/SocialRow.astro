@@ -18,7 +18,7 @@ const links = [
     <a
       href={l.href}
       aria-label={l.name}
-      {...(l.external ? { target: '_blank', rel: 'noopener' } : {})}
+      {...(l.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
     >
       <Icon name={l.icon} />
     </a>
