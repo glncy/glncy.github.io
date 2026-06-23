@@ -1,7 +1,8 @@
 ---
 import Layout from '../layouts/Layout.astro'
 import TitleBox from '../components/TitleBox.astro'
-import { Icon } from 'astro-icon/components'
+import SocialRow from '../components/SocialRow.astro'
+import Button from '../components/Button.astro'
 import { getEntry } from 'astro:content'
 
 const profile = await getEntry('profile', 'profile')
@@ -9,10 +10,12 @@ const { name, tagline } = profile!.data
 ---
 
 <Layout showNav={false} title="glncy">
-  <div class="flex h-screen w-screen flex-col items-center justify-center">
+  <div class="flex h-screen w-screen flex-col items-center justify-center gap-6">
     <TitleBox title={name} subtitle={tagline} />
-    <div class="mt-6">
-      <a href="/about" class="cta glass">About Me <Icon class="arrow" name="ph:arrow-right" /></a>
+    <SocialRow />
+    <div class="flex flex-wrap items-center justify-center gap-3">
+      <Button href="/about">About Me</Button>
+      <Button href="/writing" icon="ph:arrow-right">Writing</Button>
     </div>
   </div>
 </Layout>
