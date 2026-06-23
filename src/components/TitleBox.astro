@@ -22,23 +22,28 @@ const { title, subtitle, plain = false } = Astro.props
     width: 100%;
     transition: all 0.3s ease-in-out;
   }
-  /* Polished frosted hero box — subtle gradient frost, soft shadow, top highlight.
-     (No hover-fade; it stays put.) */
+  /* Polished frosted hero box. Mobile: full-width band, NO radius (top/bottom
+     borders only). Desktop: rounded card with soft shadow + top highlight. */
   .title-box.glass {
-    border-radius: 1rem;
     background: linear-gradient(
       180deg,
       rgba(0, 0, 0, 0.28),
       rgba(0, 0, 0, 0.16)
     );
-    border-top: 1px solid rgba(255, 255, 255, 0.28);
-    border-left: 1px solid rgba(255, 255, 255, 0.14);
-    border-right: 1px solid rgba(255, 255, 255, 0.14);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-    box-shadow: 0 12px 48px rgba(0, 0, 0, 0.35);
+    border: none;
+    border-top: 1px solid rgba(255, 255, 255, 0.18);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 0;
   }
   @media (min-width: 768px) {
-    .title-box.glass { width: auto; padding: 2.25rem 3rem; }
+    .title-box.glass {
+      width: auto;
+      padding: 2.25rem 3rem;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-top-color: rgba(255, 255, 255, 0.28);
+      border-radius: 1rem;
+      box-shadow: 0 12px 48px rgba(0, 0, 0, 0.35);
+    }
   }
   /* Boxless variant: drop the panel, lean on text-shadow for legibility. */
   .title-box.plain {
