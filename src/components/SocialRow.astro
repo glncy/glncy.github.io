@@ -1,0 +1,49 @@
+---
+import { Icon } from 'astro-icon/components'
+import settings from '../data/settings.json'
+
+const { email, linkedin, messenger } = settings.contact
+const github = settings.github
+
+const links = [
+  github && { name: 'GitHub', href: github, icon: 'ph:github-logo', external: true },
+  linkedin && { name: 'LinkedIn', href: linkedin, icon: 'ph:linkedin-logo', external: true },
+  email && { name: 'Email', href: `mailto:${email}`, icon: 'ph:envelope-simple', external: false },
+  messenger && { name: 'Messenger', href: messenger, icon: 'ph:messenger-logo', external: true },
+].filter(Boolean) as { name: string; href: string; icon: string; external: boolean }[]
+---
+
+<div class="social-row">
+  {links.map((l) => (
+    <a
+      href={l.href}
+      aria-label={l.name}
+      {...(l.external ? { target: '_blank', rel: 'noopener' } : {})}
+    >
+      <Icon name={l.icon} />
+    </a>
+  ))}
+</div>
+
+<style>
+  .social-row {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    align-items: center;
+  }
+  .social-row a {
+    color: #e5e7eb;
+    line-height: 0;
+    transition: transform 0.15s ease, opacity 0.15s ease;
+    opacity: 0.85;
+  }
+  .social-row a:hover {
+    transform: translateY(-2px) scale(1.1);
+    opacity: 1;
+  }
+  .social-row :global(svg) {
+    width: 1.35rem;
+    height: 1.35rem;
+  }
+</style>
