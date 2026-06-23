@@ -15,6 +15,8 @@ const lines = Array.from({ length: 40 }, (_, i) => {
 })
 ---
 
+<!-- Persisted across navigation so the video + player never restart. -->
+<div transition:persist="background-player">
 <!-- Fixed animated background -->
 <div class="bg-fixed-layer">
   <div id="yt-bg"></div>
@@ -46,18 +48,24 @@ const lines = Array.from({ length: 40 }, (_, i) => {
     <button class="pbtn" id="next" aria-label="Next">››</button>
   </div>
 </div>
+</div>
 
 <style>
+  /* YT.Player replaces #yt-bg with an <iframe> that keeps this id.
+     Cover the viewport AND overscan (scale) so YouTube's title bar and
+     controls sit off-screen; pointer-events:none stops hover UI. */
   #yt-bg {
     position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%);
-    width: max(100vw, 177.78vh);
-    height: max(100vh, 56.25vw);
+    width: 100vw;
+    height: 56.25vw; /* 16:9 from width */
+    min-width: 177.78vh; /* 16:9 from height */
+    min-height: 100vh;
+    transform: translate(-50%, -50%) scale(1.4);
+    border: 0;
     pointer-events: none;
   }
-  #yt-bg :global(iframe) { width: 100%; height: 100%; }
 
   .player {
     position: fixed;
@@ -91,6 +99,11 @@ const lines = Array.from({ length: 40 }, (_, i) => {
 </style>
 
 <script is:inline define:vars={{ videos }}>
+  // Runs once for the lifetime of the persisted background (ClientRouter keeps
+  // the DOM + this state alive across page navigations).
+  if (!window.__bgInit) {
+  window.__bgInit = true
+
   // Pick a random starting track each load.
   let index = Math.floor(Math.random() * videos.length)
   let player = null
@@ -131,11 +144,14 @@ const lines = Array.from({ length: 40 }, (_, i) => {
   async function init() {
     await loadYouTubeAPI()
     player = new YT.Player('yt-bg', {
+      width: '100%',
+      height: '100%',
       videoId: current().id,
       playerVars: {
         autoplay: 1, mute: 1, controls: 0, loop: 1,
         playlist: current().id, rel: 0, showinfo: 0, playsinline: 1,
-        modestbranding: 1,
+        modestbranding: 1, iv_load_policy: 3, fs: 0, disablekb: 1,
+        cc_load_policy: 0,
       },
       events: {
         onReady: () => { player.playVideo(); playerEl.hidden = false },
@@ -192,4 +208,5 @@ const lines = Array.from({ length: 40 }, (_, i) => {
   }, 1000)
 
   init()
+  }
 </script>

@@ -1,5 +1,6 @@
 ---
 import '../styles/global.css'
+import { ClientRouter } from 'astro:transitions'
 import Background from '../components/Background.astro'
 import settings from '../data/settings.json'
 
@@ -28,6 +29,9 @@ const ga = settings.analyticsId
     <link rel="icon" href="/favicon.ico" />
     <link rel="canonical" href={Astro.url.href} />
     <title>{title}</title>
+
+    <!-- SPA-style navigation so the background video + music player keep playing. -->
+    <ClientRouter />
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
