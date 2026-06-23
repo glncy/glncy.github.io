@@ -1,7 +1,7 @@
 ---
-import settings from '../data/settings.json'
+import background from '../data/background.json'
 
-const videos = settings.backgroundVideos
+const videos = background.videos
 
 // Pre-generate the animated glitch scanlines (ported from the original site).
 const lines = Array.from({ length: 40 }, (_, i) => {

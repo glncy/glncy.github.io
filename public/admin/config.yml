@@ -38,8 +38,16 @@ collections:
               - { name: email, label: Email, widget: string }
               - { name: linkedin, label: LinkedIn URL, widget: string }
               - { name: messenger, label: Messenger URL, widget: string }
-          - name: backgroundVideos
-            label: Background Lofi Videos
+
+  - name: background
+    label: Background Videos
+    files:
+      - name: background
+        label: Background Videos
+        file: src/data/background.json
+        fields:
+          - name: videos
+            label: Videos
             widget: list
             fields:
               - { name: id, label: YouTube ID, widget: string }
@@ -51,14 +59,14 @@ collections:
     files:
       - name: profile
         label: Profile
-        file: src/data/profile.json
+        file: src/content/profile/profile.md
         fields:
           - { name: name, label: Name, widget: string }
           - { name: role, label: Role, widget: string }
           - { name: tagline, label: Tagline, widget: string }
           - { name: location, label: Location, widget: string }
           - { name: image, label: Profile Image, widget: image }
-          - { name: bio, label: Bio, widget: text }
+          - { name: body, label: Bio, widget: markdown }
 
   - name: skills
     label: Skills

@@ -1,17 +1,20 @@
 ---
-import profile from '../../data/profile.json'
-import { inlineMd } from '../../lib/md'
+import { getEntry, render } from 'astro:content'
+
+const profile = await getEntry('profile', 'profile')
+const { Content } = await render(profile!)
+const data = profile!.data
 ---
 
 <div class="mb-10">
   <div class="flex flex-col items-center xl:flex-row xl:items-start">
     <img
-      src={profile.image}
-      alt={profile.name}
+      src={data.image}
+      alt={data.name}
       class="mb-4 h-40 w-40 rounded-full object-cover xl:mb-0 xl:h-56 xl:w-56"
     />
     <div class="info glass ml-0 rounded-lg p-3 text-base text-gray-200 xl:ml-8 xl:p-4 xl:text-lg">
-      <Fragment set:html={inlineMd(profile.bio)} />
+      <Content />
     </div>
   </div>
 </div>
@@ -20,4 +23,6 @@ import { inlineMd } from '../../lib/md'
   .info :global(p) { margin-bottom: 1rem; }
   .info :global(p:last-child) { margin-bottom: 0; }
   .info :global(strong) { font-weight: 600; }
+  .info :global(a) { color: #3b82f6; text-decoration: underline; }
+  .info :global(img) { border-radius: 0.5rem; margin: 1rem 0; max-width: 100%; }
 </style>

@@ -54,3 +54,20 @@ Push to GitLab `main` -> mirror to GitHub -> GitHub Actions (`.github/workflows/
 builds with Bun and deploys to Pages.
 
 > GitHub repo setting required: **Settings -> Pages -> Source = GitHub Actions.**
+
+## Embeds in content
+
+Markdown bodies (bio, jobs, projects, future blog) support:
+- **Images** natively: `![alt](/img/foo.png)`
+- **YouTube / Vimeo**: paste a bare link on its own line -> auto-embeds
+  (via `src/lib/rehype-embeds.mjs`).
+
+## TODO
+
+- [ ] **Convert content to `.mdx` soon** — to allow richer embeds/components
+  (X/Twitter, link previews, custom components) inside posts, especially for the
+  planned **blog**. Trade-off: MDX is less forgiving for CMS editing (a stray
+  `<`/`{` can break the build), so likely make **only the blog** MDX and keep
+  profile/jobs/projects on safe `.md`. See `astro-embed` (auto-embed is MDX-only).
+- [ ] Add a **blog** collection (`src/content/blog/`) + `/blog` pages.
+
