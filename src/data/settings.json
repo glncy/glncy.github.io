@@ -1,6 +1,12 @@
 {
   "siteTitle": "glncy",
+  "siteDescription": "Glency Tirao — web & mobile developer | designs & multimedia",
   "analyticsId": "G-ET3F69DHKG",
+  "pages": {
+    "aboutSubtitle": "Well, I guess you're here to learn more about me.",
+    "projectsSubtitle": "Projects and Repositories in which I have contributed.",
+    "contactSubtitle": "How can I help you today? Feel free to message me."
+  },
   "contact": {
     "email": "glency.a.tirao@gmail.com",
     "linkedin": "https://www.linkedin.com/in/glency-tirao",

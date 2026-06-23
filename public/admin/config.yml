@@ -21,8 +21,16 @@ collections:
         file: src/data/settings.json
         fields:
           - { name: siteTitle, label: Site Title, widget: string }
+          - { name: siteDescription, label: Site Description (SEO), widget: text }
           - { name: analyticsId, label: Google Analytics ID, widget: string, required: false }
           - { name: github, label: GitHub URL, widget: string }
+          - name: pages
+            label: Page Subtitles
+            widget: object
+            fields:
+              - { name: aboutSubtitle, label: About subtitle, widget: string }
+              - { name: projectsSubtitle, label: Projects subtitle, widget: string }
+              - { name: contactSubtitle, label: Contact subtitle, widget: string }
           - name: contact
             label: Contact
             widget: object

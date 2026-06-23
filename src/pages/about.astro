@@ -4,12 +4,13 @@ import TitleBox from '../components/TitleBox.astro'
 import Information from '../components/sections/Information.astro'
 import Skills from '../components/sections/Skills.astro'
 import JobHistory from '../components/sections/JobHistory.astro'
+import settings from '../data/settings.json'
 ---
 
 <Layout title="About | glncy">
   <div class="pb-40">
     <div class="relative flex h-screen w-full flex-col items-center justify-center">
-      <TitleBox title="About" subtitle="Well, I guess you're here to learn more about me." />
+      <TitleBox title="About" subtitle={settings.pages.aboutSubtitle} />
       <div class="absolute text-sm text-gray-200 opacity-80" style="margin-top:38vh;">
         Scroll Down
       </div>
