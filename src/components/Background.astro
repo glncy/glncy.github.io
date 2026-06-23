@@ -58,11 +58,12 @@ const lines = Array.from({ length: 40 }, (_, i) => {
     position: absolute;
     top: 50%;
     left: 50%;
-    width: 100vw;
-    height: 56.25vw; /* 16:9 from width */
-    min-width: 177.78vh; /* 16:9 from height */
-    min-height: 100vh;
-    transform: translate(-50%, -50%) scale(1.4);
+    /* Always 16:9 (177.78vh*9/16 = 100vh; 100vw*9/16 = 56.25vw), sized to the
+       larger dimension so it COVERS with no letterbox/pillarbox bars. */
+    width: max(100vw, 177.78vh);
+    height: max(56.25vw, 100vh);
+    /* Extra overscan pushes YouTube's title bar + logo off-screen. */
+    transform: translate(-50%, -50%) scale(1.5);
     border: 0;
     pointer-events: none;
   }
