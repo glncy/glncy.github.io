@@ -112,13 +112,15 @@ const lines = Array.from({ length: 40 }, (_, i) => {
   }
   /* When idle, hide the now-playing title — on mobile only (desktop keeps it). */
   .player.idle-title .player-info { display: none; }
-  @media (min-width: 768px) {
+  /* Desktop (≥1024px) keeps the title visible (it uses the hover-tuck below).
+     Mobile AND tablet (<1024px) tuck the title away when idle. */
+  @media (min-width: 1024px) {
     .player.idle-title .player-info { display: block; }
   }
-  /* On mobile, while the title is tucked away, disable the control buttons so
-     the first tap only reveals the title (no accidental next/pause/unmute).
-     Once revealed (idle-title removed by interact()), the buttons are active. */
-  @media (max-width: 767px) {
+  /* Touch (mobile + tablet): while the title is tucked away, disable the
+     control buttons so the first tap only reveals the title (no accidental
+     next/pause/unmute). Once revealed (idle-title removed), buttons are active. */
+  @media (max-width: 1023px) {
     .player.idle-title .player-controls { pointer-events: none; }
   }
   .player-info { cursor: pointer; max-width: 72vw; margin-bottom: 0.7rem; }

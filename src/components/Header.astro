@@ -139,7 +139,9 @@ const writingActive =
   }
   document.addEventListener('astro:page-load', initHeaderScrim)
 
-  // Priority+ nav: keep links inline; move the ones that don't fit into "More".
+  // Priority+ nav with an active-first window: keep the current page's link
+  // first, show the following links that fit, and push everything else
+  // (earlier links + overflow) into "More" — in natural nav order.
   function initNavOverflow() {
     if (window.__navResize) {
       window.removeEventListener('resize', window.__navResize)
@@ -152,16 +154,31 @@ const writingActive =
     const moreBtn = document.getElementById('nav-more-btn')
     if (!moreWrap || !moreMenu || !moreBtn) return
 
-    // Capture the server-rendered order (moreWrap is last).
+    // Server-rendered order (moreWrap is last). Items = everything but moreWrap.
     const original = Array.from(nav.children)
+    const items = original.filter((el) => el !== moreWrap)
+    const idxOf = (el) => original.indexOf(el)
+    const isActiveItem = (el) =>
+      el.classList.contains('active') ||
+      el.getAttribute('data-active') === 'true' ||
+      !!el.querySelector('.active, [data-active="true"]')
+
     const closeMore = () => {
       moreWrap.classList.remove('open')
       moreBtn.setAttribute('aria-expanded', 'false')
     }
+    const insertOrdered = (el) => {
+      el.classList.add('more-item')
+      let before = null
+      for (const child of moreMenu.children) {
+        if (idxOf(child) > idxOf(el)) { before = child; break }
+      }
+      moreMenu.insertBefore(el, before)
+    }
     const reset = () => {
       original.forEach((el) => {
         if (el.classList) el.classList.remove('more-item')
-        nav.appendChild(el)
+        nav.appendChild(el) // restores order, moreWrap last
       })
       moreWrap.hidden = true
       closeMore()
@@ -169,18 +186,22 @@ const writingActive =
     const fits = () => nav.scrollWidth <= nav.clientWidth + 1
     const layout = () => {
       reset()
-      if (fits()) return
-      moreWrap.hidden = false
+      let activeIdx = items.findIndex(isActiveItem)
+      if (activeIdx < 0) activeIdx = 0
+      const activeEl = items[activeIdx]
+      // Move everything BEFORE the active item into More.
+      for (let i = 0; i < activeIdx; i++) insertOrdered(items[i])
+      moreWrap.hidden = moreMenu.children.length === 0
+      // Then, if still overflowing, move trailing inline items (never the
+      // active one) into More until it fits on one line.
       let guard = 0
       while (!fits() && guard++ < 20) {
-        // Move the last plain inline link (not the Posts dropdown) into More.
-        const links = Array.from(nav.children).filter(
-          (c) => c.classList && c.classList.contains('nav-link')
-        )
-        const last = links[links.length - 1]
+        moreWrap.hidden = false
+        const inline = items.filter((el) => !el.classList.contains('more-item'))
+        let last = inline[inline.length - 1]
+        if (last === activeEl) last = inline[inline.length - 2]
         if (!last) break
-        last.classList.add('more-item')
-        moreMenu.insertBefore(last, moreMenu.firstChild)
+        insertOrdered(last)
       }
     }
     layout()
