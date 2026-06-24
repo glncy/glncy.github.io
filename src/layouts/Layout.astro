@@ -105,15 +105,17 @@ const ogImage = new URL(image, Astro.site).href
       <slot />
     </main>
 
-    <!-- Site-wide image lightbox (tap to open, tap anywhere to close). -->
-    <div id="lightbox" class="lightbox" aria-hidden="true">
+    <!-- Site-wide image lightbox (tap to open, tap anywhere to close).
+         transition:persist keeps it (and its bound handlers) alive across
+         ClientRouter navigations — otherwise it'd break until a refresh. -->
+    <div id="lightbox" class="lightbox" aria-hidden="true" transition:persist="lightbox">
       <button id="lightbox-close" class="lightbox-close" type="button" aria-label="Close">&times;</button>
-      <button id="lightbox-prev" class="lightbox-nav lightbox-prev" type="button" aria-label="Previous" hidden>&#8249;</button>
       <img id="lightbox-img" alt="" />
-      <button id="lightbox-next" class="lightbox-nav lightbox-next" type="button" aria-label="Next" hidden>&#8250;</button>
-      <div class="lightbox-zoom">
-        <button id="lightbox-zoomout" type="button" aria-label="Zoom out"><Icon name="ph:magnifying-glass-minus" /></button>
-        <button id="lightbox-zoomin" type="button" aria-label="Zoom in"><Icon name="ph:magnifying-glass-plus" /></button>
+      <div class="lightbox-toolbar">
+        <button id="lightbox-prev" class="lb-tbtn lb-nav" type="button" aria-label="Previous" hidden>&#8249;</button>
+        <button id="lightbox-zoomout" class="lb-tbtn lb-zoom" type="button" aria-label="Zoom out"><Icon name="ph:magnifying-glass-minus" /></button>
+        <button id="lightbox-zoomin" class="lb-tbtn lb-zoom" type="button" aria-label="Zoom in"><Icon name="ph:magnifying-glass-plus" /></button>
+        <button id="lightbox-next" class="lb-tbtn lb-nav" type="button" aria-label="Next" hidden>&#8250;</button>
       </div>
     </div>
 
