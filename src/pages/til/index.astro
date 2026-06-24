@@ -1,10 +1,22 @@
 ---
 import Layout from '../../layouts/Layout.astro'
 import TitleBox from '../../components/TitleBox.astro'
+import PostCard from '../../components/PostCard.astro'
+import { getCollection } from 'astro:content'
+
+const posts = (await getCollection('til')).sort(
+  (a, b) => b.data.date.getTime() - a.data.date.getTime()
+)
 ---
 
 <Layout title="TIL | glncy">
-  <div class="flex h-screen w-screen flex-col items-center justify-center">
-    <TitleBox title="TIL" subtitle="Today I Learned — short notes, coming soon." />
+  <div class="mx-auto max-w-2xl px-4 pb-24 pt-32">
+    <TitleBox title="TIL" subtitle="Today I Learned — short notes." />
+    <div class="mt-8 flex flex-col gap-3">
+      {posts.map((p) => (
+        <PostCard href={`/til/${p.id}`} type="TIL" title={p.data.title} date={p.data.date} tags={p.data.tags} compact />
+      ))}
+    </div>
+    {posts.length === 0 && <p class="mt-8 text-center text-gray-400">No TILs yet.</p>}
   </div>
 </Layout>
