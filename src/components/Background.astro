@@ -42,7 +42,12 @@ const lines = Array.from({ length: 40 }, (_, i) => {
 <!-- Glass music player (fixed bottom). Phosphor (fill) icons. -->
 <div class="player glass" id="player" hidden>
   <div class="player-info" id="player-info" title="Open on YouTube">
-    <div class="player-title" id="player-title-wrap"><span id="player-title">{musicPrompt}</span></div>
+    <div class="player-title" id="player-title-wrap">
+      <div class="mq-track">
+        <span id="player-title">{musicPrompt}</span>
+        <span id="player-title-dup" class="mq-dup" aria-hidden="true"></span>
+      </div>
+    </div>
     <div class="player-channel"><span id="player-channel"></span></div>
   </div>
   <div class="player-controls">
@@ -113,20 +118,23 @@ const lines = Array.from({ length: 40 }, (_, i) => {
   .player-info { cursor: pointer; max-width: 72vw; margin-bottom: 0.7rem; }
   .player-title { font-size: 0.75rem; font-weight: 500; white-space: nowrap; }
   .player-channel { font-size: 0.7rem; font-weight: 300; opacity: 0.85; margin-top: 0.15rem; }
-  /* Single-line horizontal ticker (news-strip style). */
+  /* Single-line horizontal ticker (news-strip style). Two copies of the text
+     scroll as one track and we translate -50%, so it starts at the LEFT and
+     loops seamlessly. The duplicate copy only shows when marquee is active. */
+  .mq-track { display: inline-block; white-space: nowrap; }
+  .mq-dup { display: none; }
   .marquee { overflow: hidden; white-space: nowrap; width: 15rem; max-width: 72vw; }
-  .marquee > span {
-    display: inline-block;
-    padding-left: 100%;
-    animation: ticker 14s linear infinite;
-  }
+  .marquee .mq-track { animation: ticker 16s linear infinite; }
+  .marquee .mq-track > span { padding-right: 2.5rem; }
+  .marquee .mq-dup { display: inline-block; }
   .player-channel { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   @keyframes ticker {
     from { transform: translateX(0); }
-    to { transform: translateX(-100%); }
+    to { transform: translateX(-50%); }
   }
   @media (prefers-reduced-motion: reduce) {
-    .marquee > span { animation: none; padding-left: 0; }
+    .marquee .mq-track { animation: none; }
+    .marquee .mq-dup { display: none; }
   }
   .player-controls { display: flex; align-items: center; gap: 0.85rem; }
   .pbtn {
@@ -173,6 +181,7 @@ const lines = Array.from({ length: 40 }, (_, i) => {
   window.addEventListener('resize', sizeWrapper)
   const playerEl = $('player')
   const titleEl = $('player-title')
+  const titleDup = $('player-title-dup')
   const titleWrap = $('player-title-wrap')
   const channelEl = $('player-channel')
   const toggleBtn = $('toggle')
@@ -210,6 +219,7 @@ const lines = Array.from({ length: 40 }, (_, i) => {
     if (isFirstLoad) return
     const v = current()
     titleEl.textContent = v.title
+    titleDup.textContent = v.title
     channelEl.textContent = v.channel
     // Scroll the (often long) track title; the prompt stays static.
     titleWrap.classList.add('marquee')
@@ -299,11 +309,16 @@ const lines = Array.from({ length: 40 }, (_, i) => {
     setMuteIcon()
     interact()
   })
+  // Clicking the TITLE opens the track on YouTube.
   $('player-info').addEventListener('click', () => {
     window.open(`https://www.youtube.com/watch?v=${current().id}`, '_blank')
   })
-  // Un-dim while hovering the player.
+  // Tapping anywhere on the player reveals the (mobile-hidden) title without
+  // opening YouTube — only the title itself navigates.
   playerEl.addEventListener('mouseenter', interact)
+  playerEl.addEventListener('click', (e) => {
+    if (!e.target.closest('#player-info')) interact()
+  })
 
   // Re-evaluate idle/playing state every second.
   setInterval(updateClasses, 1000)
