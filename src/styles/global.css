@@ -88,8 +88,8 @@
     --glass-border-strong: rgba(255, 255, 255, 0.8);
     --glass-blur: 10px;
     /* Solid panel surface (no backdrop-filter) — readable + cheap. */
-    --panel-bg: rgba(8, 10, 16, 0.62);
-    --panel-bg-strong: rgba(8, 10, 16, 0.78);
+    --panel-bg: rgba(6, 8, 12, 0.88);
+    --panel-bg-strong: rgba(6, 8, 12, 0.94);
     --panel-border: rgba(255, 255, 255, 0.12);
     --panel-border-strong: rgba(255, 255, 255, 0.28);
     --hairline: rgba(255, 255, 255, 0.5);
