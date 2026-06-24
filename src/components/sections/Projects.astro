@@ -26,7 +26,7 @@ const ytId = (url: string) => {
 </div>
 
 {featured.length > 0 && (
-  <section class="mb-10">
+  <section class="mb-10" id="featured-section">
     <div class="font-heading mb-4 w-fit text-4xl text-gray-200">Featured</div>
     <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
       {featured.map(({ data, Content }) => (
@@ -54,7 +54,7 @@ const ytId = (url: string) => {
   </section>
 )}
 
-<section>
+<section id="archive-section">
   <div class="font-heading mb-4 w-fit text-4xl text-gray-200">All Projects</div>
   <div class="masonry cols-3" id="archive-grid">
     {archive.map(({ data, Content }) => (
@@ -110,6 +110,12 @@ const ytId = (url: string) => {
         c.setAttribute('aria-pressed', on ? 'true' : 'false')
       })
     }
+    const featuredSection = document.getElementById('featured-section')
+    const archiveSection = document.getElementById('archive-section')
+    const visibleIn = (section) =>
+      section
+        ? Array.from(section.querySelectorAll('.proj')).some((c) => c.style.display !== 'none')
+        : false
     function apply() {
       let shown = 0
       cards.forEach((card) => {
@@ -118,6 +124,9 @@ const ytId = (url: string) => {
         card.style.display = match ? '' : 'none'
         if (match) shown++
       })
+      // Hide a section's heading when none of its cards are visible.
+      if (featuredSection) featuredSection.style.display = visibleIn(featuredSection) ? '' : 'none'
+      if (archiveSection) archiveSection.style.display = visibleIn(archiveSection) ? '' : 'none'
       if (noResults) noResults.classList.toggle('hidden', shown > 0)
     }
     chips.forEach((chip) => {

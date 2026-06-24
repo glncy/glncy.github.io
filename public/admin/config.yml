@@ -178,6 +178,7 @@ collections:
       - { name: name, label: Name, widget: string }
       - { name: year, label: Year, widget: string }
       - { name: order, label: Order (higher = shown first), widget: number, value_type: int }
+      - { name: featured, label: Featured (show in the Featured section), widget: boolean, default: false, required: false }
       - { name: stack, label: Stack, widget: list, field: { name: item, label: Tech, widget: string } }
       - { name: contributions, label: Contributions, widget: list, field: { name: item, label: Contribution, widget: string } }
       - { name: thumbnail, label: Thumbnail (optional), widget: image, required: false }
