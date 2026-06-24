@@ -227,6 +227,20 @@
   background: var(--hairline);
 }
 
+/* Readable empty-state card (no results / nothing yet) over the busy bg. */
+.empty-state {
+  margin: 2rem auto 0;
+  max-width: 30rem;
+  text-align: center;
+  color: #d8dade;
+  font-size: 0.95rem;
+  background: var(--panel-bg);
+  border: 1px solid var(--panel-border);
+  border-radius: 0.9rem;
+  padding: 1.1rem 1.4rem;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.25);
+}
+
 /* ---- Masonry (CSS columns) -------------------------------------------- */
 /* Children must not split across columns. Hidden children (display:none via
    the filter JS) simply drop out of the flow. */

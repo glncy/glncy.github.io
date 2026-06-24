@@ -92,8 +92,8 @@ const iso = (d: Date) => d.toISOString().slice(0, 10)
     ))}
   </div>
 
-  <p class="pb-empty mt-8 hidden text-center text-gray-400">No posts match your filters.</p>
-  {posts.length === 0 && <p class="mt-8 text-center text-gray-400">{emptyText}</p>}
+  <p class="pb-empty empty-state hidden">No posts match your filters.</p>
+  {posts.length === 0 && <p class="empty-state">{emptyText}</p>}
 </section>
 
 <style>
@@ -177,7 +177,9 @@ const iso = (d: Date) => d.toISOString().slice(0, 10)
           it.style.display = ok ? '' : 'none'
           if (ok) shown++
         })
-        if (empty) empty.classList.toggle('hidden', shown > 0)
+        // Only show the "no match" message when there ARE items but none match;
+        // if the collection is empty, the static emptyText handles it.
+        if (empty) empty.classList.toggle('hidden', items.length === 0 || shown > 0)
       }
 
       function applySort() {
