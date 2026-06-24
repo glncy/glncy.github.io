@@ -2,8 +2,8 @@ import rss from '@astrojs/rss'
 import { getCollection } from 'astro:content'
 
 export async function GET(context) {
-  const blog = (await getCollection('blog', ({ data }) => !data.draft && !data.hidden)).map((p) => ({ ...p, _kind: 'blog' }))
-  const til = (await getCollection('til', ({ data }) => !data.draft && !data.hidden)).map((p) => ({ ...p, _kind: 'til' }))
+  const blog = (await getCollection('blogs', ({ data }) => !data.draft && !data.hidden)).map((p) => ({ ...p, _kind: 'blogs' }))
+  const til = (await getCollection('tils', ({ data }) => !data.draft && !data.hidden)).map((p) => ({ ...p, _kind: 'tils' }))
   const items = [...blog, ...til]
     .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
     .map((p) => ({

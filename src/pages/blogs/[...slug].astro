@@ -7,7 +7,7 @@ import { formatDate } from '../../lib/format-date'
 import { readingTime } from '../../lib/reading-time'
 
 export async function getStaticPaths() {
-  const posts = await getCollection('blog', ({ data }) => !data.draft && !data.hidden)
+  const posts = await getCollection('blogs', ({ data }) => !data.draft && !data.hidden)
   return posts.map((post) => ({ params: { slug: post.id }, props: { post } }))
 }
 
@@ -15,7 +15,7 @@ const { post } = Astro.props
 const { Content } = await render(post)
 const d = post.data
 
-const url = new URL(`/blog/${post.id}`, Astro.site).href
+const url = new URL(`/blogs/${post.id}`, Astro.site).href
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'BlogPosting',
@@ -31,7 +31,7 @@ const jsonLd = {
 ---
 
 <Layout title={`${d.title} | glncy`} description={d.description} type="article" image={d.thumbnail || undefined} jsonLd={jsonLd}>
-  <article class="mx-auto max-w-2xl px-4 pb-24 pt-32">
+  <article class="mx-auto max-w-3xl px-4 pb-24 pt-32">
     <div class="panel rounded-2xl p-5 md:p-8">
       {d.thumbnail && <img src={d.thumbnail} alt={d.title} class="mb-6 w-full rounded-xl object-cover" />}
       <div class="mb-2 flex items-center gap-2"><Badge variant="label">Blog</Badge></div>

@@ -191,9 +191,9 @@ collections:
       - { name: youtube, label: YouTube URL (optional), widget: string, required: false }
       - { name: body, label: Remarks, widget: markdown, required: false }
 
-  - name: blog
-    label: Blog
-    folder: src/content/blog
+  - name: blogs
+    label: Blogs
+    folder: src/content/blogs
     extension: mdx
     format: frontmatter
     create: true
@@ -214,9 +214,9 @@ collections:
       - { name: tags, label: Tags, widget: list, required: false, field: { name: tag, label: Tag, widget: string } }
       - { name: body, label: Body, widget: markdown }
 
-  - name: til
-    label: TIL
-    folder: src/content/til
+  - name: tils
+    label: TILs
+    folder: src/content/tils
     extension: mdx
     format: frontmatter
     create: true

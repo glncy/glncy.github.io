@@ -7,7 +7,7 @@ const path = Astro.url.pathname
 const isHome = path === '/'
 const isActive = (href: string) => path.startsWith(href)
 const writingActive =
-  path.startsWith('/posts') || path.startsWith('/blog') || path.startsWith('/til')
+  path.startsWith('/posts') || path.startsWith('/blogs') || path.startsWith('/tils')
 ---
 
 <header id="site-header" class:list={['site-header', { home: isHome }]}>

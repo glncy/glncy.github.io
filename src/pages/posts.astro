@@ -6,8 +6,8 @@ import { Icon } from 'astro-icon/components'
 import { getCollection } from 'astro:content'
 import settings from '../data/settings.json'
 
-const blog = (await getCollection('blog', ({ data }) => !data.draft && !data.hidden)).map((p) => ({
-  href: `/blog/${p.id}`,
+const blog = (await getCollection('blogs', ({ data }) => !data.draft && !data.hidden)).map((p) => ({
+  href: `/blogs/${p.id}`,
   type: 'Blog' as const,
   title: p.data.title,
   date: p.data.date,
@@ -15,8 +15,8 @@ const blog = (await getCollection('blog', ({ data }) => !data.draft && !data.hid
   thumbnail: p.data.thumbnail,
   tags: p.data.tags,
 }))
-const til = (await getCollection('til', ({ data }) => !data.draft && !data.hidden)).map((p) => ({
-  href: `/til/${p.id}`,
+const til = (await getCollection('tils', ({ data }) => !data.draft && !data.hidden)).map((p) => ({
+  href: `/tils/${p.id}`,
   type: 'TIL' as const,
   title: p.data.title,
   date: p.data.date,

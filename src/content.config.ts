@@ -61,14 +61,14 @@ const postSchema = z.object({
   hidden: z.boolean().optional().default(false),
 })
 
-const blog = defineCollection({
-  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/blog' }),
+const blogs = defineCollection({
+  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/blogs' }),
   schema: postSchema,
 })
 
-const til = defineCollection({
-  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/til' }),
+const tils = defineCollection({
+  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/tils' }),
   schema: postSchema,
 })
 
-export const collections = { profile, jobs, projects, blog, til }
+export const collections = { profile, jobs, projects, blogs, tils }

@@ -6,7 +6,7 @@ import { Icon } from 'astro-icon/components'
 import { formatDate } from '../../lib/format-date'
 
 export async function getStaticPaths() {
-  const posts = await getCollection('til', ({ data }) => !data.draft && !data.hidden)
+  const posts = await getCollection('tils', ({ data }) => !data.draft && !data.hidden)
   return posts.map((post) => ({ params: { slug: post.id }, props: { post } }))
 }
 
@@ -14,7 +14,7 @@ const { post } = Astro.props
 const { Content } = await render(post)
 const d = post.data
 
-const url = new URL(`/til/${post.id}`, Astro.site).href
+const url = new URL(`/tils/${post.id}`, Astro.site).href
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'BlogPosting',
@@ -30,7 +30,7 @@ const jsonLd = {
 ---
 
 <Layout title={`${d.title} | glncy`} description={d.description} type="article" image={d.thumbnail || undefined} jsonLd={jsonLd}>
-  <article class="mx-auto max-w-2xl px-4 pb-24 pt-32">
+  <article class="mx-auto max-w-3xl px-4 pb-24 pt-32">
     <div class="panel rounded-2xl p-5 md:p-8">
       <div class="mb-2 flex items-center gap-2"><Badge variant="label">TIL</Badge></div>
       <h1 class="font-heading text-3xl text-gray-100 md:text-4xl">{d.title}</h1>
@@ -42,6 +42,6 @@ const jsonLd = {
       <div class="hairline my-6"></div>
       <div class="prose-glncy"><Content /></div>
     </div>
-    <a href="/til" class="cta glass mt-8 inline-flex"><Icon name="ph:arrow-left" /> All TILs</a>
+    <a href="/tils" class="cta glass mt-8 inline-flex"><Icon name="ph:arrow-left" /> All TILs</a>
   </article>
 </Layout>

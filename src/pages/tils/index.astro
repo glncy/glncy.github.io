@@ -5,11 +5,11 @@ import PostBrowser from '../../components/PostBrowser.astro'
 import { getCollection } from 'astro:content'
 import settings from '../../data/settings.json'
 
-const posts = (await getCollection('blog', ({ data }) => !data.draft && !data.hidden))
+const posts = (await getCollection('tils', ({ data }) => !data.draft && !data.hidden))
   .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
   .map((p) => ({
-    href: `/blog/${p.id}`,
-    type: 'Blog' as const,
+    href: `/tils/${p.id}`,
+    type: 'TIL' as const,
     title: p.data.title,
     date: p.data.date,
     description: p.data.description,
@@ -18,16 +18,16 @@ const posts = (await getCollection('blog', ({ data }) => !data.draft && !data.hi
   }))
 ---
 
-<Layout title="Blog | glncy" description="Long-form posts on web & mobile development, design, and what I'm building.">
+<Layout title="TILs | glncy" description="Today I Learned — short notes and quick wins from day-to-day development.">
   <div class="pb-40">
     <div class="relative flex h-screen w-full flex-col items-center justify-center">
-      <TitleBox title="Blog" subtitle={settings.pages.blogSubtitle} />
+      <TitleBox title="TILs" subtitle={settings.pages.tilSubtitle} />
       <div class="absolute text-sm text-gray-200 opacity-80" style="margin-top:38vh;">Scroll Down</div>
       <div class="down-arrow absolute"></div>
     </div>
 
     <div class="mx-auto max-w-4xl px-4">
-      <PostBrowser posts={posts} layout="grid" emptyText="No posts yet." />
+      <PostBrowser posts={posts} layout="list" emptyText="No TILs yet." />
     </div>
   </div>
 </Layout>
