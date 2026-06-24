@@ -2,7 +2,7 @@
 import { Icon } from 'astro-icon/components'
 import testimonials from '../../data/testimonials.json'
 
-const items = testimonials.items ?? []
+const items = (testimonials.items ?? []).filter((t) => !t.hidden)
 ---
 
 {items.length > 0 && (

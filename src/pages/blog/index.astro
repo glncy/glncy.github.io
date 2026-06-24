@@ -5,7 +5,7 @@ import PostBrowser from '../../components/PostBrowser.astro'
 import { getCollection } from 'astro:content'
 import settings from '../../data/settings.json'
 
-const posts = (await getCollection('blog'))
+const posts = (await getCollection('blog', ({ data }) => !data.draft && !data.hidden))
   .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
   .map((p) => ({
     href: `/blog/${p.id}`,

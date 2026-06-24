@@ -75,6 +75,7 @@ collections:
               - { name: icon, label: Icon (ph:name), widget: string }
               - { name: title, label: Title, widget: string }
               - { name: description, label: Description, widget: text }
+              - { name: hidden, label: Hidden, widget: boolean, default: false, required: false }
           - name: process
             label: Process steps
             widget: list
@@ -82,6 +83,7 @@ collections:
               - { name: step, label: Step (e.g. 01), widget: string }
               - { name: title, label: Title, widget: string }
               - { name: description, label: Description, widget: text }
+              - { name: hidden, label: Hidden, widget: boolean, default: false, required: false }
 
   - name: testimonials
     label: Testimonials
@@ -99,6 +101,7 @@ collections:
               - { name: role, label: Role, widget: string, required: false }
               - { name: company, label: Company, widget: string, required: false }
               - { name: avatar, label: Avatar, widget: image, required: false }
+              - { name: hidden, label: Hidden, widget: boolean, default: false, required: false }
 
   - name: background
     label: Background Videos
@@ -115,6 +118,7 @@ collections:
               - { name: id, label: YouTube ID, widget: string }
               - { name: title, label: Title, widget: string }
               - { name: channel, label: Channel, widget: string }
+              - { name: hidden, label: Hidden, widget: boolean, default: false, required: false }
 
   - name: profile
     label: Profile
@@ -165,6 +169,7 @@ collections:
       - { name: startDate, label: Start Date, widget: string }
       - { name: endDate, label: End Date, widget: string }
       - { name: order, label: Order (higher = shown first), widget: number, value_type: int }
+      - { name: hidden, label: Hidden, widget: boolean, default: false, required: false }
       - { name: body, label: Description, widget: markdown }
 
   - name: projects
@@ -179,6 +184,7 @@ collections:
       - { name: year, label: Year, widget: string }
       - { name: order, label: Order (higher = shown first), widget: number, value_type: int }
       - { name: featured, label: Featured (show in the Featured section), widget: boolean, default: false, required: false }
+      - { name: hidden, label: Hidden, widget: boolean, default: false, required: false }
       - { name: stack, label: Stack, widget: list, field: { name: item, label: Tech, widget: string } }
       - { name: contributions, label: Contributions, widget: list, field: { name: item, label: Contribution, widget: string } }
       - { name: thumbnail, label: Thumbnail (optional), widget: image, required: false }
@@ -192,8 +198,15 @@ collections:
     format: frontmatter
     create: true
     slug: '{{year}}-{{month}}-{{day}}-{{slug}}'
+    summary: '{{title}}{{#if draft}} · DRAFT{{/if}}{{#if hidden}} · HIDDEN{{/if}}'
+    view_filters:
+      - { label: Drafts, field: draft, pattern: true }
+      - { label: Published, field: draft, pattern: false }
+      - { label: Hidden, field: hidden, pattern: true }
     fields:
       - { name: title, label: Title, widget: string }
+      - { name: draft, label: Draft (unpublished), widget: boolean, default: true, required: false }
+      - { name: hidden, label: Hidden (hide a published post), widget: boolean, default: false, required: false }
       - { name: date, label: Date created, widget: datetime }
       - { name: updated, label: Date updated, widget: datetime, required: false }
       - { name: description, label: Description, widget: text, required: false }
@@ -208,8 +221,15 @@ collections:
     format: frontmatter
     create: true
     slug: '{{year}}-{{month}}-{{day}}-{{slug}}'
+    summary: '{{title}}{{#if draft}} · DRAFT{{/if}}{{#if hidden}} · HIDDEN{{/if}}'
+    view_filters:
+      - { label: Drafts, field: draft, pattern: true }
+      - { label: Published, field: draft, pattern: false }
+      - { label: Hidden, field: hidden, pattern: true }
     fields:
       - { name: title, label: Title, widget: string }
+      - { name: draft, label: Draft (unpublished), widget: boolean, default: true, required: false }
+      - { name: hidden, label: Hidden (hide a published post), widget: boolean, default: false, required: false }
       - { name: date, label: Date created, widget: datetime }
       - { name: updated, label: Date updated, widget: datetime, required: false }
       - { name: description, label: Description, widget: text, required: false }

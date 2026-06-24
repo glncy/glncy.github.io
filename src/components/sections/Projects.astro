@@ -3,7 +3,7 @@ import { getCollection, render } from 'astro:content'
 import { Icon } from 'astro-icon/components'
 import Badge from '../Badge.astro'
 
-const all = (await getCollection('projects')).sort((a, b) => b.data.order - a.data.order)
+const all = (await getCollection('projects', ({ data }) => !data.hidden)).sort((a, b) => b.data.order - a.data.order)
 const rendered = await Promise.all(
   all.map(async (p) => ({ data: p.data, Content: (await render(p)).Content }))
 )

@@ -21,6 +21,7 @@ const jobs = defineCollection({
     startDate: z.string(),
     endDate: z.string(),
     order: z.number(),
+    hidden: z.boolean().optional().default(false),
   }),
 })
 
@@ -35,6 +36,7 @@ const projects = defineCollection({
     thumbnail: z.string().optional().default(''),
     youtube: z.string().optional().default(''),
     featured: z.boolean().optional().default(false),
+    hidden: z.boolean().optional().default(false),
   }),
 })
 
@@ -45,6 +47,8 @@ const postSchema = z.object({
   tags: z.array(z.string()).optional().default([]),
   thumbnail: z.string().optional().default(''),
   description: z.string().optional().default(''),
+  draft: z.boolean().optional().default(true),
+  hidden: z.boolean().optional().default(false),
 })
 
 const blog = defineCollection({

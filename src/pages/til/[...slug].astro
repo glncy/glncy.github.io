@@ -6,7 +6,7 @@ import { Icon } from 'astro-icon/components'
 import { formatDate } from '../../lib/format-date'
 
 export async function getStaticPaths() {
-  const posts = await getCollection('til')
+  const posts = await getCollection('til', ({ data }) => !data.draft && !data.hidden)
   return posts.map((post) => ({ params: { slug: post.id }, props: { post } }))
 }
 

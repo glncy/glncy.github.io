@@ -2,7 +2,7 @@
 import { Icon } from 'astro-icon/components'
 import background from '../data/background.json'
 
-const videos = background.videos
+const videos = (background.videos ?? []).filter((v) => !v.hidden)
 const musicPrompt = background.prompt ?? 'Love music? Click unmute. :)'
 
 // Pre-generate the animated glitch scanlines (ported from the original site).

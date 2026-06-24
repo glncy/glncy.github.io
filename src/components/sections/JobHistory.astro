@@ -2,7 +2,7 @@
 import { getCollection, render } from 'astro:content'
 import { Icon } from 'astro-icon/components'
 
-const jobs = (await getCollection('jobs')).sort((a, b) => b.data.order - a.data.order)
+const jobs = (await getCollection('jobs', ({ data }) => !data.hidden)).sort((a, b) => b.data.order - a.data.order)
 const rendered = await Promise.all(
   jobs.map(async (job) => ({ data: job.data, Content: (await render(job)).Content }))
 )

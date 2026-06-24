@@ -6,7 +6,9 @@ import { Icon } from 'astro-icon/components'
 import services from '../data/services.json'
 import settings from '../data/settings.json'
 
-const { intro, items, process } = services
+const { intro } = services
+const items = (services.items ?? []).filter((s) => !s.hidden)
+const process = (services.process ?? []).filter((p) => !p.hidden)
 ---
 
 <Layout
