@@ -237,7 +237,9 @@
   align-items: center;
   justify-content: center;
   padding: 4rem 1rem calc(4.5rem + env(safe-area-inset-bottom));
-  background: rgba(0, 0, 0, 0.92);
+  /* Solid black so it matches the dark page base showing behind iOS 26's bottom
+     toolbar (fixed content can't render there) — looks full-screen to the edge. */
+  background: #000;
   cursor: default;
   touch-action: none; /* we handle pinch/pan/swipe ourselves */
   user-select: none;
