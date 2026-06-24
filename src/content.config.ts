@@ -1,6 +1,16 @@
 import { defineCollection, z } from 'astro:content'
 import { glob } from 'astro/loaders'
 
+// CMS-tolerant helpers: the CMS may write '' or null for blank/cleared fields.
+// These coerce those to safe defaults so a blank field never breaks the build.
+const optStr = z.string().nullish().transform((v) => v ?? '')
+const strArr = z.array(z.string()).nullish().transform((v) => v ?? [])
+const num = z.coerce.number()
+const optDate = z.preprocess(
+  (v) => (v === '' || v === null ? undefined : v),
+  z.coerce.date().optional()
+)
+
 const profile = defineCollection({
   loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/profile' }),
   schema: z.object({
@@ -20,7 +30,7 @@ const jobs = defineCollection({
     location: z.string(),
     startDate: z.string(),
     endDate: z.string(),
-    order: z.number(),
+    order: num,
     hidden: z.boolean().optional().default(false),
   }),
 })
@@ -30,11 +40,11 @@ const projects = defineCollection({
   schema: z.object({
     name: z.string(),
     year: z.string(),
-    order: z.number(),
-    stack: z.array(z.string()).default([]),
-    contributions: z.array(z.string()).default([]),
-    thumbnail: z.string().optional().default(''),
-    youtube: z.string().optional().default(''),
+    order: num,
+    stack: strArr,
+    contributions: strArr,
+    thumbnail: optStr,
+    youtube: optStr,
     featured: z.boolean().optional().default(false),
     hidden: z.boolean().optional().default(false),
   }),
@@ -43,15 +53,10 @@ const projects = defineCollection({
 const postSchema = z.object({
   title: z.string(),
   date: z.coerce.date(),
-  // The CMS datetime widget writes an empty string when left blank; coerce
-  // those (and null) to undefined so the optional date validates.
-  updated: z.preprocess(
-    (v) => (v === '' || v === null ? undefined : v),
-    z.coerce.date().optional()
-  ),
-  tags: z.array(z.string()).optional().default([]),
-  thumbnail: z.string().optional().default(''),
-  description: z.string().optional().default(''),
+  updated: optDate,
+  tags: strArr,
+  thumbnail: optStr,
+  description: optStr,
   draft: z.boolean().optional().default(true),
   hidden: z.boolean().optional().default(false),
 })
