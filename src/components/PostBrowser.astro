@@ -68,7 +68,7 @@ const iso = (d: Date) => d.toISOString().slice(0, 10)
   </div>
 
   <!-- All posts are rendered in the HTML (good for SEO); JS only shows/hides. -->
-  <div class:list={['pb-grid', layout === 'grid' ? 'grid grid-cols-1 gap-4 md:grid-cols-2' : 'flex flex-col gap-3']}>
+  <div class="pb-grid masonry">
     {posts.map((p) => (
       <div
         class="pb-item"
