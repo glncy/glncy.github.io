@@ -99,6 +99,7 @@ collections:
         label: Background Videos
         file: src/data/background.json
         fields:
+          - { name: prompt, label: Music player prompt (shown before unmute), widget: string }
           - name: videos
             label: Videos
             widget: list
