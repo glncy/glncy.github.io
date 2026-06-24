@@ -42,7 +42,7 @@ const lines = Array.from({ length: 40 }, (_, i) => {
 <!-- Glass music player (fixed bottom). Phosphor (fill) icons. -->
 <div class="player glass" id="player" hidden>
   <div class="player-info" id="player-info" title="Open on YouTube">
-    <div class="player-title marquee"><span id="player-title">{musicPrompt}</span></div>
+    <div class="player-title" id="player-title-wrap"><span id="player-title">{musicPrompt}</span></div>
     <div class="player-channel"><span id="player-channel"></span></div>
   </div>
   <div class="player-controls">
@@ -173,6 +173,7 @@ const lines = Array.from({ length: 40 }, (_, i) => {
   window.addEventListener('resize', sizeWrapper)
   const playerEl = $('player')
   const titleEl = $('player-title')
+  const titleWrap = $('player-title-wrap')
   const channelEl = $('player-channel')
   const toggleBtn = $('toggle')
   const muteBtn = $('mute')
@@ -210,6 +211,8 @@ const lines = Array.from({ length: 40 }, (_, i) => {
     const v = current()
     titleEl.textContent = v.title
     channelEl.textContent = v.channel
+    // Scroll the (often long) track title; the prompt stays static.
+    titleWrap.classList.add('marquee')
   }
 
   function setFallback(hidden) { fallback.style.opacity = hidden ? '0' : '1' }
