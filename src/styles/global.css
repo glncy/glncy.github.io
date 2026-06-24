@@ -330,3 +330,12 @@
 .prose-glncy code { background: rgba(255,255,255,0.1); padding: 0.1rem 0.35rem; border-radius: 0.3rem; font-size: 0.9em; }
 .prose-glncy pre { background: rgba(0,0,0,0.4); padding: 1rem; border-radius: 0.6rem; overflow:auto; margin: 0 0 1rem; }
 .prose-glncy blockquote { border-left: 2px solid rgba(255,255,255,0.3); padding-left: 1rem; opacity: 0.85; margin: 0 0 1rem; }
+
+/* Honor reduced-motion for page transitions only (background art unchanged). */
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+}
