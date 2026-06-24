@@ -214,7 +214,7 @@ collections:
       - { name: description, label: Description, widget: text, required: false }
       - { name: thumbnail, label: Thumbnail, widget: image, required: false }
       - { name: tags, label: Tags, widget: list, required: false, field: { name: tag, label: Tag, widget: string } }
-      - { name: body, label: Body, widget: markdown }
+      - { name: body, label: Body, widget: markdown, hint: 'Resize an image: switch this field to Markdown (raw) view, then use an <img> tag with a size class instead of ![](). Example: <img src="/assets/photo.jpg" class="md" alt="caption" />. Sizes: sm (small), md (default), lg (large), full (full width). Images upload to /assets via the Media library.' }
 
   - name: tils
     label: TILs
@@ -237,4 +237,4 @@ collections:
       - { name: description, label: Description, widget: text, required: false }
       - { name: thumbnail, label: Thumbnail, widget: image, required: false }
       - { name: tags, label: Tags, widget: list, required: false, field: { name: tag, label: Tag, widget: string } }
-      - { name: body, label: Body, widget: markdown }
+      - { name: body, label: Body, widget: markdown, hint: 'Resize an image: switch this field to Markdown (raw) view, then use an <img> tag with a size class instead of ![](). Example: <img src="/assets/photo.jpg" class="md" alt="caption" />. Sizes: sm (small), md (default), lg (large), full (full width). Images upload to /assets via the Media library.' }
