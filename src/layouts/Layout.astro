@@ -2,18 +2,17 @@
 import '../styles/global.css'
 import { ClientRouter } from 'astro:transitions'
 import Background from '../components/Background.astro'
+import Header from '../components/Header.astro'
 import settings from '../data/settings.json'
 
 interface Props {
   title?: string
   description?: string
-  showNav?: boolean
 }
 
 const {
   title = settings.siteTitle,
   description = settings.siteDescription,
-  showNav = true,
 } = Astro.props
 
 const ga = settings.analyticsId
@@ -37,7 +36,7 @@ const ga = settings.analyticsId
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Poppins:ital,wght@0,100..900;1,100..900&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap"
       rel="stylesheet"
     />
     <!-- Devicon (skill icons) -->
@@ -66,22 +65,9 @@ const ga = settings.analyticsId
   <body class="overflow-x-hidden">
     <Background />
 
-    <header class="fixed inset-x-0 top-0 z-20">
-      <div
-        class="font-heading mt-3 text-center text-4xl font-medium italic text-gray-200"
-      >
-        <a href="/">{settings.siteTitle}</a>
-      </div>
-      {showNav && (
-        <nav class="mt-4 flex justify-center gap-5 text-base text-gray-200">
-          <a class="transition hover:scale-110" href="/about">About</a>
-          <a class="transition hover:scale-110" href="/projects">Projects</a>
-          <a class="transition hover:scale-110" href="/contact">Contact</a>
-        </nav>
-      )}
-    </header>
+    <Header />
 
-    <main class="relative z-10">
+    <main class="relative z-10" transition:animate="fade">
       <slot />
     </main>
   </body>

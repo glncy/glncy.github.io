@@ -1,0 +1,36 @@
+---
+interface Props {
+  variant?: 'tech' | 'label'
+  class?: string
+}
+const { variant = 'tech', class: cls = '' } = Astro.props
+---
+
+<span class:list={['badge', `badge-${variant}`, cls]}><slot /></span>
+
+<style>
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    border-radius: 9999px;
+    white-space: nowrap;
+  }
+  .badge-tech {
+    padding: 0.15rem 0.55rem;
+    font-size: 0.72rem;
+    color: #e5e7eb;
+    background: rgba(255, 255, 255, 0.12);
+    border: 0.5px solid rgba(255, 255, 255, 0.18);
+  }
+  .badge-label {
+    padding: 0.1rem 0.5rem;
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: 600;
+    color: #e5e7eb;
+    background: rgba(255, 255, 255, 0.1);
+    border: 0.5px solid rgba(255, 255, 255, 0.16);
+  }
+</style>

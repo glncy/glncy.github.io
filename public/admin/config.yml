@@ -121,3 +121,35 @@ collections:
       - { name: thumbnail, label: Thumbnail (optional), widget: image, required: false }
       - { name: youtube, label: YouTube URL (optional), widget: string, required: false }
       - { name: body, label: Remarks, widget: markdown, required: false }
+
+  - name: blog
+    label: Blog
+    folder: src/content/blog
+    extension: mdx
+    format: frontmatter
+    create: true
+    slug: '{{year}}-{{month}}-{{day}}-{{slug}}'
+    fields:
+      - { name: title, label: Title, widget: string }
+      - { name: date, label: Date created, widget: datetime }
+      - { name: updated, label: Date updated, widget: datetime, required: false }
+      - { name: description, label: Description, widget: text, required: false }
+      - { name: thumbnail, label: Thumbnail, widget: image, required: false }
+      - { name: tags, label: Tags, widget: list, required: false, field: { name: tag, label: Tag, widget: string } }
+      - { name: body, label: Body, widget: markdown }
+
+  - name: til
+    label: TIL
+    folder: src/content/til
+    extension: mdx
+    format: frontmatter
+    create: true
+    slug: '{{year}}-{{month}}-{{day}}-{{slug}}'
+    fields:
+      - { name: title, label: Title, widget: string }
+      - { name: date, label: Date created, widget: datetime }
+      - { name: updated, label: Date updated, widget: datetime, required: false }
+      - { name: description, label: Description, widget: text, required: false }
+      - { name: thumbnail, label: Thumbnail, widget: image, required: false }
+      - { name: tags, label: Tags, widget: list, required: false, field: { name: tag, label: Tag, widget: string } }
+      - { name: body, label: Body, widget: markdown }

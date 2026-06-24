@@ -1,0 +1,8 @@
+---
+title: Astro's content layer uses a glob loader
+date: 2026-06-24
+tags: [astro]
+description: Collections now load via glob() in content.config.ts.
+---
+
+Today I learned Astro's content collections load files with `glob({ pattern, base })` in `src/content.config.ts`, and you render an entry's body with `render(entry)`.

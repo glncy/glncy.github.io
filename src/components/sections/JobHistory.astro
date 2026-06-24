@@ -1,5 +1,6 @@
 ---
 import { getCollection, render } from 'astro:content'
+import { Icon } from 'astro-icon/components'
 
 const jobs = (await getCollection('jobs')).sort((a, b) => b.data.order - a.data.order)
 const rendered = await Promise.all(
@@ -8,25 +9,62 @@ const rendered = await Promise.all(
 ---
 
 <div>
-  <div class="font-heading w-fit text-6xl text-gray-200">Job History</div>
+  <div class="font-heading w-fit text-5xl text-gray-200 md:text-6xl">Job History</div>
   <div class="hairline my-4 w-full"></div>
 
-  <div class="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
+  <ol class="timeline">
     {rendered.map(({ data, Content }) => (
-      <div class="glass glass-hover flex flex-col rounded-lg p-4">
-        <div class="text-2xl text-gray-200">{data.title}</div>
-        <div class="desc text-sm font-light text-gray-200"><Content /></div>
-        <div class="hairline my-2"></div>
-        <div class="text-xl text-gray-200">{data.company}</div>
-        <div class="text-base font-extralight text-gray-200">{data.location}</div>
-        <div class="text-sm font-extralight italic text-gray-200">
-          {data.startDate} - {data.endDate}
+      <li class="tl-item">
+        <span class="tl-node"><Icon name="ph:briefcase" /></span>
+        <div class="tl-body glass">
+          <div class="tl-role">{data.title}</div>
+          <div class="tl-company">{data.company} · <span class="tl-loc">{data.location}</span></div>
+          <div class="tl-date">{data.startDate} – {data.endDate}</div>
+          <div class="tl-desc"><Content /></div>
         </div>
-      </div>
+      </li>
     ))}
-  </div>
+  </ol>
 </div>
 
 <style>
-  .desc :global(p) { margin: 0; }
+  .timeline {
+    position: relative;
+    margin: 0;
+    padding: 0 0 0 1.75rem;
+    list-style: none;
+  }
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 0.5rem;
+    top: 0.25rem;
+    bottom: 0.25rem;
+    width: 1px;
+    background: rgba(255, 255, 255, 0.18);
+  }
+  .tl-item { position: relative; margin-bottom: 1.5rem; }
+  .tl-item:last-child { margin-bottom: 0; }
+  .tl-node {
+    position: absolute;
+    left: -1.75rem;
+    top: 0.4rem;
+    width: 1.4rem;
+    height: 1.4rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 9999px;
+    background: rgba(10, 12, 16, 0.85);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    color: #e5e7eb;
+  }
+  .tl-node :global(svg) { width: 0.8rem; height: 0.8rem; }
+  .tl-body { border-radius: 0.6rem; padding: 1rem 1.1rem; }
+  .tl-role { font-size: 1.25rem; color: #e5e7eb; }
+  .tl-company { font-size: 0.95rem; color: #e5e7eb; opacity: 0.9; margin-top: 0.1rem; }
+  .tl-loc { font-weight: 300; opacity: 0.8; }
+  .tl-date { font-size: 0.8rem; font-style: italic; opacity: 0.7; margin-top: 0.15rem; }
+  .tl-desc { font-size: 0.9rem; font-weight: 300; margin-top: 0.5rem; }
+  .tl-desc :global(p) { margin: 0; }
 </style>

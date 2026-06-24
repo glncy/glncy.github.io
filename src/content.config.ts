@@ -34,7 +34,27 @@ const projects = defineCollection({
     contributions: z.array(z.string()).default([]),
     thumbnail: z.string().optional().default(''),
     youtube: z.string().optional().default(''),
+    featured: z.boolean().optional().default(false),
   }),
 })
 
-export const collections = { profile, jobs, projects }
+const writingSchema = z.object({
+  title: z.string(),
+  date: z.coerce.date(),
+  updated: z.coerce.date().optional(),
+  tags: z.array(z.string()).optional().default([]),
+  thumbnail: z.string().optional().default(''),
+  description: z.string().optional().default(''),
+})
+
+const blog = defineCollection({
+  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/blog' }),
+  schema: writingSchema,
+})
+
+const til = defineCollection({
+  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/til' }),
+  schema: writingSchema,
+})
+
+export const collections = { profile, jobs, projects, blog, til }

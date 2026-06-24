@@ -1,10 +1,16 @@
 ---
 import { getCollection, render } from 'astro:content'
+import { Icon } from 'astro-icon/components'
+import Badge from '../Badge.astro'
 
-const projects = (await getCollection('projects')).sort((a, b) => b.data.order - a.data.order)
+const all = (await getCollection('projects')).sort((a, b) => b.data.order - a.data.order)
 const rendered = await Promise.all(
-  projects.map(async (p) => ({ data: p.data, Content: (await render(p)).Content }))
+  all.map(async (p) => ({ data: p.data, Content: (await render(p)).Content }))
 )
+const featured = rendered.filter((p) => p.data.featured)
+const archive = rendered.filter((p) => !p.data.featured)
+
+const techs = [...new Set(rendered.flatMap((p) => p.data.stack))].sort()
 
 const ytId = (url: string) => {
   if (!url) return ''
@@ -13,45 +19,104 @@ const ytId = (url: string) => {
 }
 ---
 
-<div class="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
-  {rendered.map(({ data, Content }) => (
-    <div class="glass glass-hover flex flex-col rounded-lg">
-      {data.youtube ? (
-        <iframe
-          class="aspect-video w-full rounded-t-lg"
-          src={`https://www.youtube-nocookie.com/embed/${ytId(data.youtube)}`}
-          title={data.name}
-          loading="lazy"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowfullscreen
-        ></iframe>
-      ) : data.thumbnail ? (
-        <img src={data.thumbnail} alt={data.name} class="w-full rounded-t-lg object-cover" />
-      ) : null}
-
-      <div class="p-4">
-        <div class="text-xl text-gray-200">{data.name}</div>
-        <div class="text-sm font-extralight italic text-gray-200">{data.year}</div>
-        <div class="mb-2 flex flex-wrap">
-          {data.stack.map((s) => (
-            <span class="stack mr-1 mt-2 rounded-md p-1 text-xs text-gray-200">{s}</span>
-          ))}
-        </div>
-        <ul class="ml-4 list-disc text-base font-light text-gray-200">
-          {data.contributions.map((c) => <li>{c}</li>)}
-        </ul>
-        <div class="hairline my-2"></div>
-        <div class="remarks text-sm text-gray-200"><Content /></div>
-      </div>
-    </div>
-  ))}
+<!-- Filter chips -->
+<div class="filters" role="group" aria-label="Filter projects by tech">
+  <button class="chip active" data-tech="all">All</button>
+  {techs.map((t) => <button class="chip" data-tech={t}>{t}</button>)}
 </div>
 
+{featured.length > 0 && (
+  <section class="mb-10">
+    <div class="font-heading mb-4 w-fit text-4xl text-gray-200">Featured</div>
+    <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+      {featured.map(({ data, Content }) => (
+        <article class="proj glass glass-hover flex flex-col rounded-lg" data-stack={data.stack.join('|')}>
+          {data.youtube ? (
+            <iframe class="aspect-video w-full rounded-t-lg" src={`https://www.youtube-nocookie.com/embed/${ytId(data.youtube)}`} title={data.name} loading="lazy" allowfullscreen></iframe>
+          ) : data.thumbnail ? (
+            <img src={data.thumbnail} alt={data.name} class="w-full rounded-t-lg object-cover" />
+          ) : null}
+          <div class="p-4">
+            <div class="text-xl text-gray-200">{data.name}</div>
+            <div class="text-sm font-extralight italic text-gray-200">{data.year}</div>
+            <div class="mb-2 mt-2 flex flex-wrap gap-1.5">
+              {data.stack.map((s) => <Badge>{s}</Badge>)}
+            </div>
+            <ul class="ml-4 list-disc text-sm font-light text-gray-200">
+              {data.contributions.map((c) => <li>{c}</li>)}
+            </ul>
+            <div class="hairline my-2"></div>
+            <div class="remarks text-sm text-gray-200"><Content /></div>
+          </div>
+        </article>
+      ))}
+    </div>
+  </section>
+)}
+
+<section>
+  <div class="font-heading mb-4 w-fit text-4xl text-gray-200">All Projects</div>
+  <div class="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3" id="archive-grid">
+    {archive.map(({ data, Content }) => (
+      <article class="proj glass glass-hover flex flex-col rounded-lg" data-stack={data.stack.join('|')}>
+        <div class="p-4">
+          <div class="text-xl text-gray-200">{data.name}</div>
+          <div class="text-sm font-extralight italic text-gray-200">{data.year}</div>
+          <div class="mb-2 mt-2 flex flex-wrap gap-1.5">
+            {data.stack.map((s) => <Badge>{s}</Badge>)}
+          </div>
+          <ul class="ml-4 list-disc text-sm font-light text-gray-200">
+            {data.contributions.map((c) => <li>{c}</li>)}
+          </ul>
+          <div class="hairline my-2"></div>
+          <div class="remarks text-sm text-gray-200"><Content /></div>
+        </div>
+      </article>
+    ))}
+  </div>
+  <p class="no-results mt-6 hidden text-center text-gray-400">No projects with that tech.</p>
+</section>
+
 <style>
-  .stack {
-    background: rgba(255, 255, 255, 0.2);
-    border: 0.5px solid rgba(255, 255, 255, 0.3);
+  .filters { display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center; margin-bottom: 1.5rem; }
+  .chip {
+    padding: 0.25rem 0.7rem;
+    border-radius: 9999px;
+    font-size: 0.8rem;
+    color: #e5e7eb;
+    background: rgba(255, 255, 255, 0.08);
+    border: 0.5px solid rgba(255, 255, 255, 0.16);
+    cursor: pointer;
+    transition: all 0.15s ease;
   }
+  .chip:hover { background: rgba(255, 255, 255, 0.16); }
+  .chip.active { background: rgba(255, 255, 255, 0.85); color: #111; }
   .remarks :global(a) { color: #3b82f6; text-decoration: underline; }
   .remarks :global(p) { margin: 0; }
 </style>
+
+<script is:inline>
+  function initProjectFilter() {
+    const chips = document.querySelectorAll('.chip')
+    if (!chips.length) return
+    const cards = document.querySelectorAll('.proj')
+    const noResults = document.querySelector('.no-results')
+    chips.forEach((chip) => {
+      if (chip.dataset.bound) return
+      chip.dataset.bound = '1'
+      chip.addEventListener('click', () => {
+        const tech = chip.dataset.tech
+        document.querySelectorAll('.chip').forEach((c) => c.classList.toggle('active', c === chip))
+        let shown = 0
+        cards.forEach((card) => {
+          const stacks = (card.dataset.stack || '').split('|')
+          const match = tech === 'all' || stacks.includes(tech)
+          card.style.display = match ? '' : 'none'
+          if (match) shown++
+        })
+        if (noResults) noResults.classList.toggle('hidden', shown > 0)
+      })
+    })
+  }
+  document.addEventListener('astro:page-load', initProjectFilter)
+</script>

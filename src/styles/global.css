@@ -7,7 +7,7 @@
 
 @theme inline {
     --font-heading: 'Playfair Display', serif;
-    --font-sans: 'Poppins', sans-serif;
+    --font-sans: 'Geist Variable', sans-serif;
     --color-sidebar-ring: var(--sidebar-ring);
     --color-sidebar-border: var(--sidebar-border);
     --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -81,6 +81,14 @@
     --sidebar-accent-foreground: oklch(0.205 0 0);
     --sidebar-border: oklch(0.922 0 0);
     --sidebar-ring: oklch(0.708 0 0);
+    /* glncy glass + UI tokens */
+    --glass-bg: rgba(0, 0, 0, 0.2);
+    --glass-bg-strong: rgba(0, 0, 0, 0.5);
+    --glass-border: rgba(255, 255, 255, 0.2);
+    --glass-border-strong: rgba(255, 255, 255, 0.8);
+    --glass-blur: 8px;
+    --hairline: rgba(255, 255, 255, 0.5);
+    --pill: 9999px;
 }
 
 .dark {
@@ -129,10 +137,28 @@
   body {
     @apply text-gray-200;
     background: transparent;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
   }
   h1, h2, h3, .font-heading {
     font-family: var(--font-heading);
+    line-height: 1.1;
+    letter-spacing: -0.01em;
   }
+}
+
+/* ---- Type scale helpers --------------------------------------------------- */
+/* Big display (hero name) and page titles scale fluidly with the viewport. */
+.t-display { font-size: clamp(2.75rem, 9vw, 6rem); }
+.t-title   { font-size: clamp(2rem, 6vw, 4rem); }
+/* Small uppercase eyebrow/label. */
+.t-label {
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.72rem;
+  font-weight: 600;
+  opacity: 0.7;
 }
 
 /* ---- Embedded media in markdown bodies (YouTube/Vimeo + images) ------- */
@@ -154,22 +180,22 @@
 
 /* ---- Glassmorphism panel (cards, info boxes, title box) ---------------- */
 .glass {
-  background: rgba(0, 0, 0, 0.2);
-  backdrop-filter: blur(8px);
-  border: 0.5px solid rgba(255, 255, 255, 0.2);
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur));
+  border: 0.5px solid var(--glass-border);
 }
 .glass-hover {
   transition: all 0.2s ease-in-out;
 }
 .glass-hover:hover {
   transform: scale(1.02);
-  background: rgba(0, 0, 0, 0.5);
-  border: 0.5px solid rgba(255, 255, 255, 0.8);
-  backdrop-filter: blur(8px);
+  background: var(--glass-bg-strong);
+  border: 0.5px solid var(--glass-border-strong);
+  backdrop-filter: blur(var(--glass-blur));
 }
 .hairline {
   height: 0.2px;
-  background: rgba(255, 255, 255, 0.5);
+  background: var(--hairline);
 }
 
 /* ---- Call-to-action pill ---------------------------------------------- */
@@ -291,4 +317,25 @@
   20%  { opacity: 0.5; }
   60%  { transform: scale(2) translateY(13vh); }
   100% { transform: scale(2) translateY(13vh); opacity: 0; }
+}
+/* ---- Article body (blog/TIL) ----------------------------------------- */
+.prose-glncy { color: #e5e7eb; font-weight: 300; line-height: 1.75; }
+.prose-glncy h2 { font-family: var(--font-heading); font-size: 1.6rem; margin: 1.6rem 0 0.6rem; }
+.prose-glncy h3 { font-family: var(--font-heading); font-size: 1.3rem; margin: 1.4rem 0 0.5rem; }
+.prose-glncy p { margin: 0 0 1rem; }
+.prose-glncy a { color: #93c5fd; text-decoration: underline; }
+.prose-glncy ul, .prose-glncy ol { margin: 0 0 1rem 1.25rem; }
+.prose-glncy li { margin: 0.25rem 0; }
+.prose-glncy img { border-radius: 0.6rem; margin: 1rem 0; max-width: 100%; }
+.prose-glncy code { background: rgba(255,255,255,0.1); padding: 0.1rem 0.35rem; border-radius: 0.3rem; font-size: 0.9em; }
+.prose-glncy pre { background: rgba(0,0,0,0.4); padding: 1rem; border-radius: 0.6rem; overflow:auto; margin: 0 0 1rem; }
+.prose-glncy blockquote { border-left: 2px solid rgba(255,255,255,0.3); padding-left: 1rem; opacity: 0.85; margin: 0 0 1rem; }
+
+/* Honor reduced-motion for page transitions only (background art unchanged). */
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
 }
