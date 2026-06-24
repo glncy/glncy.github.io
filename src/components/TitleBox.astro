@@ -10,6 +10,7 @@ const { title, subtitle, plain = false } = Astro.props
 <div class:list={['title-box', plain ? 'plain' : 'glass']}>
   <div class="font-heading title">{title}</div>
   {subtitle && <div class="subtitle" set:html={subtitle} />}
+  <slot />
 </div>
 
 <style>

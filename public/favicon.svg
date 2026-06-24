@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
+  <style>
+    @font-face {
+      font-family: "PF";
+      font-style: italic;
+      font-weight: 600;
+      src: url(data:font/woff2;base64,d09GMgABAAAAAAJIAA4AAAAABXAAAAH0AAEz+AAAAAAAAAAAAAAAAAAAAAAAAAAAGyAcKgZgP1NUQVRAAAQRCAoBKgE2AiQDBAsEAAQgBYViByAbnwQIrgZsY7LYaBr71EihYmboweseRT+WSy0uHv5/f/8/1777EUkcHQnwVyKak5JaZFfIv/3kLJ7r7fyHqErFKrOTCtQn6qP3PlEGtycQU4TVA2T+y3OmkGu7z3sLeDidHX3qJZJhgNHNs7wXB3IdQJdI3PPABxyOMJI0yLaZ3qqIyIWF8SyoL1CtQxldWLp7IxkZCgBmM6SKnctePoEuKeE7yOlaOiJJeniyYuvX+uyoXKOWv7N0V4TcpXfzWJEk3/MHASmlV+jBhVApoRXDAHbjnI4UF16waQhZIwrRkI4gQhAhACEKGkCAZCDDc4EY+fn7se3tMRPfKnnpE7wuv34Twpv/j5iFfKX0XFIugaBTcBORf5nyyS8AEGnYEkV4psJNSQEAkkC1W7jIVcQAckMYbgBJbRxCyU4nkc30CGXa+myVm5haR1CbVlTQGRINGueAA4/vV8ig0SHQ19UzAd7oFOCJTfBLJTCEwJEh4r99+O1DHpNCgsBODOk8oQio0iHki8x1dGgMSBcTtUk8jg6JTRCLKDQaRSjSMXFrlWuawLe6AC8UFQ19vZ8MnHlcCDwQOBSg0vBoRTuC7iuFw7DnscmuIYHNIOlph+UDC+fVK4uqqsUtbddWY5jpR9rYyKKAZ3922Sflk6p5zinevaYVAQA=) format("woff2");
+    }
+  </style>
+  <rect width="100" height="100" rx="22" fill="#0a0c10"/>
+  <text x="51" y="50" font-family="PF, serif" font-style="italic" font-weight="600"
+        font-size="78" fill="#f3f4f6" text-anchor="middle" dominant-baseline="central">g</text>
+</svg>
