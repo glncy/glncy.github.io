@@ -1,6 +1,7 @@
 ---
 import settings from '../data/settings.json'
 import WritingNav from './WritingNav.astro'
+import { Icon } from 'astro-icon/components'
 
 const path = Astro.url.pathname
 const isHome = path === '/'
@@ -13,12 +14,20 @@ const writingActive =
   <a href="/" class="font-heading brand">{settings.siteTitle}</a>
 
   {!isHome && (
-    <nav class="nav" aria-label="Primary">
+    <nav class="nav" id="primary-nav" aria-label="Primary">
       <a href="/about" class:list={['nav-link', { active: isActive('/about') }]}>About</a>
       <a href="/services" class:list={['nav-link', { active: isActive('/services') }]}>Services</a>
       <a href="/projects" class:list={['nav-link', { active: isActive('/projects') }]}>Projects</a>
       <WritingNav active={writingActive} />
       <a href="/contact" class:list={['nav-link', { active: isActive('/contact') }]}>Contact</a>
+
+      <!-- Overflow links are moved in here by JS when they don't fit on one line. -->
+      <div class="more-wrap" id="nav-more" hidden>
+        <button class="nav-link more-btn" id="nav-more-btn" aria-haspopup="true" aria-expanded="false">
+          More <Icon name="ph:caret-down" class="more-caret" />
+        </button>
+        <div class="more-menu" id="nav-more-menu" role="menu"></div>
+      </div>
     </nav>
   )}
 </header>
@@ -57,25 +66,98 @@ const writingActive =
   }
   .nav {
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     justify-content: center;
     align-items: center;
     gap: 1.5rem;
+    /* Full width so overflow is measurable (a shrink-to-fit nav would always
+       report scrollWidth === clientWidth and never detect overflow). */
+    width: 100%;
   }
   .nav-link {
     color: #e5e7eb;
     font-size: 1rem;
     opacity: 0.85;
+    white-space: nowrap;
     transition: opacity 0.15s ease, transform 0.15s ease;
     text-shadow: 0 1px 8px rgba(0, 0, 0, 0.5);
   }
   .nav-link:hover { opacity: 1; transform: scale(1.08); }
   .nav-link.active { opacity: 1; text-decoration: underline; text-underline-offset: 6px; }
+
+  /* "More" overflow dropdown */
+  .more-wrap { position: relative; display: inline-flex; }
+  .more-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+  }
+  .more-caret { width: 0.8rem; height: 0.8rem; transition: transform 0.15s ease; }
+  .more-wrap.open .more-caret { transform: rotate(180deg); }
+  .more-menu {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%) translateY(4px);
+    display: flex;
+    flex-direction: column;
+    min-width: 9rem;
+    margin-top: 0.5rem;
+    padding: 0.4rem;
+    border-radius: 0.6rem;
+    background: rgba(6, 8, 12, 0.96);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.15s ease, transform 0.15s ease;
+    z-index: 50;
+  }
+  .more-wrap.open .more-menu { opacity: 1; visibility: visible; }
+  .more-menu .nav-link {
+    width: 100%;
+    padding: 0.5rem 0.9rem;
+    text-align: center;
+    border-radius: 0.4rem;
+    text-shadow: none;
+  }
+  .more-menu .nav-link:hover { background: rgba(255, 255, 255, 0.08); transform: none; }
+
+  /* When the Posts control lands in "More", flatten it: no caret, no nested
+     dropdown — just stacked Posts / Blog / TIL links. */
+  .more-menu :global(.nav-writing) {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .more-menu :global(.nav-writing-link) {
+    padding: 0.5rem 0.9rem;
+    text-align: center;
+    border-radius: 0.4rem;
+  }
+  .more-menu :global(.nav-caret) { display: none; }
+  .more-menu :global(.dd-menu) {
+    position: static;
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    background: none;
+    border: none;
+    box-shadow: none;
+    margin: 0;
+    padding: 0;
+    min-width: 0;
+  }
+  .more-menu :global(.dd-item) { padding: 0.45rem 0.9rem; text-align: center; }
 </style>
 
 <script is:inline>
-  // Fade the scrim in once scrolled (no size/collapse change). Idempotent across
-  // ClientRouter navigations (remove any prior window scroll handler first).
+  // Fade the scrim in once scrolled. Idempotent across ClientRouter navigations.
   function initHeaderScrim() {
     const header = document.getElementById('site-header')
     if (!header) return
@@ -86,4 +168,117 @@ const writingActive =
     onScroll()
   }
   document.addEventListener('astro:page-load', initHeaderScrim)
+
+  // Priority+ nav with an active-first window: keep the current page's link
+  // first, show the following links that fit, and push everything else
+  // (earlier links + overflow) into "More" — in natural nav order.
+  function initNavOverflow() {
+    if (window.__navResize) {
+      window.removeEventListener('resize', window.__navResize)
+      window.__navResize = null
+    }
+    const nav = document.getElementById('primary-nav')
+    if (!nav) return
+    const moreWrap = document.getElementById('nav-more')
+    const moreMenu = document.getElementById('nav-more-menu')
+    const moreBtn = document.getElementById('nav-more-btn')
+    if (!moreWrap || !moreMenu || !moreBtn) return
+
+    // Server-rendered order (moreWrap is last). Items = everything but moreWrap.
+    const original = Array.from(nav.children)
+    const items = original.filter((el) => el !== moreWrap)
+    const idxOf = (el) => original.indexOf(el)
+    const isActiveItem = (el) =>
+      el.classList.contains('active') ||
+      el.getAttribute('data-active') === 'true' ||
+      !!el.querySelector('.active, [data-active="true"]')
+
+    const closeMore = () => {
+      moreWrap.classList.remove('open')
+      moreBtn.setAttribute('aria-expanded', 'false')
+    }
+    const insertOrdered = (el) => {
+      el.classList.add('more-item')
+      let before = null
+      for (const child of moreMenu.children) {
+        if (idxOf(child) > idxOf(el)) { before = child; break }
+      }
+      moreMenu.insertBefore(el, before)
+    }
+    const reset = () => {
+      original.forEach((el) => {
+        if (el.classList) el.classList.remove('more-item')
+        nav.appendChild(el) // restores order, moreWrap last
+      })
+      moreWrap.hidden = true
+      closeMore()
+    }
+    const fits = () => nav.scrollWidth <= nav.clientWidth + 1
+    const layout = () => {
+      reset()
+      // Everything fits → show all links in natural order, no "More".
+      if (fits()) { moreWrap.hidden = true; return }
+
+      const len = items.length
+      let activeIdx = items.findIndex(isActiveItem)
+      if (activeIdx < 0) activeIdx = 0
+      const activeEl = items[activeIdx]
+      // Move everything BEFORE the active item into More (so it starts at active).
+      for (let i = 0; i < activeIdx; i++) insertOrdered(items[i])
+      // Companion = the next link; if active is the last, wrap to the first.
+      let companionEl
+      if (activeIdx < len - 1) {
+        companionEl = items[activeIdx + 1]
+      } else {
+        companionEl = items[0]
+        companionEl.classList.remove('more-item')
+        nav.insertBefore(companionEl, activeEl.nextSibling) // place right after active
+      }
+      moreWrap.hidden = moreMenu.children.length === 0
+      // If still overflowing, move trailing inline items into More — but always
+      // keep the active link AND its companion visible.
+      let guard = 0
+      while (!fits() && guard++ < 20) {
+        moreWrap.hidden = false
+        const inline = Array.from(nav.children).filter(
+          (el) => el !== moreWrap && !el.classList.contains('more-item')
+        )
+        const last = inline[inline.length - 1]
+        if (!last || last === activeEl || last === companionEl) break
+        insertOrdered(last)
+      }
+    }
+    layout()
+    requestAnimationFrame(layout)
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(layout)
+    window.__navResize = () => layout()
+    window.addEventListener('resize', window.__navResize)
+
+    if (!moreBtn.dataset.bound) {
+      moreBtn.dataset.bound = '1'
+      moreBtn.addEventListener('click', (e) => {
+        e.stopPropagation()
+        const open = moreWrap.classList.toggle('open')
+        moreBtn.setAttribute('aria-expanded', open ? 'true' : 'false')
+      })
+      moreMenu.addEventListener('click', (e) => {
+        if (e.target.closest('a')) closeMore()
+      })
+    }
+    if (!window.__navMoreDoc) {
+      window.__navMoreDoc = true
+      document.addEventListener('click', (e) => {
+        const w = document.getElementById('nav-more')
+        if (w && w.classList.contains('open') && !w.contains(e.target)) {
+          w.classList.remove('open')
+          document.getElementById('nav-more-btn')?.setAttribute('aria-expanded', 'false')
+        }
+      })
+      document.addEventListener('keydown', (e) => {
+        if (e.key !== 'Escape') return
+        document.getElementById('nav-more')?.classList.remove('open')
+      })
+    }
+  }
+  document.addEventListener('astro:page-load', initNavOverflow)
 </script>

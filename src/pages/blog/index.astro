@@ -3,6 +3,7 @@ import Layout from '../../layouts/Layout.astro'
 import TitleBox from '../../components/TitleBox.astro'
 import PostBrowser from '../../components/PostBrowser.astro'
 import { getCollection } from 'astro:content'
+import settings from '../../data/settings.json'
 
 const posts = (await getCollection('blog'))
   .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
@@ -20,7 +21,7 @@ const posts = (await getCollection('blog'))
 <Layout title="Blog | glncy" description="Long-form posts on web & mobile development, design, and what I'm building.">
   <div class="pb-40">
     <div class="relative flex h-screen w-full flex-col items-center justify-center">
-      <TitleBox title="Blog" subtitle="Long-form posts on building, design, and the things I figure out along the way." />
+      <TitleBox title="Blog" subtitle={settings.pages.blogSubtitle} />
       <div class="absolute text-sm text-gray-200 opacity-80" style="margin-top:38vh;">Scroll Down</div>
       <div class="down-arrow absolute"></div>
     </div>

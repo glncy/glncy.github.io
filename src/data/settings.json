@@ -4,17 +4,23 @@
   "analyticsId": "G-ET3F69DHKG",
   "pages": {
     "aboutSubtitle": "Developer, designer, and the person you'd actually enjoy working with.",
+    "servicesSubtitle": "Freelance development, from idea to shipped product.",
     "projectsSubtitle": "A selection of products I've designed, built, and shipped.",
+    "postsSubtitle": "Essays, build logs, and quick notes on what I'm learning.",
+    "blogSubtitle": "Long-form posts on building, design, and the things I figure out along the way.",
+    "tilSubtitle": "Today I Learned — short, practical notes from day-to-day development.",
     "contactSubtitle": "Have a project in mind? Tell me about it — I reply within 24h."
   },
   "contact": {
-    "email": "glency.a.tirao@gmail.com",
-    "linkedin": "https://www.linkedin.com/in/glency-tirao",
-    "messenger": "https://m.me/glencytirao1999"
+    "email": "glency.a.tirao@gmail.com"
   },
-  "github": "https://github.com/glncy",
+  "socials": [
+    { "label": "GitHub", "url": "https://github.com/glncy", "icon": "ph:github-logo" },
+    { "label": "LinkedIn", "url": "https://www.linkedin.com/in/glency-tirao", "icon": "ph:linkedin-logo" },
+    { "label": "Messenger", "url": "https://m.me/glencytirao1999", "icon": "ph:messenger-logo" },
+    { "label": "Schedule a call", "url": "https://example.com", "icon": "ph:calendar-dots" }
+  ],
   "web3formsKey": "54686f46-a3dd-4578-a0c8-8cabd596c1e4",
-  "scheduleUrl": "",
   "location": "Philippines · GMT+8",
   "responseTime": "I usually reply within 24h.",
   "services": "Web & mobile development, UI/UX, design & multimedia."

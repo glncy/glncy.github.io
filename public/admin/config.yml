@@ -23,9 +23,7 @@ collections:
           - { name: siteTitle, label: Site Title, widget: string }
           - { name: siteDescription, label: Site Description (SEO), widget: text }
           - { name: analyticsId, label: Google Analytics ID, widget: string, required: false }
-          - { name: github, label: GitHub URL, widget: string }
           - { name: web3formsKey, label: Web3Forms Access Key (contact form), widget: string, required: false }
-          - { name: scheduleUrl, label: Schedule/Booking URL, widget: string, required: false }
           - { name: location, label: Location / Timezone, widget: string, required: false }
           - { name: responseTime, label: Response time note, widget: string, required: false }
           - { name: services, label: Services (contact intro line), widget: text, required: false }
@@ -34,15 +32,25 @@ collections:
             widget: object
             fields:
               - { name: aboutSubtitle, label: About subtitle, widget: string }
+              - { name: servicesSubtitle, label: Services subtitle, widget: string }
               - { name: projectsSubtitle, label: Projects subtitle, widget: string }
+              - { name: postsSubtitle, label: Posts subtitle, widget: string }
+              - { name: blogSubtitle, label: Blog subtitle, widget: string }
+              - { name: tilSubtitle, label: TIL subtitle, widget: string }
               - { name: contactSubtitle, label: Contact subtitle, widget: string }
           - name: contact
             label: Contact
             widget: object
             fields:
               - { name: email, label: Email, widget: string }
-              - { name: linkedin, label: LinkedIn URL, widget: string }
-              - { name: messenger, label: Messenger URL, widget: string }
+          - name: socials
+            label: Social / Contact Links
+            widget: list
+            summary: '{{fields.label}}'
+            fields:
+              - { name: label, label: Label, widget: string }
+              - { name: url, label: URL, widget: string }
+              - { name: icon, label: Icon (ph:name from phosphoricons.com), widget: string }
 
   - name: services
     label: Services
@@ -91,6 +99,7 @@ collections:
         label: Background Videos
         file: src/data/background.json
         fields:
+          - { name: prompt, label: Music player prompt (shown before unmute), widget: string }
           - name: videos
             label: Videos
             widget: list

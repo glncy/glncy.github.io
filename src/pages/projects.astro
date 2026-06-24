@@ -5,8 +5,11 @@ import Projects from '../components/sections/Projects.astro'
 import { Icon } from 'astro-icon/components'
 import settings from '../data/settings.json'
 
-const subtitle = `${settings.pages.projectsSubtitle}
-  <div class="mt-2"><a href="${settings.github}" target="_blank" rel="noopener">@glncy</a></div>`
+const github = settings.socials.find((s) => s.label.toLowerCase() === 'github')?.url
+const subtitle = github
+  ? `${settings.pages.projectsSubtitle}
+  <div class="mt-2"><a href="${github}" target="_blank" rel="noopener">@glncy</a></div>`
+  : settings.pages.projectsSubtitle
 ---
 
 <Layout title="Projects | glncy">
