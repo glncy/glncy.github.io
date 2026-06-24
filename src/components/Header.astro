@@ -124,6 +124,34 @@ const writingActive =
     text-shadow: none;
   }
   .more-menu .nav-link:hover { background: rgba(255, 255, 255, 0.08); transform: none; }
+
+  /* When the Posts control lands in "More", flatten it: no caret, no nested
+     dropdown — just stacked Posts / Blog / TIL links. */
+  .more-menu :global(.nav-writing) {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .more-menu :global(.nav-writing-link) {
+    padding: 0.5rem 0.9rem;
+    text-align: center;
+    border-radius: 0.4rem;
+  }
+  .more-menu :global(.nav-caret) { display: none; }
+  .more-menu :global(.dd-menu) {
+    position: static;
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    background: none;
+    border: none;
+    box-shadow: none;
+    margin: 0;
+    padding: 0;
+    min-width: 0;
+  }
+  .more-menu :global(.dd-item) { padding: 0.45rem 0.9rem; text-align: center; }
 </style>
 
 <script is:inline>
@@ -189,18 +217,18 @@ const writingActive =
       let activeIdx = items.findIndex(isActiveItem)
       if (activeIdx < 0) activeIdx = 0
       const activeEl = items[activeIdx]
+      const nextEl = items[activeIdx + 1] // keep the link right after active too
       // Move everything BEFORE the active item into More.
       for (let i = 0; i < activeIdx; i++) insertOrdered(items[i])
       moreWrap.hidden = moreMenu.children.length === 0
-      // Then, if still overflowing, move trailing inline items (never the
-      // active one) into More until it fits on one line.
+      // Then, if still overflowing, move trailing inline items into More — but
+      // always keep the active link AND the one right after it visible.
       let guard = 0
       while (!fits() && guard++ < 20) {
         moreWrap.hidden = false
         const inline = items.filter((el) => !el.classList.contains('more-item'))
-        let last = inline[inline.length - 1]
-        if (last === activeEl) last = inline[inline.length - 2]
-        if (!last) break
+        const last = inline[inline.length - 1]
+        if (!last || last === activeEl || last === nextEl) break
         insertOrdered(last)
       }
     }
