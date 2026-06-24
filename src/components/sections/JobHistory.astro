@@ -35,18 +35,22 @@ const rendered = await Promise.all(
     padding: 0 0 0 3rem;
     list-style: none;
   }
-  /* Vertical line runs through the centre of the nodes (node center = 1.1rem). */
-  .timeline::before {
-    content: '';
-    position: absolute;
-    left: 1.1rem;
-    top: 0.5rem;
-    bottom: 0.5rem;
-    width: 2px;
-    background: rgba(255, 255, 255, 0.16);
-  }
   .tl-item { position: relative; margin-bottom: 1.5rem; }
   .tl-item:last-child { margin-bottom: 0; }
+  /* Connector: from THIS node's centre down to the NEXT node's centre.
+     node centre x (item-relative) = -3rem + 1.1rem = -1.9rem;
+     node centre y = node top (1.1rem) + half height (1.1rem) = 2.2rem.
+     Height spans the rest of this item + the 1.5rem gap to the next node. */
+  .tl-item::before {
+    content: '';
+    position: absolute;
+    left: calc(-1.9rem - 1px);
+    top: 2.2rem;
+    width: 2px;
+    height: calc(100% + 1.5rem);
+    background: rgba(255, 255, 255, 0.16);
+  }
+  .tl-item:last-child::before { display: none; }
   .tl-node {
     position: absolute;
     /* Item content starts at padding-left (3rem). Place the 2.2rem node so its
