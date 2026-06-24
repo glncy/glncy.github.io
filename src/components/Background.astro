@@ -115,6 +115,12 @@ const lines = Array.from({ length: 40 }, (_, i) => {
   @media (min-width: 768px) {
     .player.idle-title .player-info { display: block; }
   }
+  /* On mobile, while the title is tucked away, disable the control buttons so
+     the first tap only reveals the title (no accidental next/pause/unmute).
+     Once revealed (idle-title removed by interact()), the buttons are active. */
+  @media (max-width: 767px) {
+    .player.idle-title .player-controls { pointer-events: none; }
+  }
   .player-info { cursor: pointer; max-width: 72vw; margin-bottom: 0.7rem; }
   .player-title { font-size: 0.75rem; font-weight: 500; white-space: nowrap; }
   .player-channel { font-size: 0.7rem; font-weight: 300; opacity: 0.85; margin-top: 0.15rem; }
