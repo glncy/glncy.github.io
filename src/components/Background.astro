@@ -110,11 +110,11 @@ const lines = Array.from({ length: 40 }, (_, i) => {
   @media (min-width: 768px) {
     .player.idle-title .player-info { display: block; }
   }
-  .player-info { cursor: pointer; width: 15rem; max-width: 72vw; margin-bottom: 0.7rem; }
+  .player-info { cursor: pointer; max-width: 72vw; margin-bottom: 0.7rem; }
   .player-title { font-size: 0.75rem; font-weight: 500; }
   .player-channel { font-size: 0.7rem; font-weight: 300; opacity: 0.85; margin-top: 0.15rem; }
   /* Single-line horizontal ticker (news-strip style). */
-  .marquee { overflow: hidden; white-space: nowrap; }
+  .marquee { overflow: hidden; white-space: nowrap; width: 15rem; max-width: 72vw; }
   .marquee > span {
     display: inline-block;
     padding-left: 100%;
