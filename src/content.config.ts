@@ -34,6 +34,7 @@ const projects = defineCollection({
     contributions: z.array(z.string()).default([]),
     thumbnail: z.string().optional().default(''),
     youtube: z.string().optional().default(''),
+    featured: z.boolean().optional().default(false),
   }),
 })
 
