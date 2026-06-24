@@ -5,21 +5,114 @@ import { Icon } from 'astro-icon/components'
 import settings from '../data/settings.json'
 
 const { email, linkedin, messenger } = settings.contact
+const { github, web3formsKey, scheduleUrl, location, responseTime, services } = settings
+
+const socials = [
+  { name: 'Email', href: `mailto:${email}`, icon: 'ph:envelope-simple' },
+  { name: 'LinkedIn', href: linkedin, icon: 'ph:linkedin-logo', external: true },
+  { name: 'Messenger', href: messenger, icon: 'ph:messenger-logo', external: true },
+  { name: 'GitHub', href: github, icon: 'ph:github-logo', external: true },
+].filter((s) => s.href)
 ---
 
 <Layout title="Contact | glncy">
-  <div class="flex h-screen w-screen flex-col items-center justify-center">
+  <div class="mx-auto flex min-h-screen max-w-xl flex-col items-center justify-center px-4 py-28">
     <TitleBox title="Contact" subtitle={settings.pages.contactSubtitle} />
-    <div class="mt-3 flex max-w-xs flex-wrap justify-center gap-3 md:max-w-2xl">
-      <a class="cta glass" href={`mailto:${email}`}>
-        <Icon name="ph:envelope-simple" /> {email}
-      </a>
-      <a class="cta glass" href={linkedin} target="_blank" rel="noopener">
-        <Icon name="ph:linkedin-logo" /> LinkedIn
-      </a>
-      <a class="cta glass" href={messenger} target="_blank" rel="noopener">
-        <Icon name="ph:messenger-logo" /> Messenger
-      </a>
+
+    <p class="mt-4 text-center text-sm text-gray-300">{services}</p>
+    <p class="mt-1 flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-xs text-gray-400">
+      <span class="inline-flex items-center gap-1"><Icon name="ph:map-pin" /> {location}</span>
+      <span class="inline-flex items-center gap-1"><Icon name="ph:clock" /> {responseTime}</span>
+    </p>
+
+    {web3formsKey && (
+      <form id="contact-form" class="glass mt-6 w-full rounded-xl p-5">
+        <input type="hidden" name="access_key" value={web3formsKey} />
+        <input type="checkbox" name="botcheck" class="hidden" style="display:none" tabindex="-1" autocomplete="off" />
+        <label class="block">
+          <span class="mb-1 block text-xs text-gray-300">Name</span>
+          <input name="name" required class="field" type="text" autocomplete="name" />
+        </label>
+        <label class="mt-3 block">
+          <span class="mb-1 block text-xs text-gray-300">Email</span>
+          <input name="email" required class="field" type="email" autocomplete="email" />
+        </label>
+        <label class="mt-3 block">
+          <span class="mb-1 block text-xs text-gray-300">Message</span>
+          <textarea name="message" required rows="4" class="field"></textarea>
+        </label>
+        <button type="submit" class="cta glass mt-4 w-full justify-center">Send <Icon class="arrow" name="ph:paper-plane-tilt" /></button>
+        <p id="form-status" class="mt-3 hidden text-center text-sm"></p>
+      </form>
+    )}
+
+    <div class="mt-6 flex flex-wrap items-center justify-center gap-3">
+      {socials.map((s) => (
+        <a class="cta glass" href={s.href} {...(s.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}>
+          <Icon name={s.icon} /> {s.name}
+        </a>
+      ))}
+      <button id="copy-email" class="cta glass" data-email={email}>
+        <Icon name="ph:copy" /> Copy email
+      </button>
+      {scheduleUrl && (
+        <a class="cta glass" href={scheduleUrl} target="_blank" rel="noopener noreferrer">
+          <Icon name="ph:calendar-dots" /> Schedule a call
+        </a>
+      )}
     </div>
   </div>
 </Layout>
+
+<style>
+  .field {
+    width: 100%;
+    border-radius: 0.5rem;
+    background: rgba(0, 0, 0, 0.25);
+    border: 0.5px solid rgba(255, 255, 255, 0.2);
+    padding: 0.55rem 0.7rem;
+    color: #e5e7eb;
+    font-size: 0.9rem;
+  }
+  .field:focus { outline: none; border-color: rgba(255, 255, 255, 0.5); }
+</style>
+
+<script is:inline>
+  function initContact() {
+    const copy = document.getElementById('copy-email')
+    if (copy && !copy.dataset.bound) {
+      copy.dataset.bound = '1'
+      copy.addEventListener('click', async () => {
+        try {
+          await navigator.clipboard.writeText(copy.dataset.email || '')
+          copy.classList.add('copied')
+          setTimeout(() => copy.classList.remove('copied'), 1500)
+        } catch {}
+      })
+    }
+    const form = document.getElementById('contact-form')
+    if (form && !form.dataset.bound) {
+      form.dataset.bound = '1'
+      const status = document.getElementById('form-status')
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault()
+        if (status) { status.classList.remove('hidden'); status.textContent = 'Sending…'; status.style.color = '#e5e7eb' }
+        try {
+          const res = await fetch('https://api.web3forms.com/submit', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+            body: JSON.stringify(Object.fromEntries(new FormData(form))),
+          })
+          const data = await res.json()
+          if (data.success) {
+            form.reset()
+            if (status) { status.textContent = 'Thanks! I’ll get back to you soon.'; status.style.color = '#86efac' }
+          } else throw new Error()
+        } catch {
+          if (status) { status.textContent = 'Something went wrong — email me directly.'; status.style.color = '#fca5a5' }
+        }
+      })
+    }
+  }
+  document.addEventListener('astro:page-load', initContact)
+</script>
