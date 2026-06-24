@@ -16,7 +16,7 @@ const rendered = await Promise.all(
     {rendered.map(({ data, Content }) => (
       <li class="tl-item">
         <span class="tl-node"><Icon name="ph:briefcase" /></span>
-        <div class="tl-body glass">
+        <div class="tl-body panel">
           <div class="tl-role">{data.title}</div>
           <div class="tl-company">{data.company} · <span class="tl-loc">{data.location}</span></div>
           <div class="tl-date">{data.startDate} – {data.endDate}</div>
@@ -60,11 +60,11 @@ const rendered = await Promise.all(
     color: #e5e7eb;
   }
   .tl-node :global(svg) { width: 0.8rem; height: 0.8rem; }
-  .tl-body { border-radius: 0.6rem; padding: 1rem 1.1rem; }
-  .tl-role { font-size: 1.25rem; color: #e5e7eb; }
-  .tl-company { font-size: 0.95rem; color: #e5e7eb; opacity: 0.9; margin-top: 0.1rem; }
-  .tl-loc { font-weight: 300; opacity: 0.8; }
-  .tl-date { font-size: 0.8rem; font-style: italic; opacity: 0.7; margin-top: 0.15rem; }
-  .tl-desc { font-size: 0.9rem; font-weight: 300; margin-top: 0.5rem; }
+  .tl-body { border-radius: 0.7rem; padding: 1.1rem 1.25rem; }
+  .tl-role { font-size: 1.3rem; font-weight: 500; color: #f3f4f6; }
+  .tl-company { font-size: 0.95rem; color: #e5e7eb; opacity: 0.92; margin-top: 0.15rem; }
+  .tl-loc { font-weight: 300; opacity: 0.85; }
+  .tl-date { font-size: 0.8rem; font-style: italic; opacity: 0.7; margin-top: 0.2rem; }
+  .tl-desc { font-size: 0.95rem; font-weight: 300; line-height: 1.6; color: #d8dade; margin-top: 0.6rem; }
   .tl-desc :global(p) { margin: 0; }
 </style>

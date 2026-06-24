@@ -30,7 +30,7 @@ const ytId = (url: string) => {
     <div class="font-heading mb-4 w-fit text-4xl text-gray-200">Featured</div>
     <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
       {featured.map(({ data, Content }) => (
-        <article class="proj glass glass-hover flex flex-col rounded-lg" data-stack={data.stack.join('|')}>
+        <article class="proj panel panel-hover flex flex-col rounded-lg" data-stack={data.stack.join('|')}>
           {data.youtube ? (
             <iframe class="aspect-video w-full rounded-t-lg" src={`https://www.youtube-nocookie.com/embed/${ytId(data.youtube)}`} title={data.name} loading="lazy" allowfullscreen></iframe>
           ) : data.thumbnail ? (
@@ -58,7 +58,7 @@ const ytId = (url: string) => {
   <div class="font-heading mb-4 w-fit text-4xl text-gray-200">All Projects</div>
   <div class="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3" id="archive-grid">
     {archive.map(({ data, Content }) => (
-      <article class="proj glass glass-hover flex flex-col rounded-lg" data-stack={data.stack.join('|')}>
+      <article class="proj panel panel-hover flex flex-col rounded-lg" data-stack={data.stack.join('|')}>
         <div class="p-4">
           <div class="text-xl text-gray-200">{data.name}</div>
           <div class="text-sm font-extralight italic text-gray-200">{data.year}</div>

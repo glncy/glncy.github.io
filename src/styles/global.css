@@ -82,11 +82,16 @@
     --sidebar-border: oklch(0.922 0 0);
     --sidebar-ring: oklch(0.708 0 0);
     /* glncy glass + UI tokens */
-    --glass-bg: rgba(0, 0, 0, 0.2);
+    --glass-bg: rgba(0, 0, 0, 0.28);
     --glass-bg-strong: rgba(0, 0, 0, 0.5);
     --glass-border: rgba(255, 255, 255, 0.2);
     --glass-border-strong: rgba(255, 255, 255, 0.8);
-    --glass-blur: 8px;
+    --glass-blur: 10px;
+    /* Solid panel surface (no backdrop-filter) — readable + cheap. */
+    --panel-bg: rgba(8, 10, 16, 0.62);
+    --panel-bg-strong: rgba(8, 10, 16, 0.78);
+    --panel-border: rgba(255, 255, 255, 0.12);
+    --panel-border-strong: rgba(255, 255, 255, 0.28);
     --hairline: rgba(255, 255, 255, 0.5);
     --pill: 9999px;
 }
@@ -178,20 +183,40 @@
   border: 0;
 }
 
-/* ---- Glassmorphism panel (cards, info boxes, title box) ---------------- */
+/* ---- Glassmorphism panel (hero, music player — used SPARINGLY) ---------
+   backdrop-filter is GPU-expensive: every element with it forces a snapshot
+   of the moving video behind it each frame. Reserve `.glass` for a handful of
+   elements (hero title, player). For repeated content cards use `.panel`,
+   which is a solid translucent surface (no backdrop-filter) — cheaper AND
+   higher-contrast/more readable over the busy background. */
 .glass {
   background: var(--glass-bg);
   backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
   border: 0.5px solid var(--glass-border);
 }
 .glass-hover {
-  transition: all 0.2s ease-in-out;
+  transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
 }
 .glass-hover:hover {
   transform: scale(1.02);
   background: var(--glass-bg-strong);
   border: 0.5px solid var(--glass-border-strong);
-  backdrop-filter: blur(var(--glass-blur));
+}
+
+/* Solid frosted card — NO backdrop-filter. Use for lists/grids/repeated cards. */
+.panel {
+  background: var(--panel-bg);
+  border: 1px solid var(--panel-border);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.25);
+}
+.panel-hover {
+  transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+}
+.panel-hover:hover {
+  transform: translateY(-2px);
+  background: var(--panel-bg-strong);
+  border-color: var(--panel-border-strong);
 }
 .hairline {
   height: 0.2px;
@@ -280,12 +305,23 @@
   inset: 0;
   overflow: hidden;
 }
+/* Cheap scanline: a translucent gradient bar blended over the video, NO
+   backdrop-filter (which forced a per-frame snapshot for every one of these). */
 .glitch-line {
   position: absolute;
   width: 100vw;
   opacity: 0.6;
   top: var(--top);
-  backdrop-filter: saturate(5) blur(10px);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.14) 30%,
+    rgba(120, 170, 255, 0.12) 50%,
+    rgba(255, 90, 160, 0.1) 70%,
+    transparent
+  );
+  mix-blend-mode: screen;
+  will-change: top, opacity;
   animation: lineGlitch 10s linear infinite;
 }
 @keyframes lineGlitch {

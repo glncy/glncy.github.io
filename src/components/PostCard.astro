@@ -16,7 +16,7 @@ interface Props {
 const { href, type, title, date, description = '', thumbnail = '', tags = [], compact = false } = Astro.props
 ---
 
-<a href={href} class="post glass glass-hover" data-compact={compact ? 'true' : undefined}>
+<a href={href} class="post panel panel-hover" data-compact={compact ? 'true' : undefined}>
   {thumbnail && !compact && (
     <img src={thumbnail} alt={title} class="post-thumb" loading="lazy" />
   )}

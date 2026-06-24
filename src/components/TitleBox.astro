@@ -27,9 +27,13 @@ const { title, subtitle, plain = false } = Astro.props
   .title-box.glass {
     background: linear-gradient(
       180deg,
-      rgba(0, 0, 0, 0.28),
-      rgba(0, 0, 0, 0.16)
+      rgba(0, 0, 0, 0.42),
+      rgba(0, 0, 0, 0.24)
     );
+    /* Explicit, slightly stronger frost for the hero (a single element, so the
+       backdrop-filter cost here is fine). */
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
     border: none;
     border-top: 1px solid rgba(255, 255, 255, 0.18);
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
