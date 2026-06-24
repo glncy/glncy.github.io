@@ -68,10 +68,3 @@ Content bodies are **`.mdx`** (`src/content/**`), powered by **[astro-embed](htt
 > `astro.config.mjs` sets `markdown: { processor: unified() }` and installs
 > `@astrojs/markdown-remark`. Without that, Astro 7's default (Sätteri) processor
 > ignores remark/rehype plugins and auto-embed silently no-ops.
-
-## TODO
-
-- [ ] Add a **blog** collection (`src/content/blog/`) + `/blog` pages (MDX, so
-  embeds work out of the box).
-- [ ] Add a **blog** collection (`src/content/blog/`) + `/blog` pages.
-
