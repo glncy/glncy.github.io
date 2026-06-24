@@ -17,22 +17,43 @@ const socials = [
 
 <Layout title="Contact | glncy" description="Get in touch — web & mobile development, UI/UX, design & multimedia.">
   <div class="pb-40">
-    <div class="relative flex h-screen w-full flex-col items-center justify-center">
+    <div class="relative flex min-h-screen w-full flex-col items-center justify-center px-4 py-28">
       <TitleBox title="Contact" subtitle={settings.pages.contactSubtitle} />
-      <div class="absolute text-sm text-gray-200 opacity-80" style="margin-top:38vh;">Scroll Down</div>
-      <div class="down-arrow absolute"></div>
+
+      <p class="mt-5 text-center text-base text-gray-200">{services}</p>
+      <p class="mt-2 flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-xs text-gray-400">
+        <span class="inline-flex items-center gap-1"><Icon name="ph:map-pin" /> {location}</span>
+        <span class="inline-flex items-center gap-1"><Icon name="ph:clock" /> {responseTime}</span>
+      </p>
+
+      <div class="mt-6 flex flex-wrap items-center justify-center gap-3">
+        {socials.map((s) => (
+          <a class="cta panel" href={s.href} {...(s.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}>
+            <Icon name={s.icon} /> {s.name}
+          </a>
+        ))}
+        <button id="copy-email" class="cta panel" data-email={email}>
+          <Icon name="ph:copy" /> Copy email
+        </button>
+        {scheduleUrl && (
+          <a class="cta panel" href={scheduleUrl} target="_blank" rel="noopener noreferrer">
+            <Icon name="ph:calendar-dots" /> Schedule a call
+          </a>
+        )}
+      </div>
+
+      {web3formsKey && (
+        <a href="#contact-form-section" class="cta send-btn mt-8">
+          Send me a message <Icon class="arrow" name="ph:arrow-down" />
+        </a>
+      )}
     </div>
 
-    <div class="mx-auto max-w-xl px-4">
-      <div class="panel rounded-2xl p-5 md:p-7">
-        <p class="text-center text-base text-gray-200">{services}</p>
-        <p class="mt-2 flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-xs text-gray-400">
-          <span class="inline-flex items-center gap-1"><Icon name="ph:map-pin" /> {location}</span>
-          <span class="inline-flex items-center gap-1"><Icon name="ph:clock" /> {responseTime}</span>
-        </p>
-
-        {web3formsKey && (
-          <form id="contact-form" class="mt-6">
+    {web3formsKey && (
+      <div class="mx-auto max-w-xl px-4">
+        <div id="contact-form-section" class="panel scroll-mt-28 rounded-2xl p-5 md:p-7">
+          <h2 class="font-heading mb-4 text-center text-3xl text-gray-100">Send a message</h2>
+          <form id="contact-form">
             <input type="hidden" name="access_key" value={web3formsKey} />
             <input type="checkbox" name="botcheck" class="hidden" style="display:none" tabindex="-1" autocomplete="off" />
             <label class="block">
@@ -50,25 +71,9 @@ const socials = [
             <button type="submit" class="cta send-btn mt-4 w-full justify-center">Send <Icon class="arrow" name="ph:paper-plane-tilt" /></button>
             <p id="form-status" class="mt-3 hidden text-center text-sm"></p>
           </form>
-        )}
+        </div>
       </div>
-
-      <div class="mt-6 flex flex-wrap items-center justify-center gap-3">
-        {socials.map((s) => (
-          <a class="cta panel" href={s.href} {...(s.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}>
-            <Icon name={s.icon} /> {s.name}
-          </a>
-        ))}
-        <button id="copy-email" class="cta panel" data-email={email}>
-          <Icon name="ph:copy" /> Copy email
-        </button>
-        {scheduleUrl && (
-          <a class="cta panel" href={scheduleUrl} target="_blank" rel="noopener noreferrer">
-            <Icon name="ph:calendar-dots" /> Schedule a call
-          </a>
-        )}
-      </div>
-    </div>
+    )}
   </div>
 </Layout>
 

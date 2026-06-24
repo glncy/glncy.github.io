@@ -136,6 +136,10 @@
   }
   html {
     @apply font-sans;
+    scroll-behavior: smooth;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
   }
   /* The site renders over a fixed video background, so the page itself is
      transparent and text defaults to light gray (matches the original). */
