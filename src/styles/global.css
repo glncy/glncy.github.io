@@ -82,11 +82,16 @@
     --sidebar-border: oklch(0.922 0 0);
     --sidebar-ring: oklch(0.708 0 0);
     /* glncy glass + UI tokens */
-    --glass-bg: rgba(0, 0, 0, 0.2);
+    --glass-bg: rgba(0, 0, 0, 0.28);
     --glass-bg-strong: rgba(0, 0, 0, 0.5);
     --glass-border: rgba(255, 255, 255, 0.2);
     --glass-border-strong: rgba(255, 255, 255, 0.8);
-    --glass-blur: 8px;
+    --glass-blur: 10px;
+    /* Solid panel surface (no backdrop-filter) — readable + cheap. */
+    --panel-bg: rgba(6, 8, 12, 0.88);
+    --panel-bg-strong: rgba(6, 8, 12, 0.94);
+    --panel-border: rgba(255, 255, 255, 0.12);
+    --panel-border-strong: rgba(255, 255, 255, 0.28);
     --hairline: rgba(255, 255, 255, 0.5);
     --pill: 9999px;
 }
@@ -131,6 +136,10 @@
   }
   html {
     @apply font-sans;
+    scroll-behavior: smooth;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
   }
   /* The site renders over a fixed video background, so the page itself is
      transparent and text defaults to light gray (matches the original). */
@@ -178,25 +187,53 @@
   border: 0;
 }
 
-/* ---- Glassmorphism panel (cards, info boxes, title box) ---------------- */
+/* ---- Glassmorphism panel (hero, music player — used SPARINGLY) ---------
+   backdrop-filter is GPU-expensive: every element with it forces a snapshot
+   of the moving video behind it each frame. Reserve `.glass` for a handful of
+   elements (hero title, player). For repeated content cards use `.panel`,
+   which is a solid translucent surface (no backdrop-filter) — cheaper AND
+   higher-contrast/more readable over the busy background. */
 .glass {
   background: var(--glass-bg);
   backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
   border: 0.5px solid var(--glass-border);
 }
 .glass-hover {
-  transition: all 0.2s ease-in-out;
+  transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
 }
 .glass-hover:hover {
   transform: scale(1.02);
   background: var(--glass-bg-strong);
   border: 0.5px solid var(--glass-border-strong);
-  backdrop-filter: blur(var(--glass-blur));
+}
+
+/* Solid frosted card — NO backdrop-filter. Use for lists/grids/repeated cards. */
+.panel {
+  background: var(--panel-bg);
+  border: 1px solid var(--panel-border);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.25);
+}
+.panel-hover {
+  transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+}
+.panel-hover:hover {
+  transform: translateY(-2px);
+  background: var(--panel-bg-strong);
+  border-color: var(--panel-border-strong);
 }
 .hairline {
   height: 0.2px;
   background: var(--hairline);
 }
+
+/* ---- Masonry (CSS columns) -------------------------------------------- */
+/* Children must not split across columns. Hidden children (display:none via
+   the filter JS) simply drop out of the flow. */
+.masonry { column-gap: 1rem; column-count: 1; }
+@media (min-width: 768px) { .masonry { column-count: 2; } }
+@media (min-width: 1280px) { .masonry.cols-3 { column-count: 3; } }
+.masonry > * { break-inside: avoid; margin-bottom: 1rem; }
 
 /* ---- Call-to-action pill ---------------------------------------------- */
 .cta {
@@ -285,7 +322,7 @@
   width: 100vw;
   opacity: 0.6;
   top: var(--top);
-  backdrop-filter: saturate(5) blur(10px);
+  backdrop-filter: saturate(5) blur(6px);
   animation: lineGlitch 10s linear infinite;
 }
 @keyframes lineGlitch {
@@ -302,6 +339,18 @@
   97%   { opacity: 0.6; }
   97.1% { opacity: 0; }
   100%  { top: var(--endTop); opacity: 0; }
+}
+
+/* Performance: the glitch lines each run a backdrop-filter (expensive). Keep
+   the full set on desktop, but thin them out on small screens where the GPU
+   cost hurts most. Desktop appearance is unchanged. */
+@media (max-width: 767px) {
+  .glitch-line:nth-child(n + 13) { display: none; }
+}
+/* Reduced motion: drop the heavy animated background effects entirely. */
+@media (prefers-reduced-motion: reduce) {
+  .glitch-line { animation: none; opacity: 0; }
+  .bg-noise { animation: none; }
 }
 
 /* ---- Bouncing down-arrow (About/Projects header) ---------------------- */

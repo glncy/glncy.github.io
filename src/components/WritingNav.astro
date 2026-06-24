@@ -7,14 +7,14 @@ interface Props {
 const { active = false } = Astro.props
 ---
 
-<!-- Split control: "Writing" text links to /writing; the caret toggles the
+<!-- Split control: "Posts" text links to /posts; the caret toggles the
      Blog/TIL menu. Plain Astro + a tiny vanilla toggle (no React island). -->
 <span class="nav-writing" data-active={active ? 'true' : undefined}>
-  <a href="/writing" class="nav-writing-link">Writing</a>
+  <a href="/posts" class="nav-writing-link">Posts</a>
   <button
     type="button"
     class="nav-caret"
-    aria-label="Open writing menu"
+    aria-label="Open posts menu"
     aria-haspopup="true"
     aria-expanded="false"
   >

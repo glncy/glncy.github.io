@@ -24,6 +24,11 @@ collections:
           - { name: siteDescription, label: Site Description (SEO), widget: text }
           - { name: analyticsId, label: Google Analytics ID, widget: string, required: false }
           - { name: github, label: GitHub URL, widget: string }
+          - { name: web3formsKey, label: Web3Forms Access Key (contact form), widget: string, required: false }
+          - { name: scheduleUrl, label: Schedule/Booking URL, widget: string, required: false }
+          - { name: location, label: Location / Timezone, widget: string, required: false }
+          - { name: responseTime, label: Response time note, widget: string, required: false }
+          - { name: services, label: Services (contact intro line), widget: text, required: false }
           - name: pages
             label: Page Subtitles
             widget: object
@@ -38,6 +43,46 @@ collections:
               - { name: email, label: Email, widget: string }
               - { name: linkedin, label: LinkedIn URL, widget: string }
               - { name: messenger, label: Messenger URL, widget: string }
+
+  - name: services
+    label: Services
+    files:
+      - name: services
+        label: Services
+        file: src/data/services.json
+        fields:
+          - { name: intro, label: Intro, widget: text }
+          - name: items
+            label: Offerings
+            widget: list
+            fields:
+              - { name: icon, label: Icon (ph:name), widget: string }
+              - { name: title, label: Title, widget: string }
+              - { name: description, label: Description, widget: text }
+          - name: process
+            label: Process steps
+            widget: list
+            fields:
+              - { name: step, label: Step (e.g. 01), widget: string }
+              - { name: title, label: Title, widget: string }
+              - { name: description, label: Description, widget: text }
+
+  - name: testimonials
+    label: Testimonials
+    files:
+      - name: testimonials
+        label: Testimonials
+        file: src/data/testimonials.json
+        fields:
+          - name: items
+            label: Testimonials
+            widget: list
+            fields:
+              - { name: quote, label: Quote, widget: text }
+              - { name: name, label: Name, widget: string }
+              - { name: role, label: Role, widget: string, required: false }
+              - { name: company, label: Company, widget: string, required: false }
+              - { name: avatar, label: Avatar, widget: image, required: false }
 
   - name: background
     label: Background Videos

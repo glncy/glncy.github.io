@@ -1,30 +1,32 @@
 ---
 import Layout from '../../layouts/Layout.astro'
 import TitleBox from '../../components/TitleBox.astro'
-import PostCard from '../../components/PostCard.astro'
+import PostBrowser from '../../components/PostBrowser.astro'
 import { getCollection } from 'astro:content'
 
-const posts = (await getCollection('blog')).sort(
-  (a, b) => b.data.date.getTime() - a.data.date.getTime()
-)
+const posts = (await getCollection('blog'))
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
+  .map((p) => ({
+    href: `/blog/${p.id}`,
+    type: 'Blog' as const,
+    title: p.data.title,
+    date: p.data.date,
+    description: p.data.description,
+    thumbnail: p.data.thumbnail,
+    tags: p.data.tags,
+  }))
 ---
 
-<Layout title="Blog | glncy">
-  <div class="mx-auto max-w-4xl px-4 pb-24 pt-32">
-    <TitleBox title="Blog" subtitle="Long-form posts." />
-    <div class="mt-8 grid grid-cols-1 gap-4 md:grid-cols-2">
-      {posts.map((p) => (
-        <PostCard
-          href={`/blog/${p.id}`}
-          type="Blog"
-          title={p.data.title}
-          date={p.data.date}
-          description={p.data.description}
-          thumbnail={p.data.thumbnail}
-          tags={p.data.tags}
-        />
-      ))}
+<Layout title="Blog | glncy" description="Long-form posts on web & mobile development, design, and what I'm building.">
+  <div class="pb-40">
+    <div class="relative flex h-screen w-full flex-col items-center justify-center">
+      <TitleBox title="Blog" subtitle="Long-form posts on building, design, and the things I figure out along the way." />
+      <div class="absolute text-sm text-gray-200 opacity-80" style="margin-top:38vh;">Scroll Down</div>
+      <div class="down-arrow absolute"></div>
     </div>
-    {posts.length === 0 && <p class="mt-8 text-center text-gray-400">No posts yet.</p>}
+
+    <div class="mx-auto max-w-4xl px-4">
+      <PostBrowser posts={posts} layout="grid" emptyText="No posts yet." />
+    </div>
   </div>
 </Layout>

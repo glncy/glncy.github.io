@@ -15,52 +15,99 @@ const socials = [
 ].filter((s) => s.href)
 ---
 
-<Layout title="Contact | glncy">
-  <div class="mx-auto flex min-h-screen max-w-xl flex-col items-center justify-center px-4 py-28">
-    <TitleBox title="Contact" subtitle={settings.pages.contactSubtitle} />
+<Layout title="Contact | glncy" description="Get in touch — web & mobile development, UI/UX, design & multimedia.">
+  <div class="pb-40">
+    <div class="relative flex min-h-screen w-full flex-col items-center justify-center px-4 py-28">
+      <TitleBox title="Contact" subtitle={settings.pages.contactSubtitle} />
 
-    <p class="mt-4 text-center text-sm text-gray-300">{services}</p>
-    <p class="mt-1 flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-xs text-gray-400">
-      <span class="inline-flex items-center gap-1"><Icon name="ph:map-pin" /> {location}</span>
-      <span class="inline-flex items-center gap-1"><Icon name="ph:clock" /> {responseTime}</span>
-    </p>
+      <p class="hero-meta mt-5 text-center text-base text-gray-100">{services}</p>
+      <p class="hero-meta mt-2 flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-sm text-gray-200">
+        <span class="inline-flex items-center gap-1"><Icon name="ph:map-pin" /> {location}</span>
+        <span class="inline-flex items-center gap-1"><Icon name="ph:clock" /> {responseTime}</span>
+      </p>
 
-    {web3formsKey && (
-      <form id="contact-form" class="glass mt-6 w-full rounded-xl p-5">
-        <input type="hidden" name="access_key" value={web3formsKey} />
-        <input type="checkbox" name="botcheck" class="hidden" style="display:none" tabindex="-1" autocomplete="off" />
-        <label class="block">
-          <span class="mb-1 block text-xs text-gray-300">Name</span>
-          <input name="name" required class="field" type="text" autocomplete="name" />
-        </label>
-        <label class="mt-3 block">
-          <span class="mb-1 block text-xs text-gray-300">Email</span>
-          <input name="email" required class="field" type="email" autocomplete="email" />
-        </label>
-        <label class="mt-3 block">
-          <span class="mb-1 block text-xs text-gray-300">Message</span>
-          <textarea name="message" required rows="4" class="field"></textarea>
-        </label>
-        <button type="submit" class="cta glass mt-4 w-full justify-center">Send <Icon class="arrow" name="ph:paper-plane-tilt" /></button>
-        <p id="form-status" class="mt-3 hidden text-center text-sm"></p>
-      </form>
-    )}
+      <div class="mt-6 flex flex-wrap items-center justify-center gap-3">
+        {socials.map((s) => (
+          <a class="cta panel" href={s.href} {...(s.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}>
+            <Icon name={s.icon} /> {s.name}
+          </a>
+        ))}
+        <button id="copy-email" class="cta panel" data-email={email}>
+          <Icon name="ph:copy" /> Copy email
+        </button>
+        {scheduleUrl && (
+          <a class="cta panel" href={scheduleUrl} target="_blank" rel="noopener noreferrer">
+            <Icon name="ph:calendar-dots" /> Schedule a call
+          </a>
+        )}
+      </div>
 
-    <div class="mt-6 flex flex-wrap items-center justify-center gap-3">
-      {socials.map((s) => (
-        <a class="cta glass" href={s.href} {...(s.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}>
-          <Icon name={s.icon} /> {s.name}
-        </a>
-      ))}
-      <button id="copy-email" class="cta glass" data-email={email}>
-        <Icon name="ph:copy" /> Copy email
-      </button>
-      {scheduleUrl && (
-        <a class="cta glass" href={scheduleUrl} target="_blank" rel="noopener noreferrer">
-          <Icon name="ph:calendar-dots" /> Schedule a call
+      {web3formsKey && (
+        <a href="#contact-form-section" class="cta send-btn mt-8">
+          Send me a message <Icon class="arrow" name="ph:arrow-down" />
         </a>
       )}
     </div>
+
+    {web3formsKey && (
+      <div class="mx-auto max-w-xl px-4">
+        <div id="contact-form-section" class="panel scroll-mt-28 rounded-2xl p-5 md:p-7">
+          <h2 class="font-heading mb-4 text-center text-3xl text-gray-100">Send a message</h2>
+          <form id="contact-form">
+            <input type="hidden" name="access_key" value={web3formsKey} />
+            <input type="checkbox" name="botcheck" class="hidden" style="display:none" tabindex="-1" autocomplete="off" />
+            <label class="block">
+              <span class="mb-1 block text-xs text-gray-300">Name</span>
+              <input name="name" required class="field" type="text" autocomplete="name" />
+            </label>
+            <label class="mt-3 block">
+              <span class="mb-1 block text-xs text-gray-300">Email</span>
+              <input name="email" required class="field" type="email" autocomplete="email" />
+            </label>
+            <div class="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-3">
+              <label class="block">
+                <span class="mb-1 block text-xs text-gray-300">Project type</span>
+                <select name="Project type" class="field">
+                  <option value="">Select…</option>
+                  <option>Web app / website</option>
+                  <option>Mobile app</option>
+                  <option>UI/UX & design</option>
+                  <option>API / backend</option>
+                  <option>Other</option>
+                </select>
+              </label>
+              <label class="block">
+                <span class="mb-1 block text-xs text-gray-300">Budget</span>
+                <select name="Budget" class="field">
+                  <option value="">Select…</option>
+                  <option>Under $500</option>
+                  <option>$500 – $2k</option>
+                  <option>$2k – $5k</option>
+                  <option>$5k+</option>
+                  <option>Not sure yet</option>
+                </select>
+              </label>
+              <label class="block">
+                <span class="mb-1 block text-xs text-gray-300">Timeline</span>
+                <select name="Timeline" class="field">
+                  <option value="">Select…</option>
+                  <option>ASAP</option>
+                  <option>1–4 weeks</option>
+                  <option>1–3 months</option>
+                  <option>Flexible</option>
+                </select>
+              </label>
+            </div>
+            <label class="mt-3 block">
+              <span class="mb-1 block text-xs text-gray-300">Message</span>
+              <textarea name="message" required rows="4" class="field" placeholder="Tell me a bit about your project…"></textarea>
+            </label>
+            <button type="submit" class="cta send-btn mt-4 w-full justify-center">Send <Icon class="arrow" name="ph:paper-plane-tilt" /></button>
+            <p id="form-status" class="mt-3 hidden text-center text-sm"></p>
+          </form>
+        </div>
+      </div>
+    )}
   </div>
 </Layout>
 
@@ -68,13 +115,37 @@ const socials = [
   .field {
     width: 100%;
     border-radius: 0.5rem;
-    background: rgba(0, 0, 0, 0.25);
-    border: 0.5px solid rgba(255, 255, 255, 0.2);
-    padding: 0.55rem 0.7rem;
-    color: #e5e7eb;
+    background: rgba(0, 0, 0, 0.45);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    padding: 0.6rem 0.75rem;
+    color: #f3f4f6;
     font-size: 0.9rem;
   }
-  .field:focus { outline: none; border-color: rgba(255, 255, 255, 0.5); }
+  .field:focus { outline: none; border-color: rgba(255, 255, 255, 0.55); background: rgba(0, 0, 0, 0.6); }
+  select.field {
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+    padding-right: 2rem;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%239ca3af' viewBox='0 0 16 16'%3E%3Cpath d='M3.2 5.5h9.6L8 11z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center;
+  }
+  select.field option { background: #0a0c10; color: #e5e7eb; }
+  .hero-meta { text-shadow: 0 1px 10px rgba(0, 0, 0, 0.85), 0 1px 3px rgba(0, 0, 0, 0.7); }
+  #copy-email.copied {
+    background: rgba(34, 197, 94, 0.92);
+    color: #06210f;
+    border-color: rgba(34, 197, 94, 0.92);
+    font-weight: 600;
+  }
+  .send-btn {
+    background: rgba(255, 255, 255, 0.92);
+    color: #0a0c10;
+    font-weight: 600;
+    border: 1px solid rgba(255, 255, 255, 0.92);
+  }
+  .send-btn:hover { background: #fff; transform: scale(1.02); }
 </style>
 
 <script is:inline>
@@ -82,12 +153,23 @@ const socials = [
     const copy = document.getElementById('copy-email')
     if (copy && !copy.dataset.bound) {
       copy.dataset.bound = '1'
+      const original = copy.innerHTML
+      const check = '<svg width="16" height="16" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"></path></svg>'
       copy.addEventListener('click', async () => {
+        if (copy.dataset.reverting) return
         try {
           await navigator.clipboard.writeText(copy.dataset.email || '')
-          copy.classList.add('copied')
-          setTimeout(() => copy.classList.remove('copied'), 1500)
-        } catch {}
+        } catch {
+          return
+        }
+        copy.dataset.reverting = '1'
+        copy.classList.add('copied')
+        copy.innerHTML = check + ' Copied!'
+        setTimeout(() => {
+          copy.innerHTML = original
+          copy.classList.remove('copied')
+          delete copy.dataset.reverting
+        }, 1600)
       })
     }
     const form = document.getElementById('contact-form')

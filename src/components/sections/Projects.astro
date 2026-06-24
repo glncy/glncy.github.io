@@ -19,10 +19,10 @@ const ytId = (url: string) => {
 }
 ---
 
-<!-- Filter chips -->
-<div class="filters" role="group" aria-label="Filter projects by tech">
-  <button class="chip active" data-tech="all">All</button>
-  {techs.map((t) => <button class="chip" data-tech={t}>{t}</button>)}
+<!-- Filter chips (multiple allowed) -->
+<div class="filters" role="group" aria-label="Filter projects by tech (multiple allowed)">
+  <button class="chip active" data-tech="all" aria-pressed="true">All</button>
+  {techs.map((t) => <button class="chip" data-tech={t} aria-pressed="false">{t}</button>)}
 </div>
 
 {featured.length > 0 && (
@@ -30,7 +30,7 @@ const ytId = (url: string) => {
     <div class="font-heading mb-4 w-fit text-4xl text-gray-200">Featured</div>
     <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
       {featured.map(({ data, Content }) => (
-        <article class="proj glass glass-hover flex flex-col rounded-lg" data-stack={data.stack.join('|')}>
+        <article class="proj panel panel-hover flex flex-col rounded-lg" data-stack={data.stack.join('|')}>
           {data.youtube ? (
             <iframe class="aspect-video w-full rounded-t-lg" src={`https://www.youtube-nocookie.com/embed/${ytId(data.youtube)}`} title={data.name} loading="lazy" allowfullscreen></iframe>
           ) : data.thumbnail ? (
@@ -56,9 +56,9 @@ const ytId = (url: string) => {
 
 <section>
   <div class="font-heading mb-4 w-fit text-4xl text-gray-200">All Projects</div>
-  <div class="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3" id="archive-grid">
+  <div class="masonry cols-3" id="archive-grid">
     {archive.map(({ data, Content }) => (
-      <article class="proj glass glass-hover flex flex-col rounded-lg" data-stack={data.stack.join('|')}>
+      <article class="proj panel panel-hover flex flex-col rounded-lg" data-stack={data.stack.join('|')}>
         <div class="p-4">
           <div class="text-xl text-gray-200">{data.name}</div>
           <div class="text-sm font-extralight italic text-gray-200">{data.year}</div>
@@ -80,17 +80,17 @@ const ytId = (url: string) => {
 <style>
   .filters { display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center; margin-bottom: 1.5rem; }
   .chip {
-    padding: 0.25rem 0.7rem;
+    padding: 0.3rem 0.8rem;
     border-radius: 9999px;
     font-size: 0.8rem;
     color: #e5e7eb;
-    background: rgba(255, 255, 255, 0.08);
-    border: 0.5px solid rgba(255, 255, 255, 0.16);
+    background: rgba(6, 8, 12, 0.78);
+    border: 1px solid rgba(255, 255, 255, 0.16);
     cursor: pointer;
-    transition: all 0.15s ease;
+    transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
   }
-  .chip:hover { background: rgba(255, 255, 255, 0.16); }
-  .chip.active { background: rgba(255, 255, 255, 0.85); color: #111; }
+  .chip:hover { background: rgba(34, 38, 47, 0.92); border-color: rgba(255, 255, 255, 0.32); }
+  .chip.active { background: #e5e7eb; color: #0a0c10; border-color: #e5e7eb; font-weight: 600; }
   .remarks :global(a) { color: #3b82f6; text-decoration: underline; }
   .remarks :global(p) { margin: 0; }
 </style>
@@ -101,20 +101,35 @@ const ytId = (url: string) => {
     if (!chips.length) return
     const cards = document.querySelectorAll('.proj')
     const noResults = document.querySelector('.no-results')
+    const active = new Set() // empty = all (multi-select, OR match)
+
+    function syncChips() {
+      chips.forEach((c) => {
+        const on = c.dataset.tech === 'all' ? active.size === 0 : active.has(c.dataset.tech)
+        c.classList.toggle('active', on)
+        c.setAttribute('aria-pressed', on ? 'true' : 'false')
+      })
+    }
+    function apply() {
+      let shown = 0
+      cards.forEach((card) => {
+        const stacks = (card.dataset.stack || '').split('|').filter(Boolean)
+        const match = active.size === 0 || stacks.some((s) => active.has(s))
+        card.style.display = match ? '' : 'none'
+        if (match) shown++
+      })
+      if (noResults) noResults.classList.toggle('hidden', shown > 0)
+    }
     chips.forEach((chip) => {
       if (chip.dataset.bound) return
       chip.dataset.bound = '1'
       chip.addEventListener('click', () => {
         const tech = chip.dataset.tech
-        document.querySelectorAll('.chip').forEach((c) => c.classList.toggle('active', c === chip))
-        let shown = 0
-        cards.forEach((card) => {
-          const stacks = (card.dataset.stack || '').split('|')
-          const match = tech === 'all' || stacks.includes(tech)
-          card.style.display = match ? '' : 'none'
-          if (match) shown++
-        })
-        if (noResults) noResults.classList.toggle('hidden', shown > 0)
+        if (tech === 'all') active.clear()
+        else if (active.has(tech)) active.delete(tech)
+        else active.add(tech)
+        syncChips()
+        apply()
       })
     })
   }

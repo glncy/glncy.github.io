@@ -16,7 +16,7 @@ const rendered = await Promise.all(
     {rendered.map(({ data, Content }) => (
       <li class="tl-item">
         <span class="tl-node"><Icon name="ph:briefcase" /></span>
-        <div class="tl-body glass">
+        <div class="tl-body panel">
           <div class="tl-role">{data.title}</div>
           <div class="tl-company">{data.company} · <span class="tl-loc">{data.location}</span></div>
           <div class="tl-date">{data.startDate} – {data.endDate}</div>
@@ -31,40 +31,50 @@ const rendered = await Promise.all(
   .timeline {
     position: relative;
     margin: 0;
-    padding: 0 0 0 1.75rem;
+    /* Leave room on the left for the node (centered on the line). */
+    padding: 0 0 0 3rem;
     list-style: none;
-  }
-  .timeline::before {
-    content: '';
-    position: absolute;
-    left: 0.5rem;
-    top: 0.25rem;
-    bottom: 0.25rem;
-    width: 1px;
-    background: rgba(255, 255, 255, 0.18);
   }
   .tl-item { position: relative; margin-bottom: 1.5rem; }
   .tl-item:last-child { margin-bottom: 0; }
+  /* Connector: from THIS node's centre down to the NEXT node's centre.
+     node centre x (item-relative) = -3rem + 1.1rem = -1.9rem;
+     node centre y = node top (1.1rem) + half height (1.1rem) = 2.2rem.
+     Height spans the rest of this item + the 1.5rem gap to the next node. */
+  .tl-item::before {
+    content: '';
+    position: absolute;
+    left: calc(-1.9rem - 1px);
+    top: 2.2rem;
+    width: 2px;
+    height: calc(100% + 1.5rem);
+    background: rgba(255, 255, 255, 0.16);
+  }
+  .tl-item:last-child::before { display: none; }
   .tl-node {
     position: absolute;
-    left: -1.75rem;
-    top: 0.4rem;
-    width: 1.4rem;
-    height: 1.4rem;
+    /* Item content starts at padding-left (3rem). Place the 2.2rem node so its
+       centre sits on the line (timeline x=1.1rem): left edge at timeline x=0,
+       i.e. item-relative -3rem. */
+    left: -3rem;
+    top: 1.1rem;
+    width: 2.2rem;
+    height: 2.2rem;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     border-radius: 9999px;
-    background: rgba(10, 12, 16, 0.85);
-    border: 1px solid rgba(255, 255, 255, 0.25);
+    background: rgba(10, 12, 16, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.28);
     color: #e5e7eb;
+    box-shadow: 0 0 0 4px rgba(8, 10, 16, 0.6);
   }
-  .tl-node :global(svg) { width: 0.8rem; height: 0.8rem; }
-  .tl-body { border-radius: 0.6rem; padding: 1rem 1.1rem; }
-  .tl-role { font-size: 1.25rem; color: #e5e7eb; }
-  .tl-company { font-size: 0.95rem; color: #e5e7eb; opacity: 0.9; margin-top: 0.1rem; }
-  .tl-loc { font-weight: 300; opacity: 0.8; }
-  .tl-date { font-size: 0.8rem; font-style: italic; opacity: 0.7; margin-top: 0.15rem; }
-  .tl-desc { font-size: 0.9rem; font-weight: 300; margin-top: 0.5rem; }
+  .tl-node :global(svg) { width: 1.15rem; height: 1.15rem; }
+  .tl-body { border-radius: 0.7rem; padding: 1.1rem 1.25rem; }
+  .tl-role { font-size: 1.3rem; font-weight: 500; color: #f3f4f6; }
+  .tl-company { font-size: 0.95rem; color: #e5e7eb; opacity: 0.92; margin-top: 0.15rem; }
+  .tl-loc { font-weight: 300; opacity: 0.85; }
+  .tl-date { font-size: 0.8rem; font-style: italic; opacity: 0.7; margin-top: 0.2rem; }
+  .tl-desc { font-size: 0.95rem; font-weight: 300; line-height: 1.6; color: #d8dade; margin-top: 0.6rem; }
   .tl-desc :global(p) { margin: 0; }
 </style>

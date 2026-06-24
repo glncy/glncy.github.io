@@ -289,6 +289,23 @@ const lines = Array.from({ length: 40 }, (_, i) => {
   // Re-evaluate idle/playing state every second.
   setInterval(updateClasses, 1000)
 
+  // Save resources when the tab is hidden — but ONLY if muted (i.e. nobody is
+  // listening to the lofi music in the background). If the user has unmuted, we
+  // leave it playing so they keep hearing it in other tabs.
+  let pausedByHide = false
+  document.addEventListener('visibilitychange', () => {
+    if (!player) return
+    if (document.hidden) {
+      if (isMuted && isPlaying) {
+        player.pauseVideo()
+        pausedByHide = true
+      }
+    } else if (pausedByHide) {
+      player.playVideo()
+      pausedByHide = false
+    }
+  })
+
   init()
   }
 </script>

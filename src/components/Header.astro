@@ -6,7 +6,7 @@ const path = Astro.url.pathname
 const isHome = path === '/'
 const isActive = (href: string) => path.startsWith(href)
 const writingActive =
-  path.startsWith('/writing') || path.startsWith('/blog') || path.startsWith('/til')
+  path.startsWith('/posts') || path.startsWith('/blog') || path.startsWith('/til')
 ---
 
 <header id="site-header" class:list={['site-header', { home: isHome }]}>
@@ -15,6 +15,7 @@ const writingActive =
   {!isHome && (
     <nav class="nav" aria-label="Primary">
       <a href="/about" class:list={['nav-link', { active: isActive('/about') }]}>About</a>
+      <a href="/services" class:list={['nav-link', { active: isActive('/services') }]}>Services</a>
       <a href="/projects" class:list={['nav-link', { active: isActive('/projects') }]}>Projects</a>
       <WritingNav active={writingActive} />
       <a href="/contact" class:list={['nav-link', { active: isActive('/contact') }]}>Contact</a>

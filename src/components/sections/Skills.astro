@@ -1,30 +1,57 @@
 ---
 import skills from '../../data/skills.json'
+
+const total = skills.categories.reduce((n, g) => n + g.list.length, 0)
 ---
 
-<div class="mb-10">
-  <div class="font-heading w-fit text-6xl text-gray-200">Skills</div>
-  <div class="hairline my-4 w-full"></div>
+<div class="mb-12">
+  <div class="mb-4 flex items-end justify-between">
+    <div class="font-heading text-5xl text-gray-200 md:text-6xl">Skills</div>
+    <div class="t-label mb-1">{total}+ tools</div>
+  </div>
+  <div class="hairline mb-6 w-full"></div>
 
-  {skills.categories.map((group) => (
-    <div class="mb-4 last:mb-0">
-      <div class="mb-4 w-fit text-xl font-semibold text-gray-200">{group.category}</div>
-      <div class="grid grid-cols-3 gap-2 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-8 xl:gap-4">
-        {group.list.map((item) => (
-          <div class="flex flex-col items-center">
-            <div class="glass flex h-14 w-14 items-center justify-center rounded-lg">
+  <div class="flex flex-col gap-4">
+    {skills.categories.map((group) => (
+      <div class="panel rounded-xl p-4 md:p-5">
+        <div class="mb-3 flex items-center gap-2">
+          <span class="font-heading text-xl text-gray-100">{group.category}</span>
+          <span class="text-xs text-gray-500">{group.list.length}</span>
+        </div>
+        <div class="flex flex-wrap gap-2">
+          {group.list.map((item) => (
+            <span class="chip">
               {item.img ? (
-                <img src={item.img} alt={item.name} class="h-7 w-7 object-contain" />
+                <img src={item.img} alt="" class="chip-ico" />
               ) : (
-                <i class={`${item.icon} text-3xl text-gray-200`}></i>
+                <i class={`${item.icon} chip-ico-font`}></i>
               )}
-            </div>
-            <div class="mt-2 whitespace-nowrap text-center text-base text-gray-200">
-              {item.name}
-            </div>
-          </div>
-        ))}
+              <span class="chip-label">{item.name}</span>
+            </span>
+          ))}
+        </div>
       </div>
-    </div>
-  ))}
+    ))}
+  </div>
 </div>
+
+<style>
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.4rem 0.85rem 0.4rem 0.6rem;
+    border-radius: 9999px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: transform 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+  }
+  .chip:hover {
+    transform: translateY(-2px);
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.25);
+  }
+  .chip-ico { width: 1.15rem; height: 1.15rem; object-fit: contain; }
+  .chip-ico-font { font-size: 1.15rem; line-height: 1; color: #f3f4f6; }
+  .chip-label { font-size: 0.9rem; color: #e5e7eb; white-space: nowrap; }
+</style>
