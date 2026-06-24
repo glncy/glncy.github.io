@@ -23,7 +23,7 @@ const { intro, items, process } = services
       <p class="mx-auto mb-10 max-w-2xl text-center text-lg text-gray-200">{intro}</p>
 
       <!-- Offerings -->
-      <div class="masonry cols-3">
+      <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
         {items.map((s) => (
           <div class="panel rounded-2xl p-6">
             <Icon name={s.icon} class="svc-ico" />
@@ -56,9 +56,14 @@ const { intro, items, process } = services
       <div class="mt-16 flex flex-col items-center text-center">
         <div class="font-heading text-3xl text-gray-100">Have a project in mind?</div>
         <p class="mt-2 text-gray-300">Tell me what you're building — I'll get back within 24h.</p>
-        <a href="/contact#contact-form-section" class="cta send-btn mt-5">
-          Start a project <Icon class="arrow" name="ph:arrow-right" />
-        </a>
+        <div class="mt-5 flex flex-wrap items-center justify-center gap-3">
+          <a href="/contact#contact-form-section" class="cta send-btn">
+            Start a project <Icon class="arrow" name="ph:arrow-right" />
+          </a>
+          <a href="/projects" class="cta panel">
+            See my work <Icon class="arrow" name="ph:arrow-right" />
+          </a>
+        </div>
       </div>
     </div>
   </div>
