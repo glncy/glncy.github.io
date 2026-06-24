@@ -1,0 +1,47 @@
+---
+import { Icon } from 'astro-icon/components'
+import Badge from './Badge.astro'
+import { formatDate } from '../lib/format-date'
+
+interface Props {
+  href: string
+  type: 'Blog' | 'TIL'
+  title: string
+  date: Date
+  description?: string
+  thumbnail?: string
+  tags?: string[]
+  compact?: boolean
+}
+const { href, type, title, date, description = '', thumbnail = '', tags = [], compact = false } = Astro.props
+---
+
+<a href={href} class="post glass glass-hover" data-compact={compact ? 'true' : undefined}>
+  {thumbnail && !compact && (
+    <img src={thumbnail} alt={title} class="post-thumb" loading="lazy" />
+  )}
+  <div class="post-body">
+    <div class="post-meta">
+      <Badge variant="label">{type}</Badge>
+      <span class="post-date"><Icon name="ph:calendar-blank" /> {formatDate(date)}</span>
+    </div>
+    <div class="post-title font-heading">{title}</div>
+    {description && !compact && <p class="post-desc">{description}</p>}
+    {tags.length > 0 && (
+      <div class="post-tags">{tags.map((t) => <Badge>#{t}</Badge>)}</div>
+    )}
+  </div>
+</a>
+
+<style>
+  .post { display: flex; flex-direction: column; border-radius: 0.7rem; overflow: hidden; }
+  .post-thumb { width: 100%; aspect-ratio: 16/9; object-fit: cover; }
+  .post-body { padding: 1rem 1.1rem; }
+  .post-meta { display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.4rem; }
+  .post-date { display: inline-flex; align-items: center; gap: 0.25rem; font-size: 0.75rem; opacity: 0.7; color: #e5e7eb; }
+  .post-date :global(svg) { width: 0.85rem; height: 0.85rem; }
+  .post-title { font-size: 1.35rem; color: #e5e7eb; line-height: 1.2; }
+  .post[data-compact='true'] .post-title { font-size: 1.05rem; }
+  .post-desc { margin-top: 0.4rem; font-size: 0.9rem; font-weight: 300; color: #e5e7eb; opacity: 0.85; }
+  .post-tags { margin-top: 0.6rem; display: flex; flex-wrap: wrap; gap: 0.35rem; }
+</style>
