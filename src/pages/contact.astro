@@ -122,7 +122,15 @@ const socials = [
     font-size: 0.9rem;
   }
   .field:focus { outline: none; border-color: rgba(255, 255, 255, 0.55); background: rgba(0, 0, 0, 0.6); }
-  select.field { cursor: pointer; }
+  select.field {
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+    padding-right: 2rem;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%239ca3af' viewBox='0 0 16 16'%3E%3Cpath d='M3.2 5.5h9.6L8 11z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center;
+  }
   select.field option { background: #0a0c10; color: #e5e7eb; }
   .hero-meta { text-shadow: 0 1px 10px rgba(0, 0, 0, 0.85), 0 1px 3px rgba(0, 0, 0, 0.7); }
   #copy-email.copied {
