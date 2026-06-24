@@ -15,31 +15,33 @@ const socials = [
 
 <Layout title="Contact | glncy" description="Get in touch — web & mobile development, UI/UX, design & multimedia.">
   <div class="pb-40">
-    <div class="relative flex min-h-dvh w-full flex-col items-center justify-center px-4 py-28">
+    <div class="relative flex min-h-dvh w-full flex-col items-center justify-center py-28">
       <TitleBox title="Contact" subtitle={settings.pages.contactSubtitle} />
 
-      <p class="hero-meta mt-5 text-center text-base text-gray-100">{services}</p>
-      <p class="hero-meta mt-2 flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-sm text-gray-200">
-        <span class="inline-flex items-center gap-1"><Icon name="ph:map-pin" /> {location}</span>
-        <span class="inline-flex items-center gap-1"><Icon name="ph:clock" /> {responseTime}</span>
-      </p>
+      <div class="flex w-full flex-col items-center px-4">
+        <p class="hero-meta mt-5 text-center text-base text-gray-100">{services}</p>
+        <p class="hero-meta mt-2 flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-sm text-gray-200">
+          <span class="inline-flex items-center gap-1"><Icon name="ph:map-pin" /> {location}</span>
+          <span class="inline-flex items-center gap-1"><Icon name="ph:clock" /> {responseTime}</span>
+        </p>
 
-      <div class="mt-6 flex flex-wrap items-center justify-center gap-3">
-        {socials.map((s) => (
-          <a class="cta panel" href={s.href} {...(s.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}>
-            <Icon name={s.icon} /> {s.name}
+        <div class="mt-6 flex flex-wrap items-center justify-center gap-3">
+          {socials.map((s) => (
+            <a class="cta panel" href={s.href} {...(s.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}>
+              <Icon name={s.icon} /> {s.name}
+            </a>
+          ))}
+          <button id="copy-email" class="cta panel" data-email={email}>
+            <Icon name="ph:copy" /> Copy email
+          </button>
+        </div>
+
+        {web3formsKey && (
+          <a href="#contact-form-section" class="cta send-btn mt-8">
+            Send me a message <Icon class="arrow" name="ph:arrow-down" />
           </a>
-        ))}
-        <button id="copy-email" class="cta panel" data-email={email}>
-          <Icon name="ph:copy" /> Copy email
-        </button>
+        )}
       </div>
-
-      {web3formsKey && (
-        <a href="#contact-form-section" class="cta send-btn mt-8">
-          Send me a message <Icon class="arrow" name="ph:arrow-down" />
-        </a>
-      )}
     </div>
 
     {web3formsKey && (

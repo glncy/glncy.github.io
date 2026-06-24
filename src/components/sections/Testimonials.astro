@@ -11,9 +11,9 @@ const items = (testimonials.items ?? []).filter((t) => !t.hidden)
       <div class="font-heading text-4xl text-gray-100 md:text-5xl">Kind words</div>
       <p class="mt-2 text-sm text-gray-400">What people I've worked with have said.</p>
     </div>
-    <div class="masonry cols-3">
+    <div class="js-masonry" id="testimonials-grid">
       {items.map((t) => (
-        <figure class="panel rounded-2xl p-5">
+        <figure class="t-item panel rounded-2xl p-5">
           <Icon name="ph:quotes" class="quote-mark" />
           <blockquote class="mt-2 text-gray-200">{t.quote}</blockquote>
           <figcaption class="mt-4 flex items-center gap-3">
@@ -33,3 +33,20 @@ const items = (testimonials.items ?? []).filter((t) => !t.hidden)
   .quote-mark { width: 1.5rem; height: 1.5rem; color: rgba(255, 255, 255, 0.4); }
   blockquote { font-weight: 300; line-height: 1.6; }
 </style>
+
+<script>
+  import { createMasonry, defaultColumns } from '../../scripts/masonry.js'
+
+  function initTestimonials() {
+    const grid = document.getElementById('testimonials-grid')
+    if (!grid || grid.dataset.bound) return
+    grid.dataset.bound = '1'
+    const items = Array.from(grid.querySelectorAll('.t-item'))
+    const layout = createMasonry(grid, {
+      columns: defaultColumns,
+      getItems: () => items,
+    })
+    layout()
+  }
+  document.addEventListener('astro:page-load', initTestimonials)
+</script>
