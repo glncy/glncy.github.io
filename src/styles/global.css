@@ -305,23 +305,12 @@
   inset: 0;
   overflow: hidden;
 }
-/* Cheap scanline: a translucent gradient bar blended over the video, NO
-   backdrop-filter (which forced a per-frame snapshot for every one of these). */
 .glitch-line {
   position: absolute;
   width: 100vw;
   opacity: 0.6;
   top: var(--top);
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(255, 255, 255, 0.14) 30%,
-    rgba(120, 170, 255, 0.12) 50%,
-    rgba(255, 90, 160, 0.1) 70%,
-    transparent
-  );
-  mix-blend-mode: screen;
-  will-change: top, opacity;
+  backdrop-filter: saturate(5) blur(10px);
   animation: lineGlitch 10s linear infinite;
 }
 @keyframes lineGlitch {
