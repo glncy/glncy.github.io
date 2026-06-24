@@ -3,20 +3,101 @@ import Layout from '../layouts/Layout.astro'
 import TitleBox from '../components/TitleBox.astro'
 import SocialRow from '../components/SocialRow.astro'
 import Button from '../components/Button.astro'
-import { getEntry } from 'astro:content'
+import { getEntry, getCollection } from 'astro:content'
 
 const profile = await getEntry('profile', 'profile')
 const { name, tagline } = profile!.data
+
+const live = ({ data }: { data: { draft?: boolean; hidden?: boolean } }) =>
+  !data.draft && !data.hidden
+
+const recent = [
+  ...(await getCollection('blogs', live)).map((p) => ({
+    type: 'Blog',
+    href: `/blogs/${p.id}`,
+    title: p.data.title,
+    date: p.data.date,
+  })),
+  ...(await getCollection('tils', live)).map((p) => ({
+    type: 'TIL',
+    href: `/tils/${p.id}`,
+    title: p.data.title,
+    date: p.data.date,
+  })),
+]
+  .sort((a, b) => b.date.getTime() - a.date.getTime())
+  .slice(0, 1)
 ---
 
 <Layout title="glncy">
-  <div class="flex h-screen w-screen flex-col items-center justify-center gap-6">
+  <div class="flex min-h-screen w-screen flex-col items-center justify-center gap-6 py-24">
     <TitleBox title={name} subtitle={tagline} />
     <SocialRow />
-    <div class="flex flex-wrap items-center justify-center gap-3">
+
+    {recent.length > 0 && (
+      <div class="newposts px-4">
+        <span class="np-label">New post</span>
+        {recent.map((p) => (
+          <a class="np-pill" href={p.href}>
+            <span class="np-type">{p.type}</span>
+            <span class="np-title">{p.title}</span>
+          </a>
+        ))}
+      </div>
+    )}
+
+    <div class="flex flex-wrap items-center justify-center gap-3 px-4">
       <Button href="/about" icon="ph:arrow-right">About Me</Button>
       <Button href="/posts" icon="ph:arrow-right">Posts</Button>
       <Button href="/contact#contact-form-section" icon="ph:paper-plane-tilt">Send a message</Button>
     </div>
   </div>
 </Layout>
+
+<style>
+  .newposts {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    max-width: 42rem;
+  }
+  .np-label {
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.09em;
+    font-weight: 600;
+    color: #d8dade;
+    text-shadow: 0 1px 8px rgba(0, 0, 0, 0.8);
+  }
+  .np-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    max-width: 17rem;
+    padding: 0.35rem 0.85rem;
+    border-radius: 9999px;
+    background: var(--panel-bg);
+    border: 1px solid var(--panel-border);
+    color: #e5e7eb;
+    font-size: 0.85rem;
+    transition: transform 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+  }
+  .np-pill:hover {
+    transform: translateY(-1px);
+    background: var(--panel-bg-strong);
+    border-color: var(--panel-border-strong);
+  }
+  .np-type {
+    flex: none;
+    font-size: 0.6rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-weight: 600;
+    padding: 0.12rem 0.45rem;
+    border-radius: 9999px;
+    background: rgba(255, 255, 255, 0.14);
+  }
+  .np-title { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+</style>
