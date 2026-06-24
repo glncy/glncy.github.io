@@ -104,6 +104,10 @@ const lines = Array.from({ length: 40 }, (_, i) => {
     text-align: center;
     transition: transform 0.1s ease-in-out;
   }
+  /* Sit the player a little lower on mobile + tablet. */
+  @media (max-width: 1023px) {
+    .player { bottom: 0.6rem; }
+  }
   /* While playing on large screens, slide the player down just enough to hide
      the buttons (title stays visible); hover brings the buttons back. */
   @media (min-width: 1024px) {
@@ -181,12 +185,19 @@ const lines = Array.from({ length: 40 }, (_, i) => {
   // Size the player to a 16:9 box bigger than the viewport so it covers fully
   // AND YouTube's chrome (title/logo/more-videos) overscans off-screen.
   function sizeWrapper() {
-    const w = Math.max(window.innerWidth * 1.18, window.innerHeight * 2.1)
+    // Size off the STABLE device screen (not innerHeight) so pull-to-refresh and
+    // the address-bar showing/hiding don't resize the video. Big overscan keeps
+    // it covering and hides YouTube's chrome.
+    const vw = Math.max(window.innerWidth, (window.screen && window.screen.width) || 0)
+    const vh = Math.max(window.innerHeight, (window.screen && window.screen.height) || 0)
+    const w = Math.max(vw * 1.18, vh * 2.1)
     wrapper.style.width = w + 'px'
     wrapper.style.height = (w * 9) / 16 + 'px'
   }
   sizeWrapper()
-  window.addEventListener('resize', sizeWrapper)
+  // Only re-size on orientation change — NOT on every resize (which fires during
+  // pull-to-refresh and toolbar show/hide, causing a visible video resize).
+  window.addEventListener('orientationchange', sizeWrapper)
   const playerEl = $('player')
   const titleEl = $('player-title')
   const titleDup = $('player-title-dup')

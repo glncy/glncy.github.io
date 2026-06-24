@@ -137,6 +137,7 @@
   html {
     @apply font-sans;
     scroll-behavior: smooth;
+    background: #000; /* dark base so any uncovered area is black, never white */
   }
   @media (prefers-reduced-motion: reduce) {
     html { scroll-behavior: auto; }
@@ -292,9 +293,12 @@
   left: 50%;
   bottom: calc(1rem + env(safe-area-inset-bottom));
   transform: translateX(-50%);
-  display: flex;
+  display: none; /* touch: swipe to navigate, no on-screen arrows */
   align-items: center;
   gap: 0.5rem;
+}
+@media (hover: hover) and (pointer: fine) {
+  .lightbox-toolbar { display: flex; }
 }
 .lb-tbtn {
   width: 2.6rem;
