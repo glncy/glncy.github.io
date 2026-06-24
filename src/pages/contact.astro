@@ -4,14 +4,12 @@ import TitleBox from '../components/TitleBox.astro'
 import { Icon } from 'astro-icon/components'
 import settings from '../data/settings.json'
 
-const { email, linkedin, messenger } = settings.contact
-const { github, web3formsKey, scheduleUrl, location, responseTime, services } = settings
+const email = settings.contact.email
+const { web3formsKey, location, responseTime, services } = settings
 
 const socials = [
   { name: 'Email', href: `mailto:${email}`, icon: 'ph:envelope-simple' },
-  { name: 'LinkedIn', href: linkedin, icon: 'ph:linkedin-logo', external: true },
-  { name: 'Messenger', href: messenger, icon: 'ph:messenger-logo', external: true },
-  { name: 'GitHub', href: github, icon: 'ph:github-logo', external: true },
+  ...settings.socials.map((s) => ({ name: s.label, href: s.url, icon: s.icon, external: true })),
 ].filter((s) => s.href)
 ---
 
@@ -35,11 +33,6 @@ const socials = [
         <button id="copy-email" class="cta panel" data-email={email}>
           <Icon name="ph:copy" /> Copy email
         </button>
-        {scheduleUrl && (
-          <a class="cta panel" href={scheduleUrl} target="_blank" rel="noopener noreferrer">
-            <Icon name="ph:calendar-dots" /> Schedule a call
-          </a>
-        )}
       </div>
 
       {web3formsKey && (

@@ -2,14 +2,12 @@
 import { Icon } from 'astro-icon/components'
 import settings from '../data/settings.json'
 
-const { email, linkedin, messenger } = settings.contact
-const github = settings.github
+const email = settings.contact.email
+const socials = settings.socials ?? []
 
 const links = [
-  github && { name: 'GitHub', href: github, icon: 'ph:github-logo', external: true },
-  linkedin && { name: 'LinkedIn', href: linkedin, icon: 'ph:linkedin-logo', external: true },
+  ...socials.map((s) => ({ name: s.label, href: s.url, icon: s.icon, external: true })),
   email && { name: 'Email', href: `mailto:${email}`, icon: 'ph:envelope-simple', external: false },
-  messenger && { name: 'Messenger', href: messenger, icon: 'ph:messenger-logo', external: true },
 ].filter(Boolean) as { name: string; href: string; icon: string; external: boolean }[]
 ---
 
