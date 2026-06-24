@@ -67,7 +67,11 @@ const ga = settings.analyticsId
 
     <Header />
 
-    <main class="relative z-10" transition:animate="fade">
+    <!-- NOTE: do NOT put transition:animate / view-transition-name on <main>.
+         It isolates <main> into its own snapshot layer, which breaks
+         backdrop-filter on descendants (the frosted hero box) because the
+         fixed Background lives outside <main>. -->
+    <main class="relative z-10">
       <slot />
     </main>
   </body>

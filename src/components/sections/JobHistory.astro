@@ -31,35 +31,41 @@ const rendered = await Promise.all(
   .timeline {
     position: relative;
     margin: 0;
-    padding: 0 0 0 1.75rem;
+    /* Leave room on the left for the node (centered on the line). */
+    padding: 0 0 0 3rem;
     list-style: none;
   }
+  /* Vertical line runs through the centre of the nodes (node center = 1.1rem). */
   .timeline::before {
     content: '';
     position: absolute;
-    left: 0.5rem;
-    top: 0.25rem;
-    bottom: 0.25rem;
-    width: 1px;
-    background: rgba(255, 255, 255, 0.18);
+    left: 1.1rem;
+    top: 0.5rem;
+    bottom: 0.5rem;
+    width: 2px;
+    background: rgba(255, 255, 255, 0.16);
   }
   .tl-item { position: relative; margin-bottom: 1.5rem; }
   .tl-item:last-child { margin-bottom: 0; }
   .tl-node {
     position: absolute;
-    left: -1.75rem;
-    top: 0.4rem;
-    width: 1.4rem;
-    height: 1.4rem;
+    /* Item content starts at padding-left (3rem). Place the 2.2rem node so its
+       centre sits on the line (timeline x=1.1rem): left edge at timeline x=0,
+       i.e. item-relative -3rem. */
+    left: -3rem;
+    top: 1.1rem;
+    width: 2.2rem;
+    height: 2.2rem;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     border-radius: 9999px;
-    background: rgba(10, 12, 16, 0.85);
-    border: 1px solid rgba(255, 255, 255, 0.25);
+    background: rgba(10, 12, 16, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.28);
     color: #e5e7eb;
+    box-shadow: 0 0 0 4px rgba(8, 10, 16, 0.6);
   }
-  .tl-node :global(svg) { width: 0.8rem; height: 0.8rem; }
+  .tl-node :global(svg) { width: 1.15rem; height: 1.15rem; }
   .tl-body { border-radius: 0.7rem; padding: 1.1rem 1.25rem; }
   .tl-role { font-size: 1.3rem; font-weight: 500; color: #f3f4f6; }
   .tl-company { font-size: 0.95rem; color: #e5e7eb; opacity: 0.92; margin-top: 0.15rem; }
