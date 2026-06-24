@@ -1,22 +1,32 @@
 ---
 import Layout from '../../layouts/Layout.astro'
 import TitleBox from '../../components/TitleBox.astro'
-import PostCard from '../../components/PostCard.astro'
+import PostBrowser from '../../components/PostBrowser.astro'
 import { getCollection } from 'astro:content'
 
-const posts = (await getCollection('til')).sort(
-  (a, b) => b.data.date.getTime() - a.data.date.getTime()
-)
+const posts = (await getCollection('til'))
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
+  .map((p) => ({
+    href: `/til/${p.id}`,
+    type: 'TIL' as const,
+    title: p.data.title,
+    date: p.data.date,
+    description: p.data.description,
+    thumbnail: p.data.thumbnail,
+    tags: p.data.tags,
+  }))
 ---
 
-<Layout title="TIL | glncy">
-  <div class="mx-auto max-w-2xl px-4 pb-24 pt-32">
-    <TitleBox title="TIL" subtitle="Today I Learned — short notes." />
-    <div class="mt-8 flex flex-col gap-3">
-      {posts.map((p) => (
-        <PostCard href={`/til/${p.id}`} type="TIL" title={p.data.title} date={p.data.date} tags={p.data.tags} compact />
-      ))}
+<Layout title="TIL | glncy" description="Today I Learned — short notes and quick wins from day-to-day development.">
+  <div class="pb-40">
+    <div class="relative flex h-screen w-full flex-col items-center justify-center">
+      <TitleBox title="TIL" subtitle="Today I Learned — short, practical notes from day-to-day development." />
+      <div class="absolute text-sm text-gray-200 opacity-80" style="margin-top:38vh;">Scroll Down</div>
+      <div class="down-arrow absolute"></div>
     </div>
-    {posts.length === 0 && <p class="mt-8 text-center text-gray-400">No TILs yet.</p>}
+
+    <div class="mx-auto max-w-2xl px-4">
+      <PostBrowser posts={posts} layout="list" emptyText="No TILs yet." />
+    </div>
   </div>
 </Layout>

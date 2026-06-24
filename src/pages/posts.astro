@@ -1,46 +1,40 @@
 ---
 import Layout from '../layouts/Layout.astro'
 import TitleBox from '../components/TitleBox.astro'
-import PostCard from '../components/PostCard.astro'
-import { Icon } from 'astro-icon/components'
+import PostBrowser from '../components/PostBrowser.astro'
 import { getCollection } from 'astro:content'
 
-const blog = (await getCollection('blog')).sort((a, b) => b.data.date.getTime() - a.data.date.getTime()).slice(0, 4)
-const til = (await getCollection('til')).sort((a, b) => b.data.date.getTime() - a.data.date.getTime()).slice(0, 4)
+const blog = (await getCollection('blog')).map((p) => ({
+  href: `/blog/${p.id}`,
+  type: 'Blog' as const,
+  title: p.data.title,
+  date: p.data.date,
+  description: p.data.description,
+  thumbnail: p.data.thumbnail,
+  tags: p.data.tags,
+}))
+const til = (await getCollection('til')).map((p) => ({
+  href: `/til/${p.id}`,
+  type: 'TIL' as const,
+  title: p.data.title,
+  date: p.data.date,
+  description: p.data.description,
+  thumbnail: p.data.thumbnail,
+  tags: p.data.tags,
+}))
+const posts = [...blog, ...til].sort((a, b) => b.date.getTime() - a.date.getTime())
 ---
 
-<Layout title="Posts | glncy">
+<Layout title="Posts | glncy" description="Essays, build logs, and quick notes on web & mobile development, design, and what I'm learning.">
   <div class="pb-40">
     <div class="relative flex h-screen w-full flex-col items-center justify-center">
       <TitleBox title="Posts" subtitle="Essays, build logs, and quick notes on what I'm learning." />
-      <div class="absolute text-sm text-gray-200 opacity-80" style="margin-top:38vh;">
-        Scroll Down
-      </div>
+      <div class="absolute text-sm text-gray-200 opacity-80" style="margin-top:38vh;">Scroll Down</div>
       <div class="down-arrow absolute"></div>
     </div>
 
     <div class="mx-auto max-w-4xl px-4">
-      <div class="mb-4 flex items-center justify-between">
-        <h2 class="font-heading text-3xl text-gray-200">Latest Blog</h2>
-        <a href="/blog" class="inline-flex items-center gap-1 whitespace-nowrap text-sm text-gray-300 hover:text-white">All blog <Icon name="ph:arrow-right" /></a>
-      </div>
-      <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
-        {blog.map((p) => (
-          <PostCard href={`/blog/${p.id}`} type="Blog" title={p.data.title} date={p.data.date} description={p.data.description} thumbnail={p.data.thumbnail} tags={p.data.tags} />
-        ))}
-      </div>
-      {blog.length === 0 && <p class="mt-4 text-gray-400">No posts yet.</p>}
-
-      <div class="mb-4 mt-12 flex items-center justify-between">
-        <h2 class="font-heading text-3xl text-gray-200">Latest TIL</h2>
-        <a href="/til" class="inline-flex items-center gap-1 whitespace-nowrap text-sm text-gray-300 hover:text-white">All TIL <Icon name="ph:arrow-right" /></a>
-      </div>
-      <div class="flex flex-col gap-3">
-        {til.map((p) => (
-          <PostCard href={`/til/${p.id}`} type="TIL" title={p.data.title} date={p.data.date} tags={p.data.tags} compact />
-        ))}
-      </div>
-      {til.length === 0 && <p class="mt-4 text-gray-400">No TILs yet.</p>}
+      <PostBrowser posts={posts} layout="grid" showTypeFilter emptyText="No posts yet." />
     </div>
   </div>
 </Layout>
