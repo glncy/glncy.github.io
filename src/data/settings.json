@@ -1,7 +1,11 @@
 {
   "siteTitle": "glncy",
-  "siteDescription": "Glency Tirao — freelance web & mobile developer from the Philippines. I design and build fast, polished web apps, mobile apps, and APIs for startups and small teams.",
+  "siteDescription": "Glency Tirao — web & mobile developer from the Philippines. I design and build fast, polished web apps, mobile apps, and APIs for startups and small teams.",
   "analyticsId": "G-ET3F69DHKG",
+  "web3formsKey": "54686f46-a3dd-4578-a0c8-8cabd596c1e4",
+  "location": "Philippines · GMT+8",
+  "responseTime": "I usually reply within 24h.",
+  "services": "Web & mobile development, UI/UX, design & multimedia.",
   "pages": {
     "aboutSubtitle": "Developer, designer, and the person you'd actually enjoy working with.",
     "servicesSubtitle": "Freelance development, from idea to shipped product.",
@@ -15,16 +19,32 @@
     "email": "glency.a.tirao@gmail.com"
   },
   "socials": [
-    { "label": "GitHub", "url": "https://github.com/glncy", "icon": "ph:github-logo" },
-    { "label": "LinkedIn", "url": "https://www.linkedin.com/in/glency-tirao", "icon": "ph:linkedin-logo" },
-    { "label": "Messenger", "url": "https://m.me/glencytirao1999", "icon": "ph:messenger-logo" },
-    { "label": "Schedule a call", "url": "https://example.com", "icon": "ph:calendar-dots" }
+    {
+      "label": "GitHub",
+      "url": "https://github.com/glncy",
+      "icon": "ph:github-logo"
+    },
+    {
+      "label": "LinkedIn",
+      "url": "https://www.linkedin.com/in/glency-tirao",
+      "icon": "ph:linkedin-logo"
+    },
+    {
+      "label": "Messenger",
+      "url": "https://m.me/glencytirao1999",
+      "icon": "ph:messenger-logo"
+    },
+    {
+      "label": "Schedule a call",
+      "url": "https://example.com",
+      "icon": "ph:calendar-dots"
+    }
   ],
   "handles": [
-    { "icon": "ph:github-logo", "handle": "@glncy", "url": "https://github.com/glncy" }
-  ],
-  "web3formsKey": "54686f46-a3dd-4578-a0c8-8cabd596c1e4",
-  "location": "Philippines · GMT+8",
-  "responseTime": "I usually reply within 24h.",
-  "services": "Web & mobile development, UI/UX, design & multimedia."
+    {
+      "icon": "ph:github-logo",
+      "handle": "@glncy",
+      "url": "https://github.com/glncy"
+    }
+  ]
 }
