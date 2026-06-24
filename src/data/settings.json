@@ -1,11 +1,11 @@
 {
   "siteTitle": "glncy",
-  "siteDescription": "Glency Tirao — web & mobile developer | designs & multimedia",
+  "siteDescription": "Glency Tirao — freelance web & mobile developer from the Philippines. I design and build fast, polished web apps, mobile apps, and APIs for startups and small teams.",
   "analyticsId": "G-ET3F69DHKG",
   "pages": {
-    "aboutSubtitle": "Well, I guess you're here to learn more about me.",
-    "projectsSubtitle": "Projects and Repositories in which I have contributed.",
-    "contactSubtitle": "How can I help you today? Feel free to message me."
+    "aboutSubtitle": "Developer, designer, and the person you'd actually enjoy working with.",
+    "projectsSubtitle": "A selection of products I've designed, built, and shipped.",
+    "contactSubtitle": "Have a project in mind? Tell me about it — I reply within 24h."
   },
   "contact": {
     "email": "glency.a.tirao@gmail.com",
