@@ -38,7 +38,7 @@ const projects = defineCollection({
   }),
 })
 
-const writingSchema = z.object({
+const postSchema = z.object({
   title: z.string(),
   date: z.coerce.date(),
   updated: z.coerce.date().optional(),
@@ -49,12 +49,12 @@ const writingSchema = z.object({
 
 const blog = defineCollection({
   loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/blog' }),
-  schema: writingSchema,
+  schema: postSchema,
 })
 
 const til = defineCollection({
   loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/til' }),
-  schema: writingSchema,
+  schema: postSchema,
 })
 
 export const collections = { profile, jobs, projects, blog, til }
