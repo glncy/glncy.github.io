@@ -27,7 +27,7 @@ const posts = (await getCollection('tils', ({ data }) => !data.draft && !data.hi
     </div>
 
     <div class="mx-auto max-w-4xl px-4">
-      <PostBrowser posts={posts} layout="list" emptyText="No TILs yet." />
+      <PostBrowser posts={posts} layout="list" emptyText="No posts yet." />
     </div>
   </div>
 </Layout>
