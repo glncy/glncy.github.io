@@ -8,6 +8,7 @@ import mdx from '@astrojs/mdx';
 import embeds from 'astro-embed/integration';
 
 import icon from 'astro-icon';
+import sitemap from '@astrojs/sitemap';
 
 // https://astro.build/config
 // Custom domain (public/CNAME -> glncy.is-a.dev). User site at domain root: no `base`.
@@ -28,5 +29,12 @@ export default defineConfig({
   // embeds() must come BEFORE mdx(). Auto-embeds bare URLs (YouTube, Vimeo,
   // Tweet, Bluesky, Gist, link previews) on their own line in .md/.mdx, and
   // provides <YouTube/> etc. components for manual use.
-  integrations: [embeds(), mdx(), react(), icon()],
+  integrations: [
+    embeds(),
+    mdx(),
+    react(),
+    icon(),
+    // Exclude the CMS admin from the sitemap (it's not public content).
+    sitemap({ filter: (page) => !page.includes('/admin') }),
+  ],
 });

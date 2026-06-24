@@ -8,14 +8,22 @@ import settings from '../data/settings.json'
 interface Props {
   title?: string
   description?: string
+  image?: string
+  type?: 'website' | 'article'
+  jsonLd?: Record<string, unknown> | Record<string, unknown>[]
 }
 
 const {
   title = settings.siteTitle,
   description = settings.siteDescription,
+  image = '/img/profile-picture.png',
+  type = 'website',
+  jsonLd,
 } = Astro.props
 
 const ga = settings.analyticsId
+const canonical = new URL(Astro.url.pathname, Astro.site).href
+const ogImage = new URL(image, Astro.site).href
 ---
 
 <!doctype html>
@@ -26,8 +34,28 @@ const ga = settings.analyticsId
     <meta name="description" content={description} />
     <meta name="format-detection" content="telephone=no" />
     <link rel="icon" href="/favicon.ico" />
-    <link rel="canonical" href={Astro.url.href} />
+    <link rel="canonical" href={canonical} />
     <title>{title}</title>
+
+    <!-- Open Graph -->
+    <meta property="og:type" content={type} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:site_name" content={settings.siteTitle} />
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+
+    <!-- RSS autodiscovery -->
+    <link rel="alternate" type="application/rss+xml" title="glncy — Posts" href="/rss.xml" />
+
+    {jsonLd && (
+      <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+    )}
 
     <!-- SPA-style navigation so the background video + music player keep playing. -->
     <ClientRouter />
