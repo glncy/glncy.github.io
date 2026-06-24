@@ -341,6 +341,18 @@
   100%  { top: var(--endTop); opacity: 0; }
 }
 
+/* Performance: the glitch lines each run a backdrop-filter (expensive). Keep
+   the full set on desktop, but thin them out on small screens where the GPU
+   cost hurts most. Desktop appearance is unchanged. */
+@media (max-width: 767px) {
+  .glitch-line:nth-child(n + 13) { display: none; }
+}
+/* Reduced motion: drop the heavy animated background effects entirely. */
+@media (prefers-reduced-motion: reduce) {
+  .glitch-line { animation: none; opacity: 0; }
+  .bg-noise { animation: none; }
+}
+
 /* ---- Bouncing down-arrow (About/Projects header) ---------------------- */
 .down-arrow {
   width: 16px;
