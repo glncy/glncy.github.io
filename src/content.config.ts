@@ -43,7 +43,12 @@ const projects = defineCollection({
 const postSchema = z.object({
   title: z.string(),
   date: z.coerce.date(),
-  updated: z.coerce.date().optional(),
+  // The CMS datetime widget writes an empty string when left blank; coerce
+  // those (and null) to undefined so the optional date validates.
+  updated: z.preprocess(
+    (v) => (v === '' || v === null ? undefined : v),
+    z.coerce.date().optional()
+  ),
   tags: z.array(z.string()).optional().default([]),
   thumbnail: z.string().optional().default(''),
   description: z.string().optional().default(''),
