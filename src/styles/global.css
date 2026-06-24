@@ -318,3 +318,15 @@
   60%  { transform: scale(2) translateY(13vh); }
   100% { transform: scale(2) translateY(13vh); opacity: 0; }
 }
+/* ---- Article body (blog/TIL) ----------------------------------------- */
+.prose-glncy { color: #e5e7eb; font-weight: 300; line-height: 1.75; }
+.prose-glncy h2 { font-family: var(--font-heading); font-size: 1.6rem; margin: 1.6rem 0 0.6rem; }
+.prose-glncy h3 { font-family: var(--font-heading); font-size: 1.3rem; margin: 1.4rem 0 0.5rem; }
+.prose-glncy p { margin: 0 0 1rem; }
+.prose-glncy a { color: #93c5fd; text-decoration: underline; }
+.prose-glncy ul, .prose-glncy ol { margin: 0 0 1rem 1.25rem; }
+.prose-glncy li { margin: 0.25rem 0; }
+.prose-glncy img { border-radius: 0.6rem; margin: 1rem 0; max-width: 100%; }
+.prose-glncy code { background: rgba(255,255,255,0.1); padding: 0.1rem 0.35rem; border-radius: 0.3rem; font-size: 0.9em; }
+.prose-glncy pre { background: rgba(0,0,0,0.4); padding: 1rem; border-radius: 0.6rem; overflow:auto; margin: 0 0 1rem; }
+.prose-glncy blockquote { border-left: 2px solid rgba(255,255,255,0.3); padding-left: 1rem; opacity: 0.85; margin: 0 0 1rem; }
