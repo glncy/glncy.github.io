@@ -23,7 +23,7 @@
         { "name": "React", "icon": "devicon-react-original" },
         { "name": "Next.js", "icon": "devicon-nextjs-plain" },
         { "name": "Nuxt.js", "icon": "devicon-nuxtjs-plain" },
-        { "name": "Cordova", "img": "/img/cordova-icon.png" },
+        { "name": "Cordova", "img": "/assets/cordova-icon.png" },
         { "name": "Ionic", "icon": "devicon-ionic-original" },
         { "name": "Flutter", "icon": "devicon-flutter-plain" }
       ]

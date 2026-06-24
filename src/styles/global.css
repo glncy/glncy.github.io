@@ -306,7 +306,7 @@
 .bg-noise {
   position: absolute;
   inset: -500px;
-  background: transparent url('/img/noise.png') 0 0;
+  background: transparent url('/assets/noise.png') 0 0;
   background-size: 320px;
   opacity: 0.3;
   animation: noiseAnimation 1s steps(8, end) infinite both;

@@ -8,8 +8,8 @@ backend:
   app_id: 9b093f6070f6c28feb3dc52bd930d3eeb85318d9d60f39e654f40ff3248a8d18
 
 # Images committed straight to the repo; videos use YouTube (see Projects.youtube).
-media_folder: public/img
-public_folder: /img
+media_folder: public/assets
+public_folder: /assets
 
 collections:
   # ---- Singletons (file collections) ----
@@ -23,6 +23,8 @@ collections:
           - { name: siteTitle, label: Site Title, widget: string }
           - { name: siteDescription, label: Site Description (SEO), widget: text }
           - { name: analyticsId, label: Google Analytics ID, widget: string, required: false }
+          - { name: resumeUrl, label: Résumé URL (Google Drive, etc.), widget: string, required: false }
+          - { name: cvUrl, label: CV URL (Google Drive, etc.), widget: string, required: false }
           - { name: web3formsKey, label: Web3Forms Access Key (contact form), widget: string, required: false }
           - { name: location, label: Location / Timezone, widget: string, required: false }
           - { name: responseTime, label: Response time note, widget: string, required: false }

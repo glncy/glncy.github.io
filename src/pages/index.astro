@@ -3,10 +3,13 @@ import Layout from '../layouts/Layout.astro'
 import TitleBox from '../components/TitleBox.astro'
 import SocialRow from '../components/SocialRow.astro'
 import Button from '../components/Button.astro'
+import { Icon } from 'astro-icon/components'
 import { getEntry, getCollection } from 'astro:content'
+import settings from '../data/settings.json'
 
 const profile = await getEntry('profile', 'profile')
 const { name, tagline } = profile!.data
+const { resumeUrl, cvUrl } = settings
 
 const live = ({ data }: { data: { draft?: boolean; hidden?: boolean } }) =>
   !data.draft && !data.hidden
@@ -49,6 +52,27 @@ const recent = [
     <div class="flex flex-wrap items-center justify-center gap-3 px-4">
       <Button href="/about" icon="ph:arrow-right">About Me</Button>
       <Button href="/posts" icon="ph:arrow-right">Posts</Button>
+
+      {(resumeUrl || cvUrl) && (
+        <div class="rc-wrap" id="rc-wrap">
+          <button class="cta glass rc-btn" id="rc-btn" aria-haspopup="true" aria-expanded="false">
+            <Icon name="ph:file-text" /> Resume / CV <Icon class="rc-caret" name="ph:caret-down" />
+          </button>
+          <div class="rc-menu" id="rc-menu" role="menu">
+            {resumeUrl && (
+              <a href={resumeUrl} target="_blank" rel="noopener noreferrer" download role="menuitem">
+                <Icon name="ph:download-simple" /> Download Resume
+              </a>
+            )}
+            {cvUrl && (
+              <a href={cvUrl} target="_blank" rel="noopener noreferrer" download role="menuitem">
+                <Icon name="ph:download-simple" /> Download CV
+              </a>
+            )}
+          </div>
+        </div>
+      )}
+
       <Button href="/contact#contact-form-section" icon="ph:paper-plane-tilt">Send a message</Button>
     </div>
   </div>
@@ -100,4 +124,77 @@ const recent = [
     background: rgba(255, 255, 255, 0.14);
   }
   .np-title { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+  /* Resume / CV dropdown (home) */
+  .rc-wrap { position: relative; display: inline-flex; }
+  .rc-btn { cursor: pointer; border: none; font-family: inherit; }
+  .rc-caret { width: 0.85rem; height: 0.85rem; transition: transform 0.15s ease; }
+  .rc-wrap.open .rc-caret { transform: rotate(180deg); }
+  .rc-menu {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%) translateY(6px);
+    display: flex;
+    flex-direction: column;
+    min-width: 12rem;
+    margin-top: 0.5rem;
+    padding: 0.4rem;
+    background: rgba(6, 8, 12, 0.96);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 0.7rem;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.15s ease, transform 0.15s ease;
+    z-index: 50;
+  }
+  .rc-wrap.open .rc-menu { opacity: 1; visibility: visible; }
+  .rc-menu a {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.55rem 0.9rem;
+    border-radius: 0.45rem;
+    color: #e5e7eb;
+    font-size: 0.95rem;
+    white-space: nowrap;
+  }
+  .rc-menu a:hover { background: rgba(255, 255, 255, 0.08); }
+  .rc-menu :global(svg) { width: 1.05rem; height: 1.05rem; }
 </style>
+
+<script is:inline>
+  function initResumeMenu() {
+    const wrap = document.getElementById('rc-wrap')
+    const btn = document.getElementById('rc-btn')
+    if (wrap && btn && !btn.dataset.bound) {
+      btn.dataset.bound = '1'
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation()
+        const open = wrap.classList.toggle('open')
+        btn.setAttribute('aria-expanded', open ? 'true' : 'false')
+      })
+      wrap.querySelectorAll('a').forEach((a) =>
+        a.addEventListener('click', () => {
+          wrap.classList.remove('open')
+          btn.setAttribute('aria-expanded', 'false')
+        })
+      )
+    }
+    if (!window.__rcDoc) {
+      window.__rcDoc = true
+      document.addEventListener('click', (e) => {
+        const w = document.getElementById('rc-wrap')
+        if (w && w.classList.contains('open') && !w.contains(e.target)) {
+          w.classList.remove('open')
+          document.getElementById('rc-btn')?.setAttribute('aria-expanded', 'false')
+        }
+      })
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') document.getElementById('rc-wrap')?.classList.remove('open')
+      })
+    }
+  }
+  document.addEventListener('astro:page-load', initResumeMenu)
+</script>
