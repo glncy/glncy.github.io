@@ -64,9 +64,43 @@ const socials = [
               <span class="mb-1 block text-xs text-gray-300">Email</span>
               <input name="email" required class="field" type="email" autocomplete="email" />
             </label>
+            <div class="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-3">
+              <label class="block">
+                <span class="mb-1 block text-xs text-gray-300">Project type</span>
+                <select name="Project type" class="field">
+                  <option value="">Select…</option>
+                  <option>Web app / website</option>
+                  <option>Mobile app</option>
+                  <option>UI/UX & design</option>
+                  <option>API / backend</option>
+                  <option>Other</option>
+                </select>
+              </label>
+              <label class="block">
+                <span class="mb-1 block text-xs text-gray-300">Budget</span>
+                <select name="Budget" class="field">
+                  <option value="">Select…</option>
+                  <option>Under $500</option>
+                  <option>$500 – $2k</option>
+                  <option>$2k – $5k</option>
+                  <option>$5k+</option>
+                  <option>Not sure yet</option>
+                </select>
+              </label>
+              <label class="block">
+                <span class="mb-1 block text-xs text-gray-300">Timeline</span>
+                <select name="Timeline" class="field">
+                  <option value="">Select…</option>
+                  <option>ASAP</option>
+                  <option>1–4 weeks</option>
+                  <option>1–3 months</option>
+                  <option>Flexible</option>
+                </select>
+              </label>
+            </div>
             <label class="mt-3 block">
               <span class="mb-1 block text-xs text-gray-300">Message</span>
-              <textarea name="message" required rows="4" class="field"></textarea>
+              <textarea name="message" required rows="4" class="field" placeholder="Tell me a bit about your project…"></textarea>
             </label>
             <button type="submit" class="cta send-btn mt-4 w-full justify-center">Send <Icon class="arrow" name="ph:paper-plane-tilt" /></button>
             <p id="form-status" class="mt-3 hidden text-center text-sm"></p>
@@ -88,6 +122,8 @@ const socials = [
     font-size: 0.9rem;
   }
   .field:focus { outline: none; border-color: rgba(255, 255, 255, 0.55); background: rgba(0, 0, 0, 0.6); }
+  select.field { cursor: pointer; }
+  select.field option { background: #0a0c10; color: #e5e7eb; }
   .hero-meta { text-shadow: 0 1px 10px rgba(0, 0, 0, 0.85), 0 1px 3px rgba(0, 0, 0, 0.7); }
   #copy-email.copied {
     background: rgba(34, 197, 94, 0.92);

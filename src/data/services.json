@@ -1,0 +1,47 @@
+{
+  "intro": "I help startups and small teams turn ideas into polished, production-ready web and mobile products — from first wireframe to shipped app.",
+  "items": [
+    {
+      "icon": "ph:browser",
+      "title": "Web Applications",
+      "description": "Fast, responsive web apps and sites with React, Vue, Next, Nuxt, and Astro — from landing pages to full dashboards."
+    },
+    {
+      "icon": "ph:device-mobile",
+      "title": "Mobile Apps",
+      "description": "Cross-platform iOS & Android apps with React Native, Flutter, and Expo — built, tested, and shipped to the stores."
+    },
+    {
+      "icon": "ph:pen-nib",
+      "title": "UI/UX & Design",
+      "description": "Clean, usable interfaces and design systems. I bridge design and code so the final build matches the vision."
+    },
+    {
+      "icon": "ph:plugs",
+      "title": "APIs & Backend",
+      "description": "Reliable APIs, data models, servers, and CI/CD — Node, Django, databases, and cloud deployment."
+    }
+  ],
+  "process": [
+    {
+      "step": "01",
+      "title": "Discovery",
+      "description": "We talk through your goals, scope, and timeline so we're aligned before any code is written."
+    },
+    {
+      "step": "02",
+      "title": "Design",
+      "description": "Wireframes and UI so you can see and shape the product early — no surprises later."
+    },
+    {
+      "step": "03",
+      "title": "Build",
+      "description": "Iterative development with regular updates. You see progress, give feedback, and stay in the loop."
+    },
+    {
+      "step": "04",
+      "title": "Launch & Support",
+      "description": "We ship it live, handle deployment and store submissions, and I'm available for follow-up fixes."
+    }
+  ]
+}

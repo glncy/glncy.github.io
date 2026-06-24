@@ -1,0 +1,76 @@
+---
+import Layout from '../layouts/Layout.astro'
+import TitleBox from '../components/TitleBox.astro'
+import Testimonials from '../components/sections/Testimonials.astro'
+import { Icon } from 'astro-icon/components'
+import services from '../data/services.json'
+
+const { intro, items, process } = services
+---
+
+<Layout
+  title="Services | glncy"
+  description="Freelance web & mobile development, UI/UX, and backend — from idea to shipped product."
+>
+  <div class="pb-40">
+    <div class="relative flex h-screen w-full flex-col items-center justify-center">
+      <TitleBox title="Services" subtitle="Freelance development, from idea to shipped product." />
+      <div class="absolute text-sm text-gray-200 opacity-80" style="margin-top:38vh;">Scroll Down</div>
+      <div class="down-arrow absolute"></div>
+    </div>
+
+    <div class="mx-auto max-w-5xl px-4">
+      <p class="mx-auto mb-10 max-w-2xl text-center text-lg text-gray-200">{intro}</p>
+
+      <!-- Offerings -->
+      <div class="masonry cols-3">
+        {items.map((s) => (
+          <div class="panel rounded-2xl p-6">
+            <Icon name={s.icon} class="svc-ico" />
+            <div class="mt-3 font-heading text-2xl text-gray-100">{s.title}</div>
+            <p class="mt-2 text-sm font-light leading-relaxed text-gray-300">{s.description}</p>
+          </div>
+        ))}
+      </div>
+
+      <!-- Process -->
+      <div class="mt-16">
+        <div class="mb-6 text-center font-heading text-4xl text-gray-100 md:text-5xl">How we'll work together</div>
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {process.map((p) => (
+            <div class="panel rounded-2xl p-5">
+              <div class="font-heading text-3xl text-gray-500">{p.step}</div>
+              <div class="mt-1 text-lg font-semibold text-gray-100">{p.title}</div>
+              <p class="mt-2 text-sm font-light leading-relaxed text-gray-300">{p.description}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <!-- Testimonials -->
+      <div class="mt-16">
+        <Testimonials />
+      </div>
+
+      <!-- CTA -->
+      <div class="mt-16 flex flex-col items-center text-center">
+        <div class="font-heading text-3xl text-gray-100">Have a project in mind?</div>
+        <p class="mt-2 text-gray-300">Tell me what you're building — I'll get back within 24h.</p>
+        <a href="/contact#contact-form-section" class="cta send-btn mt-5">
+          Start a project <Icon class="arrow" name="ph:arrow-right" />
+        </a>
+      </div>
+    </div>
+  </div>
+</Layout>
+
+<style>
+  .svc-ico { width: 2rem; height: 2rem; color: #e5e7eb; }
+  .send-btn {
+    background: rgba(255, 255, 255, 0.92);
+    color: #0a0c10;
+    font-weight: 600;
+    border: 1px solid rgba(255, 255, 255, 0.92);
+  }
+  .send-btn:hover { background: #fff; transform: scale(1.02); }
+</style>
