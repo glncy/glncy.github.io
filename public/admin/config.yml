@@ -51,6 +51,14 @@ collections:
               - { name: label, label: Label, widget: string }
               - { name: url, label: URL, widget: string }
               - { name: icon, label: Icon (ph:name from phosphoricons.com), widget: string }
+          - name: handles
+            label: Handles (shown on Projects)
+            widget: list
+            summary: '{{fields.handle}}'
+            fields:
+              - { name: icon, label: Icon (ph:name from phosphoricons.com), widget: string }
+              - { name: handle, label: Handle (e.g. @glncy), widget: string }
+              - { name: url, label: URL, widget: string }
 
   - name: services
     label: Services

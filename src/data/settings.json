@@ -20,6 +20,9 @@
     { "label": "Messenger", "url": "https://m.me/glencytirao1999", "icon": "ph:messenger-logo" },
     { "label": "Schedule a call", "url": "https://example.com", "icon": "ph:calendar-dots" }
   ],
+  "handles": [
+    { "icon": "ph:github-logo", "handle": "@glncy", "url": "https://github.com/glncy" }
+  ],
   "web3formsKey": "54686f46-a3dd-4578-a0c8-8cabd596c1e4",
   "location": "Philippines · GMT+8",
   "responseTime": "I usually reply within 24h.",

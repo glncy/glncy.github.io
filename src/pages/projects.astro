@@ -5,17 +5,25 @@ import Projects from '../components/sections/Projects.astro'
 import { Icon } from 'astro-icon/components'
 import settings from '../data/settings.json'
 
-const github = settings.socials.find((s) => s.label.toLowerCase() === 'github')?.url
-const subtitle = github
-  ? `${settings.pages.projectsSubtitle}
-  <div class="mt-2"><a href="${github}" target="_blank" rel="noopener">@glncy</a></div>`
-  : settings.pages.projectsSubtitle
+const handles = settings.handles ?? []
 ---
 
 <Layout title="Projects | glncy">
   <div class="pb-40">
     <div class="relative flex h-screen w-full flex-col items-center justify-center">
-      <TitleBox title="Projects" subtitle={subtitle} />
+      <TitleBox title="Projects" subtitle={settings.pages.projectsSubtitle} />
+      {handles.length > 0 && (
+        <div class="handles">
+          {handles.map((h, i) => (
+            <>
+              {i > 0 && <span class="handle-dot">·</span>}
+              <a class="handle" href={h.url} target="_blank" rel="noopener noreferrer">
+                <Icon name={h.icon} /> {h.handle}
+              </a>
+            </>
+          ))}
+        </div>
+      )}
       <div class="absolute text-sm text-gray-200 opacity-80" style="margin-top:38vh;">
         Scroll Down
       </div>
@@ -31,3 +39,26 @@ const subtitle = github
     </div>
   </div>
 </Layout>
+
+<style>
+  .handles {
+    margin-top: 1rem;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    text-shadow: 0 1px 10px rgba(0, 0, 0, 0.85), 0 1px 3px rgba(0, 0, 0, 0.7);
+  }
+  .handle {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    color: #e5e7eb;
+    font-size: 0.95rem;
+    transition: color 0.15s ease, transform 0.15s ease;
+  }
+  .handle:hover { color: #fff; transform: translateY(-1px); }
+  .handle :global(svg) { width: 1.05rem; height: 1.05rem; }
+  .handle-dot { color: #9ca3af; user-select: none; }
+</style>
