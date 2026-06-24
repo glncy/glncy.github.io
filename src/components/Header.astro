@@ -70,7 +70,9 @@ const writingActive =
     justify-content: center;
     align-items: center;
     gap: 1.5rem;
-    max-width: 100%;
+    /* Full width so overflow is measurable (a shrink-to-fit nav would always
+       report scrollWidth === clientWidth and never detect overflow). */
+    width: 100%;
   }
   .nav-link {
     color: #e5e7eb;
@@ -214,25 +216,41 @@ const writingActive =
     const fits = () => nav.scrollWidth <= nav.clientWidth + 1
     const layout = () => {
       reset()
+      // Everything fits → show all links in natural order, no "More".
+      if (fits()) { moreWrap.hidden = true; return }
+
+      const len = items.length
       let activeIdx = items.findIndex(isActiveItem)
       if (activeIdx < 0) activeIdx = 0
       const activeEl = items[activeIdx]
-      const nextEl = items[activeIdx + 1] // keep the link right after active too
-      // Move everything BEFORE the active item into More.
+      // Move everything BEFORE the active item into More (so it starts at active).
       for (let i = 0; i < activeIdx; i++) insertOrdered(items[i])
+      // Companion = the next link; if active is the last, wrap to the first.
+      let companionEl
+      if (activeIdx < len - 1) {
+        companionEl = items[activeIdx + 1]
+      } else {
+        companionEl = items[0]
+        companionEl.classList.remove('more-item')
+        nav.insertBefore(companionEl, activeEl.nextSibling) // place right after active
+      }
       moreWrap.hidden = moreMenu.children.length === 0
-      // Then, if still overflowing, move trailing inline items into More — but
-      // always keep the active link AND the one right after it visible.
+      // If still overflowing, move trailing inline items into More — but always
+      // keep the active link AND its companion visible.
       let guard = 0
       while (!fits() && guard++ < 20) {
         moreWrap.hidden = false
-        const inline = items.filter((el) => !el.classList.contains('more-item'))
+        const inline = Array.from(nav.children).filter(
+          (el) => el !== moreWrap && !el.classList.contains('more-item')
+        )
         const last = inline[inline.length - 1]
-        if (!last || last === activeEl || last === nextEl) break
+        if (!last || last === activeEl || last === companionEl) break
         insertOrdered(last)
       }
     }
     layout()
+    requestAnimationFrame(layout)
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(layout)
     window.__navResize = () => layout()
     window.addEventListener('resize', window.__navResize)
 
