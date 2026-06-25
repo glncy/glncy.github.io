@@ -35,6 +35,10 @@ const { title, subtitle, plain = false } = Astro.props
        backdrop-filter cost here is fine). */
     -webkit-backdrop-filter: blur(14px);
     backdrop-filter: blur(14px);
+    /* Keep the frost on its own GPU layer so Safari has the blur ready on the
+       very first frame after a navigation swap — otherwise it paints one
+       unblurred frame (a "no blur → blur" blink) before computing the filter. */
+    transform: translateZ(0);
     border: none;
     border-top: 1px solid rgba(255, 255, 255, 0.18);
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);

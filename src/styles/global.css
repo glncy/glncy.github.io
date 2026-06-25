@@ -138,6 +138,11 @@
     @apply font-sans;
     scroll-behavior: smooth;
     background: #000; /* dark base so any uncovered area is black, never white */
+    /* Stop Safari's elastic rubber-band at the page edges. Normal scrolling and
+       trackpad momentum are unaffected — this only removes the overscroll bounce,
+       which is what desyncs the fixed video background from its overlay and
+       exposes a strip at the top/bottom edge. */
+    overscroll-behavior-y: none;
   }
   @media (prefers-reduced-motion: reduce) {
     html { scroll-behavior: auto; }
@@ -359,6 +364,14 @@
 .cta:hover .arrow { transform: translateX(4px); }
 
 /* ---- Animated background ----------------------------------------------- */
+/* The background is relocated to be a direct child of <html> and kept alive
+   across navigations. Each page still renders its own #bg-persist into <body>;
+   that duplicate is removed by the relocate script, but for one frame it would
+   paint its dark .bg-overlay on top of the kept copy — a visible flash/blink on
+   refresh + page switch. Hide any copy still inside <body> so only the relocated
+   <html> child is ever shown. */
+body > #bg-persist { display: none; }
+
 .bg-fixed-layer {
   position: fixed;
   inset: 0;
@@ -497,11 +510,14 @@
 .prose-glncy pre { background: rgba(0,0,0,0.4); padding: 1rem; border-radius: 0.6rem; overflow:auto; margin: 0 0 1rem; }
 .prose-glncy blockquote { border-left: 2px solid rgba(255,255,255,0.3); padding-left: 1rem; opacity: 0.85; margin: 0 0 1rem; }
 
-/* Honor reduced-motion for page transitions only (background art unchanged). */
-@media (prefers-reduced-motion: reduce) {
-  ::view-transition-group(*),
-  ::view-transition-old(*),
-  ::view-transition-new(*) {
-    animation: none !important;
-  }
+/* Swap page content INSTANTLY on navigation — no view-transition crossfade.
+   ClientRouter still does the SPA swap that keeps the YouTube iframe + music
+   alive; we only drop the visual animation. The crossfade is what caused the
+   background's semi-transparent overlay to double-expose ("dark → darker" blink)
+   during navigation, in every browser, because the persisted background shows
+   through the fading content. Instant swap = the background never double-paints. */
+::view-transition-group(*),
+::view-transition-old(*),
+::view-transition-new(*) {
+  animation: none !important;
 }
