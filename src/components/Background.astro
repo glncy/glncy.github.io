@@ -17,8 +17,14 @@ const lines = Array.from({ length: 40 }, (_, i) => {
 })
 ---
 
-<!-- Persisted across navigation so the video + player never restart. -->
-<div transition:persist="background-player">
+<!-- Persisted across navigation so the video + player never restart.
+     NOTE: we do NOT use transition:persist here. Astro persists by physically
+     re-inserting the island into the swapped <body>, and Safari (macOS/iOS/iPadOS)
+     reloads any <iframe> the moment it is re-inserted into the DOM — which
+     restarts the YouTube player and stops the music/video. Instead the inline
+     script below relocates this wrapper OUT of <body> (to a direct child of
+     <html>, which Astro never swaps) so the iframe is never re-inserted. -->
+<div id="bg-persist">
 <!-- Fixed animated background -->
 <div class="bg-fixed-layer">
   <div class="yt-wrapper" id="yt-wrapper">
@@ -102,6 +108,9 @@ const lines = Array.from({ length: 40 }, (_, i) => {
     padding: 0.85rem 1.25rem;
     border-radius: 0.85rem;
     text-align: center;
+    /* Explicit color: the player now lives under <html> (outside <body>) so it
+       no longer inherits the body's light text color. */
+    color: #e5e7eb;
     transition: transform 0.1s ease-in-out;
   }
   /* Sit the player a little lower on mobile + tablet. */
@@ -111,7 +120,7 @@ const lines = Array.from({ length: 40 }, (_, i) => {
   /* While playing on large screens, slide the player down just enough to hide
      the buttons (title stays visible); hover brings the buttons back. */
   @media (min-width: 1024px) {
-    .player.playing { transform: translateX(-50%) translateY(3.5rem); }
+    .player.playing { transform: translateX(-50%) translateY(4rem); }
     .player.playing:hover { transform: translateX(-50%) translateY(0); }
   }
   /* When idle, hide the now-playing title — on mobile only (desktop keeps it). */
@@ -167,6 +176,33 @@ const lines = Array.from({ length: 40 }, (_, i) => {
 <script is:inline define:vars={{ videos }}>
   // Runs once for the lifetime of the persisted background (ClientRouter keeps
   // the DOM + this state alive across page navigations).
+  // Relocate the persisted wrapper out of <body> and into <html> so it lives
+  // outside the tree that ClientRouter swaps on navigation. This keeps the
+  // YouTube <iframe> from ever being re-inserted into the DOM (Safari reloads
+  // iframes on re-insert, which would stop the music/video). Each newly
+  // rendered page injects its own fresh #bg-persist into <body>; we keep the
+  // single relocated one under <html> and drop the body duplicates.
+  function relocateBackground() {
+    const all = document.querySelectorAll('#bg-persist')
+    let keep = document.documentElement.querySelector(':scope > #bg-persist')
+    all.forEach((el) => {
+      if (el === keep) return
+      if (!keep) {
+        // First load: promote the body copy to be a direct child of <html>.
+        keep = el
+        document.documentElement.appendChild(el)
+      } else {
+        // A duplicate freshly rendered by the navigated-to page — discard it.
+        el.remove()
+      }
+    })
+  }
+  relocateBackground()
+  if (!window.__bgRelocateBound) {
+    window.__bgRelocateBound = true
+    document.addEventListener('astro:after-swap', relocateBackground)
+  }
+
   if (!window.__bgInit) {
   window.__bgInit = true
 
